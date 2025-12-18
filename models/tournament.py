@@ -2,10 +2,11 @@ import json
 from operator import truediv
 
 from models.constances import DATA_DIR
+from models.user import User
 
 
 class Tournament:
-    def __init__(self, tournament_name, location, start_date, end_date, turn_number=4, description="", users=None, turns=None):
+    def __init__(self, tournament_name, location, start_date, end_date, turn_number=4, description="",):
         self.tournament_name = tournament_name
         self.location = location
         self.start_date = start_date
@@ -13,8 +14,8 @@ class Tournament:
         self.turn_number = turn_number
         self.description = description
 
-        self.users = users
-        # self.turns = turns
+        self.users : list[User] = []
+        # self.turns = []
 
     def add_tournament(self):
         tournament = {"name": self.tournament_name,
@@ -34,7 +35,7 @@ class Tournament:
         for tournament in tournaments:
             if tournament["name"] == self.tournament_name:
                 return True
-            return False
+        return False
 
     def save_tournament(self, tournament):
         tournaments = self.load_tournaments()
@@ -49,7 +50,7 @@ class Tournament:
                 with open(f"{DATA_DIR}/tournaments.json", "r") as file:
                     tournaments = json.load(file)
                     return tournaments
-            except json.decoder.JSONDecodeError and FileNotFoundError:
+            except json.decoder.JSONDecodeError or FileNotFoundError:
                 with open(f"{DATA_DIR}/tournaments.json", "w") as file:
                     json.dump([],file)
 
@@ -57,13 +58,9 @@ class Tournament:
 
 
     def add_users_in_tournament(self):
-        for u in self.users:
-            user = (u.user_id, u.score)
-            if not self.control_user_in_tournament(user):
-                self.save_user_in_tournament(user)
-                return True
-            else:
-                return False
+        print(self.users)
+        print(self.tournament_name)
+        pass
 
 
     def control_user_in_tournament(self,user):
@@ -96,4 +93,6 @@ class Tournament:
 
 
 
-
+if __name__ == "__main__":
+    tournament = Tournament("Tournament 1", "lyon", "24/12/2025", "25/12/2025")
+    tournament.add_tournament()

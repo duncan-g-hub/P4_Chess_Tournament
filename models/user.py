@@ -23,7 +23,7 @@ class User:
         for user in users:
             if user["user_id"] == self.user_id:
                 return True
-            return False
+        return False
 
 
     def save_user(self, user):
@@ -35,14 +35,19 @@ class User:
 
     def load_users(self):
         users = None
+
         while users is None :
             try :
                 with open(f"{DATA_DIR}/users.json", "r") as file:
                     users = json.load(file)
                     return users
-            except json.decoder.JSONDecodeError and FileNotFoundError:
+            except json.decoder.JSONDecodeError or FileNotFoundError:
                 with open(f"{DATA_DIR}/users.json", "w") as file:
                     json.dump([], file)
+
+
+
+
 
     def __str__(self):
         return f"{self.lastname} {self.firstname} - {self.birthdate} - {self.user_id}"
