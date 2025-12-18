@@ -67,8 +67,20 @@ class Controller:
                     return False
 
 
-    def get_tournament_users(self):
-        pass
+    def get_tournament_users(self, tournament_name):
+        tournaments = load_tournaments()
+        for tournament in tournaments:
+            if tournament["name"] == tournament_name:
+                users_ids = tournament["users"]
+
+        users = load_users()
+        users_in_tournament = []
+        for user in users:
+            if user["user_id"] in users_ids:
+                users_in_tournament.append(user)
+
+        return users_in_tournament
+
 
     def get_tournament_turns(self):
         pass
@@ -110,14 +122,11 @@ class Controller:
                             #afficher les infos
                             self.view.display_tournament_informations(self.get_tournament_informations(tournament_name))
                         elif choice == "2":
+                            # ajouter un joueur
                             self.add_user_in_tournament(tournament_name)
-                            #ajouter un joueur
-                            pass
                         elif choice == "3":
-
                             #voir la liste des joueurs
-                            self.get_tournament_users()
-                            pass
+                            self.view.display_users_in_tournament(self.get_tournament_users(tournament_name))
                         elif choice == "4":
                             #voir la liste des round et match
                             pass

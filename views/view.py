@@ -86,6 +86,15 @@ Description : {tournament['description']}
         user_id = input("Entrer l'identifiant national d'échecs du joueur' : ")
         return user_id
 
+    def display_users_in_tournament(self, users):
+        #nom(tri alphabétique) prénom user_id
+        print("Liste des particpants : ")
+        print()
+        for user in users:
+            print(f"{user['last_name']} {user['first_name']} - id : {user['user_id']}")
+
+
+
     def display_tournaments(self, tournaments):
         print("Liste des tournois : ")
         print()
