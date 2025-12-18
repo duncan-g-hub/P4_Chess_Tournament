@@ -12,10 +12,11 @@ class Controller:
     def add_tournament(self):
         tournament_name, location, start_date, end_date, turn_number, descritpion = self.view.tournament_form()
         tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
-        if tournament.add_tournament():
-            return True
+        if self.control_tournament_name(tournament_name) == True :
+            self.view.display_message(f"Le tournoi {tournament_name} existe déja.")
         else:
-            return False
+            tournament.add_tournament()
+            self.view.display_message(f"Le tournoi {tournament_name} à été créé.")
 
     def control_tournament_name(self, tournament_name):
         tournaments = load_tournaments()
@@ -36,8 +37,6 @@ class Controller:
                 return tournament
 
     def add_user_in_tournament(self, tournament_name):
-        users = load_users()
-        tournaments = load_tournaments()
 
         user_id = self.view.form_user_id()
         if self.control_user_in_users(user_id) == False:
@@ -48,14 +47,13 @@ class Controller:
             self.view.display_message(f"Ce joueur est déja inscrit au tournoi {tournament_name}. ")
             return
 
-        for tournament in tournaments:
-            if tournament["name"] == tournament_name:
-                tournament["users"].append(user_id)
+        tournament = Tournament(tournament_name)
+        tournament.add_user_in_tournament(user_id)
 
     def control_user_in_users(self, user_id):
         users = load_users()
         for user in users:
-            if user["id"] == user_id:
+            if user["user_id"] == user_id:
                 return True
         return False
 
@@ -80,10 +78,11 @@ class Controller:
     def add_user(self):
         last_name, first_name, birth_date, user_id = self.view.user_form()
         user = User(last_name, first_name, birth_date, user_id)
-        if user.add_user() :
-            return True
+        if self.control_user_in_users(user_id) == True :
+            self.view.display_message(f"Le joueur {last_name} {first_name} existe déja.")
         else:
-            return False
+            user.add_user()
+            self.view.display_message(f"Le joueur {last_name} {first_name} à bien été ajouté.")
 
     def get_users(self):
         users = load_users()
@@ -115,7 +114,9 @@ class Controller:
                             #ajouter un joueur
                             pass
                         elif choice == "3":
+
                             #voir la liste des joueurs
+                            self.get_tournament_users()
                             pass
                         elif choice == "4":
                             #voir la liste des round et match

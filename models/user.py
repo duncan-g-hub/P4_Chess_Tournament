@@ -13,18 +13,7 @@ class User:
 
     def add_user(self):
         user = {"last_name": self.last_name, "first_name": self.first_name, "birth_date": self.birth_date, "user_id": self.user_id}
-        if not self.control_users():
-            self.save_user(user)
-            return True
-        else:
-            return False
-
-    def control_users(self):
-        users = load_users()
-        for user in users:
-            if user["user_id"] == self.user_id:
-                return True
-        return False
+        self.save_user(user)
 
 
     def save_user(self, user):

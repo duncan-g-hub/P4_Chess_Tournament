@@ -24,18 +24,20 @@ class Tournament:
                       "turn_number": self.turn_number,
                       "description": self.description,
                       "users": []}
-        if not self.control_tournament():
-            self.save_tournament(tournament)
-            return True
-        else:
-            return False
 
-    def control_tournament(self):
+        self.save_tournament(tournament)
+
+    def add_user_in_tournament(self, user_id):
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.tournament_name:
-                return True
-        return False
+                tournament["users"].append(user_id)
+                self.update_tournaments(tournaments)
+
+
+    def update_tournaments(self, tournaments):
+        with open(f"{DATA_DIR}/tournaments.json", "w") as file:
+            json.dump(tournaments, file, indent=4)
 
     def save_tournament(self, tournament):
         tournaments = load_tournaments()
