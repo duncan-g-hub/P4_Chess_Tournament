@@ -1,7 +1,7 @@
 import json
 
 from models.constances import DATA_DIR
-from models.player import player
+from models.player import Player
 
 
 class Tournament:
@@ -13,7 +13,7 @@ class Tournament:
         self.turn_number = turn_number
         self.description = description
 
-        self.players : list[player] = players or []
+        self.players : list[Player] = players or []
         # self.turns = []
 
     def add_tournament(self):
@@ -52,10 +52,12 @@ def load_tournaments():
             with open(f"{DATA_DIR}/tournaments.json", "r") as file:
                 tournaments = json.load(file)
                 return tournaments
-        except json.decoder.JSONDecodeError or FileNotFoundError:
+        except json.decoder.JSONDecodeError:
             with open(f"{DATA_DIR}/tournaments.json", "w") as file:
                 json.dump([],file)
-
+        except FileNotFoundError:
+            with open(f"{DATA_DIR}/tournaments.json", "w") as file:
+                json.dump([],file)
 
 
 if __name__ == "__main__":

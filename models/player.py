@@ -36,15 +36,18 @@ def load_players():
             with open(f"{DATA_DIR}/players.json", "r") as file:
                 players = json.load(file)
                 return players
-        except json.decoder.JSONDecodeError or FileNotFoundError:
+        except json.decoder.JSONDecodeError:
+            with open(f"{DATA_DIR}/players.json", "w") as file:
+                json.dump([], file)
+        except FileNotFoundError:
             with open(f"{DATA_DIR}/players.json", "w") as file:
                 json.dump([], file)
 
 
 
 if __name__ == '__main__':
-    jean = player("Morel","Jean", "18 Novembre 2001", "AB12345" )
+    jean = Player("Morel","Jean", "18 Novembre 2001", "AB12345" )
     jean.add_player()
 
-    paul = player("Durand","Paul", "13 Septembre 1988", "AB12346" )
+    paul = Player("Durand","Paul", "13 Septembre 1988", "AB12346" )
     paul.add_player()

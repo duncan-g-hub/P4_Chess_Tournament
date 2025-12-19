@@ -13,10 +13,10 @@ class Controller:
         tournament_name, location, start_date, end_date, turn_number, descritpion = self.view.tournament_form()
         tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
         if self.control_tournament_name(tournament_name) == True:
-            self.view.display_message(f"Le tournoi {tournament_name} existe déja.")
+            self.view.display_message(f"Le tournoi {tournament_name.title()} existe déja.")
         else:
             tournament.add_tournament()
-            self.view.display_message(f"Le tournoi {tournament_name} à été créé.")
+            self.view.display_message(f"Le tournoi {tournament_name.title()} a bien été créé.")
 
     def control_tournament_name(self, tournament_name):
         tournaments = load_tournaments()
@@ -40,15 +40,22 @@ class Controller:
 
         player_id = self.view.form_player_id()
         if self.control_player_in_players(player_id) == False:
-            self.view.display_message(f"L'identifiant {player_id} ne correspond à aucun utilisateur, ajoutez le à partir du menu principal. ")
+            self.view.display_message(f"L'identifiant {player_id.upper()} ne correspond à aucun joueur, ajoutez le à partir du menu principal. ")
             return
 
+        players = load_players()
+        for player in players:
+            if player["player_id"] == player_id:
+                player_name = f"{player["last_name"].upper()} {player['first_name'].capitalize()}"
+
         if self.control_player_in_tournament(player_id, tournament_name) == True:
-            self.view.display_message(f"Ce joueur est déja inscrit au tournoi {tournament_name}. ")
+            self.view.display_message(f"Le joueur '{player_name}' est déja inscrit au tournoi '{tournament_name.title()}'. ")
             return
 
         tournament = Tournament(tournament_name)
         tournament.add_player_in_tournament(player_id)
+
+        self.view.display_message(f"Le joueur '{player_name}' a bien été inscrit au tournoi '{tournament_name.title()}'. ")
 
     def control_player_in_players(self, player_id):
         players = load_players()
@@ -91,10 +98,10 @@ class Controller:
         last_name, first_name, birth_date, player_id = self.view.player_form()
         player = Player(last_name, first_name, birth_date, player_id)
         if self.control_player_in_players(player_id) == True :
-            self.view.display_message(f"Le joueur {last_name} {first_name} existe déja.")
+            self.view.display_message(f"Le joueur {last_name.uper()} {first_name.capitalize()} existe déja.")
         else:
             player.add_player()
-            self.view.display_message(f"Le joueur {last_name} {first_name} à bien été ajouté.")
+            self.view.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
 
     def get_players(self):
         players = load_players()
@@ -110,34 +117,30 @@ class Controller:
             if choice == "1":
                 self.add_tournament()
             if choice == "2":
-                #selectionner un tournoi
-                tournament_name = self.view.get_tournament_name()
 
-                if self.control_tournament_name(tournament_name) == True :
+                #faire une selection via un numéro parmis une liste de tournoi
+                tournament_name = self.view.display_tournaments_list(load_tournaments())
 
+                if tournament_name :
                     #ouvre un nouveau menu tournois
                     while True:
-                        choice = self.view.tournament_menu(tournament_name)
-                        if choice == "1":
+                        choice_tournament = self.view.tournament_menu(tournament_name)
+                        if choice_tournament == "1":
                             #afficher les infos
                             self.view.display_tournament_informations(self.get_tournament_informations(tournament_name))
-                        elif choice == "2":
+                        elif choice_tournament == "2":
                             # ajouter un joueur
                             self.add_player_in_tournament(tournament_name)
-                        elif choice == "3":
+                        elif choice_tournament == "3":
                             #voir la liste des joueurs
                             self.view.display_players_in_tournament(list_dict_sorting(self.get_tournament_players(tournament_name)))
-                        elif choice == "4":
+                        elif choice_tournament == "4":
                             #voir la liste des round et match
                             pass
-                        elif choice == "5":
+                        elif choice_tournament == "5":
                             #retour au menu principal
                             self.view.display_message("Retour au menu principal. ")
                             break
-
-                else :
-                    #message d'erreur
-                    self.view.display_message("Ce tournoi n'éxiste pas, retour au menu principal. ")
 
 
             if choice == "3":
@@ -154,9 +157,12 @@ class Controller:
             if choice == "6":
                 break
 
+
+
+
 def list_dict_sorting(list_of_dicts):
     list_of_dicts_sorted = sorted(list_of_dicts, key=get_key_in_dict)
     return list_of_dicts_sorted
 
 def get_key_in_dict(d):
-    return d["nom"]
+    return d["last_name"]
