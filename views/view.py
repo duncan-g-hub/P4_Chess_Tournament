@@ -1,3 +1,4 @@
+from datetime import datetime
 
 class View:
 
@@ -31,7 +32,15 @@ class View:
         tournament_name = cleaning_input(input("Entrer le nom du tournoi : "))
         location = cleaning_input(input("Entrer le lieu du tournoi : "))
         start_date = cleaning_input(input("Entrer le date de début du tournoi (jj/mm/aaaa) : "))
+        while self.control_date_format(start_date) == False:
+            print("----------------------------------")
+            print("la date de début du tournoi doit etre valide et correspondre au format 'jj/mm/aaaa'.")
+            start_date = cleaning_input(input("Entrer le date de début du tournoi (jj/mm/aaaa) : "))
         end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
+        while self.control_date_format(end_date) == False:
+            print("----------------------------------")
+            print("la date de fon du tournoi doit etre valide et correspondre au format 'jj/mm/aaaa'.")
+            end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
         turn_number = cleaning_input(input("Entrer le nombre de tour du tournoi (par défaut 4) : "))
         if turn_number.isdigit():
             turn_number = int(turn_number)
@@ -138,8 +147,17 @@ class View:
     def player_form(self):
         last_name = cleaning_input(input("Entrer le nom de famille du joueur : "))
         first_name = cleaning_input(input("Enter le prénom du joueur : "))
-        birth_date = cleaning_input(input("Enter la date de naissance du joueur (jj/mm/aaaa) : "))
+        birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
+        while self.control_date_format(birth_date) == False:
+            print("----------------------------------")
+            print("la date de naissance du joueur doit etre valide et correspondre au format 'jj/mm/aaaa'.")
+            birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
+
         player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
+        while self.control_player_id_format(player_id) == False:
+            print("----------------------------------")
+            print("L'identifiant national d'échecs du joueur doit correspondre au format 'AB12345'.")
+            player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
         print("----------------------------------")
         return last_name, first_name, birth_date, player_id
 
@@ -151,6 +169,24 @@ class View:
             print(f"{player['player_id'].upper()}  ->  Nom : {player['last_name'].upper()}  -  Prénom : {player['first_name'].capitalize()}  -  Date de naissance : {player['birth_date']}")
         print("----------------------------------")
 
+
+
+    def control_player_id_format(self, player_id):
+        if len(player_id) != 7:
+            return False
+        if not player_id[0:2].isalpha():
+            return False
+        if not player_id[2:].isdigit():
+            return False
+        return True
+
+
+    def control_date_format(self, date):
+        try:
+            datetime.strptime(date, "%d/%m/%Y")
+            return True
+        except ValueError:
+            return False
 
 
     def display_message(self, message):

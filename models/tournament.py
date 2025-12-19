@@ -16,6 +16,7 @@ class Tournament:
         self.players : list[Player] = players or []
         # self.turns = []
 
+
     def add_tournament(self):
         tournament = {"name": self.tournament_name,
                       "location": self.location,
@@ -24,8 +25,8 @@ class Tournament:
                       "turn_number": self.turn_number,
                       "description": self.description,
                       "players": []}
-
         self.save_tournament(tournament)
+
 
     def add_player_in_tournament(self, player_id):
         tournaments = load_tournaments()
@@ -39,11 +40,13 @@ class Tournament:
         with open(f"{DATA_DIR}/tournaments.json", "w") as file:
             json.dump(tournaments, file, indent=4)
 
+
     def save_tournament(self, tournament):
         tournaments = load_tournaments()
         tournaments.append(tournament)
         with open(f"{DATA_DIR}/tournaments.json", "w") as file:
             json.dump(tournaments, file, indent=4)
+
 
 def load_tournaments():
     tournaments = None
