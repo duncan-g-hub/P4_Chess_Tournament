@@ -82,16 +82,16 @@ Nombre de tour : {tournament['turn_number']}
 Description : {tournament['description']}
 """)
 
-    def form_user_id(self):
-        user_id = input("Entrer l'identifiant national d'échecs du joueur' : ")
-        return user_id
+    def form_player_id(self):
+        player_id = input("Entrer l'identifiant national d'échecs du joueur' : ")
+        return player_id
 
-    def display_users_in_tournament(self, users):
-        #nom(tri alphabétique) prénom user_id
+    def display_players_in_tournament(self, players):
+        #nom(tri alphabétique) prénom player_id
         print("Liste des particpants : ")
         print()
-        for user in users:
-            print(f"{user['last_name']} {user['first_name']} - id : {user['user_id']}")
+        for player in players:
+            print(f"{player['last_name']} {player['first_name']} - id : {player['player_id']}")
 
 
 
@@ -108,20 +108,20 @@ Description : {tournament['description']}
 """)
 
 
-    def user_form(self):
+    def player_form(self):
         last_name = input("Entrer le nom de famille du joueur : ")
         first_name = input("Enter le prénom du joueur : ")
         birth_date = input("Enter la date de naissance du joueur (jj/mm/aaaa) : ")
-        user_id = input("Entrer l'identifiant national d'échecs du joueur (AB12345) : ")
-        return last_name, first_name, birth_date, user_id
+        player_id = input("Entrer l'identifiant national d'échecs du joueur (AB12345) : ")
+        return last_name, first_name, birth_date, player_id
 
 
 
-    def display_users(self, users):
+    def display_players(self, players):
         print("Liste des joueurs : ")
         print()
-        for user in users:
-            print(f"{user['user_id']}  ->  Nom : {user['last_name']}  -  Prénom : {user['first_name']}  -  Date de naissance : {user['birth_date']}")
+        for player in players:
+            print(f"{player['player_id']}  ->  Nom : {player['last_name']}  -  Prénom : {player['first_name']}  -  Date de naissance : {player['birth_date']}")
 
 
     def display_message(self, message):

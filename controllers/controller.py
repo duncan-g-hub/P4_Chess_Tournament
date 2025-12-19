@@ -1,18 +1,18 @@
 from models.tournament import Tournament, load_tournaments
-from models.user import User, load_users
+from models.player import Player, load_players
 
 
 class Controller:
 
     def __init__(self, view):
-        self.users = []
+        self.players = []
         self.view = view
 
 
     def add_tournament(self):
         tournament_name, location, start_date, end_date, turn_number, descritpion = self.view.tournament_form()
         tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
-        if self.control_tournament_name(tournament_name) == True :
+        if self.control_tournament_name(tournament_name) == True:
             self.view.display_message(f"Le tournoi {tournament_name} existe déja.")
         else:
             tournament.add_tournament()
@@ -36,50 +36,50 @@ class Controller:
             if tournament["name"] == tournament_name:
                 return tournament
 
-    def add_user_in_tournament(self, tournament_name):
+    def add_player_in_tournament(self, tournament_name):
 
-        user_id = self.view.form_user_id()
-        if self.control_user_in_users(user_id) == False:
-            self.view.display_message(f"L'identifiant {user_id} ne correspond à aucun utilisateur, ajoutez le à partir du menu principal. ")
+        player_id = self.view.form_player_id()
+        if self.control_player_in_players(player_id) == False:
+            self.view.display_message(f"L'identifiant {player_id} ne correspond à aucun utilisateur, ajoutez le à partir du menu principal. ")
             return
 
-        if self.control_user_in_tournament(user_id, tournament_name) == True:
+        if self.control_player_in_tournament(player_id, tournament_name) == True:
             self.view.display_message(f"Ce joueur est déja inscrit au tournoi {tournament_name}. ")
             return
 
         tournament = Tournament(tournament_name)
-        tournament.add_user_in_tournament(user_id)
+        tournament.add_player_in_tournament(player_id)
 
-    def control_user_in_users(self, user_id):
-        users = load_users()
-        for user in users:
-            if user["user_id"] == user_id:
+    def control_player_in_players(self, player_id):
+        players = load_players()
+        for player in players:
+            if player["player_id"] == player_id:
                 return True
         return False
 
-    def control_user_in_tournament(self, user_id, tournament_name):
+    def control_player_in_tournament(self, player_id, tournament_name):
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == tournament_name:
-                if user_id in tournament["users"]:
+                if player_id in tournament["players"]:
                     return True
                 else :
                     return False
 
 
-    def get_tournament_users(self, tournament_name):
+    def get_tournament_players(self, tournament_name):
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == tournament_name:
-                users_ids = tournament["users"]
+                players_ids = tournament["players"]
 
-        users = load_users()
-        users_in_tournament = []
-        for user in users:
-            if user["user_id"] in users_ids:
-                users_in_tournament.append(user)
+        players = load_players()
+        players_in_tournament = []
+        for player in players:
+            if player["player_id"] in players_ids:
+                players_in_tournament.append(player)
 
-        return users_in_tournament
+        return players_in_tournament
 
 
     def get_tournament_turns(self):
@@ -87,18 +87,18 @@ class Controller:
 
 
 
-    def add_user(self):
-        last_name, first_name, birth_date, user_id = self.view.user_form()
-        user = User(last_name, first_name, birth_date, user_id)
-        if self.control_user_in_users(user_id) == True :
+    def add_player(self):
+        last_name, first_name, birth_date, player_id = self.view.player_form()
+        player = Player(last_name, first_name, birth_date, player_id)
+        if self.control_player_in_players(player_id) == True :
             self.view.display_message(f"Le joueur {last_name} {first_name} existe déja.")
         else:
-            user.add_user()
+            player.add_player()
             self.view.display_message(f"Le joueur {last_name} {first_name} à bien été ajouté.")
 
-    def get_users(self):
-        users = load_users()
-        return users
+    def get_players(self):
+        players = load_players()
+        return players
 
 
 
@@ -123,10 +123,10 @@ class Controller:
                             self.view.display_tournament_informations(self.get_tournament_informations(tournament_name))
                         elif choice == "2":
                             # ajouter un joueur
-                            self.add_user_in_tournament(tournament_name)
+                            self.add_player_in_tournament(tournament_name)
                         elif choice == "3":
                             #voir la liste des joueurs
-                            self.view.display_users_in_tournament(self.get_tournament_users(tournament_name))
+                            self.view.display_players_in_tournament(list_dict_sorting(self.get_tournament_players(tournament_name)))
                         elif choice == "4":
                             #voir la liste des round et match
                             pass
@@ -146,10 +146,17 @@ class Controller:
 
             if choice == "4":
                 # ajouter un joueur
-                self.add_user()
+                self.add_player()
 
             if choice == "5":
                 # afficher la lsite des joeurs
-                self.view.display_users(self.get_users())
+                self.view.display_players(list_dict_sorting(self.get_players()))
             if choice == "6":
                 break
+
+def list_dict_sorting(list_of_dicts):
+    list_of_dicts_sorted = sorted(list_of_dicts, key=get_key_in_dict)
+    return list_of_dicts_sorted
+
+def get_key_in_dict(d):
+    return d["nom"]
