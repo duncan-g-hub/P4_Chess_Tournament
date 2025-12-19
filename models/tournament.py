@@ -1,11 +1,11 @@
 import json
 
 from models.constances import DATA_DIR
-from models.player import Player
+
 
 
 class Tournament:
-    def __init__(self, tournament_name, location=None, start_date=None, end_date=None, turn_number=4, description="",players=None):
+    def __init__(self, tournament_name, location=None, start_date=None, end_date=None, turn_number=4, description="",players=None, current_turn=None):
         self.tournament_name = tournament_name
         self.location = location
         self.start_date = start_date
@@ -13,7 +13,10 @@ class Tournament:
         self.turn_number = turn_number
         self.description = description
 
-        self.players : list[Player] = players or []
+
+        self.players = players or []
+
+        self.current_turn = current_turn
         # self.turns = []
 
 
@@ -32,7 +35,7 @@ class Tournament:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.tournament_name:
-                tournament["players"].append(player_id)
+                tournament["players"].append((player_id,0.0))
                 self.update_tournaments(tournaments)
 
 

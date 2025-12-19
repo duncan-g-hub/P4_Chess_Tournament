@@ -78,14 +78,16 @@ class Controller:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == tournament_name:
-                players_ids = tournament["players"]
+                players_ids = tournament["players"][0]
+                players_scores = tournament["players"][1]
         players = load_players()
         players_in_tournament = []
         for player in players:
-            if player["player_id"] in players_ids:
-                players_in_tournament.append(player)
+            for player_id, score in players_ids, players_scores:
+                if player["player_id"] == player_id:
+                    player["score"] = score
+                    players_in_tournament.append(player)
         return players_in_tournament
-
 
     def get_tournament_turns(self):
         pass
