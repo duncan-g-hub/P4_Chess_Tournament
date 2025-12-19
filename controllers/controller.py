@@ -13,7 +13,7 @@ class Controller:
         tournament_name, location, start_date, end_date, turn_number, descritpion = self.view.tournament_form()
         tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
         if self.control_tournament_name(tournament_name) == True:
-            self.view.display_message(f"Le tournoi {tournament_name.title()} existe déja.")
+            self.view.display_message(f"Le tournoi {tournament_name.title()} existe déja. Veuillez saisir les informations de nouveau en changeant de nom.")
         else:
             tournament.add_tournament()
             self.view.display_message(f"Le tournoi {tournament_name.title()} a bien été créé.")

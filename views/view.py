@@ -4,7 +4,6 @@ class View:
 
     def menu(self):
         possible_choices = ["1","2","3","4","5","6"]
-
         print("-------------- Menu --------------")
         print()
         print("1.Ajouter un tournoi ")
@@ -24,36 +23,29 @@ class View:
         return choice
 
 
-
-
-
-
     def tournament_form(self):
         tournament_name = cleaning_input(input("Entrer le nom du tournoi : "))
         location = cleaning_input(input("Entrer le lieu du tournoi : "))
         start_date = cleaning_input(input("Entrer le date de début du tournoi (jj/mm/aaaa) : "))
-        while self.control_date_format(start_date) == False:
+        while self.control_start_date(start_date)[0] == False:
             print("----------------------------------")
-            print("la date de début du tournoi doit etre valide et correspondre au format 'jj/mm/aaaa'.")
+            print(self.control_start_date(start_date)[1])
             start_date = cleaning_input(input("Entrer le date de début du tournoi (jj/mm/aaaa) : "))
         end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
-        while self.control_date_format(end_date) == False:
+        while self.control_end_date(end_date, start_date)[0] == False:
             print("----------------------------------")
-            print("la date de fon du tournoi doit etre valide et correspondre au format 'jj/mm/aaaa'.")
+            print(self.control_end_date(end_date, start_date)[1])
             end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
         turn_number = cleaning_input(input("Entrer le nombre de tour du tournoi (par défaut 4) : "))
         if turn_number.isdigit():
             turn_number = int(turn_number)
         else :
             turn_number = 4
-
         description = cleaning_input(input("Indiquer une description (si besoin) : "))
         if not description:
             description = tournament_name
         print("----------------------------------")
-
         return tournament_name, location, start_date, end_date, turn_number, description
-
 
 
     def display_tournaments_list(self, tournaments):
@@ -62,8 +54,6 @@ class View:
             print("Il n'existe aucun tournoi, veuillez en ajouter un. Retour au menu principal.")
             print("---------------------------------")
             return ""
-
-
         possible_choices = []
         for nb, tournament in enumerate(tournaments):
             print(f"{nb+1}- {tournament['name'].title()}")
@@ -79,9 +69,9 @@ class View:
         tournament_name = tournament['name']
         return tournament_name
 
+
     def tournament_menu(self, tournament_name):
         possible_choices = ["1", "2", "3", "4", "5"]
-
         print("---------- Menu Tournoi ----------")
         print()
         print(f"Tournoi '{tournament_name.title()}' séléctionné.")
@@ -95,12 +85,12 @@ class View:
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
         print("----------------------------------")
-
         while choice not in possible_choices:
             print("Vous devez entrer un numéro compris entre 1 et 6.")
             choice = input("Entrer le numéro correspondant : ")
             print("----------------------------------")
         return choice
+
 
     def display_tournament_informations(self, tournament):
         print()
@@ -131,7 +121,6 @@ class View:
         print("----------------------------------")
 
 
-
     def display_tournaments(self, tournaments):
         print("Liste des tournois : ")
         print()
@@ -148,15 +137,14 @@ class View:
         last_name = cleaning_input(input("Entrer le nom de famille du joueur : "))
         first_name = cleaning_input(input("Enter le prénom du joueur : "))
         birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
-        while self.control_date_format(birth_date) == False:
+        while self.control_birth_date(birth_date)[0] == False:
             print("----------------------------------")
-            print("la date de naissance du joueur doit etre valide et correspondre au format 'jj/mm/aaaa'.")
+            print(self.control_birth_date(birth_date)[1])
             birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
-
         player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
-        while self.control_player_id_format(player_id) == False:
+        while self.control_player_id_format(player_id)[0] == False:
             print("----------------------------------")
-            print("L'identifiant national d'échecs du joueur doit correspondre au format 'AB12345'.")
+            print(self.control_player_id_format(player_id)[1])
             player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
         print("----------------------------------")
         return last_name, first_name, birth_date, player_id
@@ -170,28 +158,58 @@ class View:
         print("----------------------------------")
 
 
-
     def control_player_id_format(self, player_id):
         if len(player_id) != 7:
-            return False
+            return False, "L'identifiant national d'échecs du joueur doit etre composé de 7 caractères."
         if not player_id[0:2].isalpha():
-            return False
+            return False, "L'identifiant national d'échecs du joueur doit commencer par 2 lettres."
         if not player_id[2:].isdigit():
-            return False
-        return True
+            return False, "L'identifiant national d'échecs du joueur doit terminer par 5 numéros."
+        return True, ""
 
 
     def control_date_format(self, date):
         try:
             datetime.strptime(date, "%d/%m/%Y")
-            return True
+            return True, ""
         except ValueError:
-            return False
+            return False, "La date doit etre valide et correspondre au format 'jj/mm/aaaa'."
+
+
+    def control_birth_date(self, birth_date):
+        if self.control_date_format(birth_date)[0] == False:
+            return False, self.control_date_format(birth_date)[1]
+        birth_date = datetime.strptime(birth_date, "%d/%m/%Y")
+        today = datetime.today()
+        if today < birth_date :
+            return False, f"La date de naissance ne peut pas être antérieur à la date d'aujourd'hui."
+        return True, ""
+
+
+    def control_start_date(self, start_date):
+        if self.control_date_format(start_date)[0] == False:
+            return False, self.control_date_format(start_date)[1]
+        start_date = datetime.strptime(start_date, "%d/%m/%Y")
+        today = datetime.today()
+        if start_date < today :
+            return False, f"La date de départ ne peut pas être antérieur à la date d'aujourd'hui."
+        return True, ""
+
+
+    def control_end_date(self, end_date, start_date):
+        if self.control_date_format(end_date)[0] == False:
+            return False, self.control_date_format(end_date)[1]
+        start_date = datetime.strptime(start_date, "%d/%m/%Y")
+        end_date = datetime.strptime(end_date, "%d/%m/%Y")
+        if end_date < start_date :
+            return False, f"La date de fin ne peut pas être antérieur à la date de départ."
+        return True, ""
 
 
     def display_message(self, message):
         print(message)
         print("----------------------------------")
+
 
 # fonction de nettoyage pour stockage
 def cleaning_input(input_string):
