@@ -28,18 +28,14 @@ class Match:
         updated_players = []
         if winner is None:
             for player in self.players:
-                # on transforme en liste pour pouvoir modifier la valeur
-                player = list(player)
                 player[1] += 0.5
-                updated_players.append((player[0],player[1]))
+                updated_players.append([player[0],player[1]])
 
         else :
             for player in self.players:
                 if player == winner:
-                    #on transforme en liste pour pouvoir modifier la valeur
-                    player = list(player)
                     player[1] += 1.0
-                updated_players.append((player[0],player[1]))
+                updated_players.append([player[0],player[1]])
 
         # on stock les modifs dans players
         self.players = updated_players
@@ -47,6 +43,6 @@ class Match:
 
 
 if __name__ == '__main__':
-    match = Match([("ed78945", 0.0), ("dz78945", 0.0)])
+    match = Match([["ed78945", 0.0], ["dz78945", 0.0]])
     match.launch_match()
     print(match.players)

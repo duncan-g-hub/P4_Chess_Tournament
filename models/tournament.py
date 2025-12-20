@@ -36,7 +36,7 @@ class Tournament:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.tournament_name:
-                tournament["players"].append((player_id,0.0))
+                tournament["players"].append([player_id,0.0])
                 self.update_tournaments(tournaments)
 
     def add_turn_in_tournament(self, turns, players):
@@ -45,6 +45,7 @@ class Tournament:
             if tournament["name"] == self.tournament_name:
                 tournament["turns"].append(turns)
                 tournament["players"] = players
+
                 self.update_tournaments(tournaments)
 
     def update_tournaments(self, tournaments):

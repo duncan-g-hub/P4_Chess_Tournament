@@ -71,7 +71,7 @@ class View:
 
 
     def tournament_menu(self, tournament_name):
-        possible_choices = ["1", "2", "3", "4", "5"]
+        possible_choices = ["1", "2", "3", "4", "5", "6"]
         print("---------- Menu Tournoi ----------")
         print()
         print(f"Tournoi '{tournament_name.title()}' séléctionné.")

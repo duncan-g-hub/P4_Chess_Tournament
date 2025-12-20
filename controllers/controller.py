@@ -98,7 +98,7 @@ class Controller:
 
     def add_player(self):
         last_name, first_name, birth_date, player_id = self.view.player_form()
-        player = Player(last_name, first_name, birth_date, player_id)
+        player = Player(player_id, last_name, first_name, birth_date)
         if self.control_player_in_players(player_id) :
             self.view.display_message(f"Le joueur {last_name.uper()} {first_name.capitalize()} existe déja.")
         else:
@@ -163,22 +163,24 @@ class Controller:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == tournament_name:
-                players = tuple(tournament["players"])
+                players = tournament["players"]
                 turn_number = tournament["turn_number"]
         # ouverture du menu de gestion du tournoi
         #gérer la suite dans une boucle
         turn = Turn(players)
-        while turn.current_turn <= turn_number :
+        while turn.current_turn < turn_number :
             pairs, player_alone = turn.get_players_pairs()
             # afficher un message si player_alone is None
+
+            turn.start_turn()
             matchs = []
             for pair in pairs:
                 match = Match(pair)
                 match.launch_match()
                 matchs.append(match.players)
-            turn.get_matchs_information()
+            turn.get_matchs_information(matchs)
+            turn_informations = turn.stock_turn_informations()
             players = turn.players
-            turn_informations = turn.create_turn()
             #il faut sauvegarder les informations dans le tournoi
             tournament = Tournament(tournament_name)
             tournament.add_turn_in_tournament(turn_informations, players)

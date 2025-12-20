@@ -1,7 +1,9 @@
 import random
+from datetime import datetime
+
 
 class Turn:
-    def __init__(self, players, matchs=None, current_turn=0, start_datetime=None, end_datetime=None):
+    def __init__(self, players, matchs=None, current_turn=0, start_datetime=None, end_datetime=None, player_alone=None):
 
         self.players = players
 
@@ -10,6 +12,7 @@ class Turn:
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
 
+        self.player_alone = player_alone
 
 
     def mix_players_randomly(self):
@@ -38,37 +41,57 @@ class Turn:
         if len(self.players) % 2 == 1:  # permet de dire si un joueur n'a pas de paire
             player_alone = self.players[-1]
 
+        self.player_alone = player_alone
+
         return pairs, player_alone
 
-
-    def get_matchs_information(self):
-        # on récupere la liste de pairs avec score mis à jour
-        # on envois cette liste dans la fonction create_turn
-
-        # on stock la lsite dans la liste players (pour prochain tour)
+    def start_turn(self):
+        # mise à jour de la date de départ
+        now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        self.start_datetime = now
 
 
-        pass
+    def get_matchs_information(self, matchs):
+        # on récupere la liste des matchs avec score mis à jour
+        self.matchs = matchs
 
-    def create_turn(self):
+
+    def stock_turn_informations(self):
         # on appel la fonction finish_turn
         self.finish_turn()
-        #met en form le tour sous forme de dict :
-        # round 1 : liste des matchs du round 1
-        #retourne le dict
+        #met en form le tour sous forme de dict : round 1 : liste des matchs du round 1
+        turn = {f"round {self.current_turn}": self.matchs, "start_datetime": self.start_datetime, "end_datetime": self.end_datetime}
+        return turn
 
-        pass
 
     def finish_turn(self):
         # on incrémente le nombre de tour
         self.current_turn += 1
 
+        # on met à jour la liste de joueur à partir de la liste des matchs
+        self.update_players()
 
-        pass
+        # ajout de la date de fin
+        now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        self.end_datetime = now
+
+    def update_players(self):
+        # on met à jour la liste des joueurs à partir de match,
+        updated_players = []
+        for match in self.matchs:
+            updated_players.append(match[0])
+            updated_players.append(match[1])
+
+        # attention à ne pas oublier si un joueur est solo et n'a pas de match
+        if self.player_alone is not None:
+            updated_players.append(self.player_alone)
+
+        self.players = updated_players
 
 
 
 def get_key_score(player):
     return player[1]
+
 
 
