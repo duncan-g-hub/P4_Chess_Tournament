@@ -30,8 +30,7 @@ class Turn:
 
         # affectation des paires à partir de self.players
         pairs = []
-        for i in range(0, len(self.players) - 1,
-                       2):  # permet de boucler sur le nombre d'élément de la liste de 2 en 2, -1 exlu le dernier élément au cas ou il s'agit d'un nombre impaire
+        for i in range(0, len(self.players) - 1, 2):  # permet de boucler sur le nombre d'élément de la liste de 2 en 2, -1 exlu le dernier élément au cas ou il s'agit d'un nombre impaire
             pair = [self.players[i], self.players[i + 1]]  # on récupere la pair sous forme de liste
             pairs.append(pair)  # on ajoute chaque paire à la liste de paires
 
@@ -64,14 +63,12 @@ class Turn:
         # on incrémente le nombre de tour
         self.current_turn += 1
 
-        # on trie la liste de joueur selon le numéro de joueur
-        self.players = sorted(self.players, key=get_key_player_number)
+
         pass
 
 
 
 def get_key_score(player):
-    return player[2]
+    return player[1]
 
-def get_key_player_number(player):
-    return player[0]
+
