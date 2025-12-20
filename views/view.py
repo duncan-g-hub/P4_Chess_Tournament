@@ -118,7 +118,7 @@ class View:
             print("Liste des particpants : ")
             print()
             for player in players:
-                print(f"{player['player_number']}  ->  ID : {player['player_id'].upper()} - {player['last_name'].upper()} {player['first_name'].capitalize()} - score : {player['score']}")
+                print(f"{player['player_id'].upper()} -> {player['last_name'].upper()} {player['first_name'].capitalize()} - score : {player['score']}")
         print("----------------------------------")
 
 

@@ -88,8 +88,7 @@ class Controller:
         for player in players:
             for player_info in players_infos:
                 if player["player_id"] in player_info:
-                    player["player_number"] = player_info[0]
-                    player["score"] = player_info[2]
+                    player["score"] = player_info[1]
                     players_in_tournament.append(player)
         return players_in_tournament
 
