@@ -13,20 +13,34 @@ class Turn:
 
 
     def mix_players_randomly(self):
-        # premier tour
         # trier de maniere aléatoire les joeurs de la liste players
-        pass
+        random.shuffle(self.players)
+
 
     def sort_players(self):
-        # on récupère la liste des joueurs avec leur score
-        # on trie la liste à partir du score sans toucher au numéro de joueurs
+        # on trie la liste à partir du score
+        self.players = sorted(self.players, key=get_key_score)
 
-        pass
 
     def get_players_pairs(self):
-        # à partir de la liste de tuple issu de mix players randomly, ou sort player
-        # créer des pairs de joueurs (joueur 1 avec joueur 2, joueur 3 avec 4 etc)
-        pass
+        if self.current_turn == 0:
+            self.mix_players_randomly()
+        else:
+            self.sort_players()
+
+        # affectation des paires à partir de self.players
+        pairs = []
+        for i in range(0, len(self.players) - 1,
+                       2):  # permet de boucler sur le nombre d'élément de la liste de 2 en 2, -1 exlu le dernier élément au cas ou il s'agit d'un nombre impaire
+            pair = [self.players[i], self.players[i + 1]]  # on récupere la pair sous forme de liste
+            pairs.append(pair)  # on ajoute chaque paire à la liste de paires
+
+        player_alone = None
+        if len(self.players) % 2 == 1:  # permet de dire si un joueur n'a pas de paire
+            player_alone = self.players[-1]
+
+        return pairs, player_alone
+
 
     def get_matchs_information(self):
         # on récupere la liste de pairs avec score mis à jour
@@ -39,7 +53,7 @@ class Turn:
 
     def create_turn(self):
         # on appel la fonction finish_turn
-
+        self.finish_turn()
         #met en form le tour sous forme de dict :
         # round 1 : liste des matchs du round 1
         #retourne le dict
@@ -48,9 +62,16 @@ class Turn:
 
     def finish_turn(self):
         # on incrémente le nombre de tour
-        # on appel la fonction create turn
+        self.current_turn += 1
+
+        # on trie la liste de joueur selon le numéro de joueur
+        self.players = sorted(self.players, key=get_key_player_number)
         pass
 
 
 
+def get_key_score(player):
+    return player[2]
 
+def get_key_player_number(player):
+    return player[0]

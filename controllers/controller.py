@@ -164,13 +164,14 @@ class Controller:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == tournament_name:
-                players = tournament["players"]
+                players = tuple(tournament["players"])
                 turn_number = tournament["turn_number"]
         # ouverture du menu de gestion du tournoi
         #gérer la suite dans une boucle
         turn = Turn(players)
         while turn.current_turn <= turn_number :
-            pairs = turn.get_players_pairs()
+            pairs, player_alone = turn.get_players_pairs()
+            # afficher un message si player_alone is None
             matchs = []
             for pair in pairs:
                 match = Match(pair)
@@ -183,7 +184,7 @@ class Controller:
             tournament = Tournament(tournament_name)
             tournament.add_turn_in_tournament(turn_informations, players)
 
-            turn = Turn(players)
+            turn = Turn(players, current_turn=turn.current_turn)
 
 
 
