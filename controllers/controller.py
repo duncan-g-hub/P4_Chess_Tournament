@@ -1,6 +1,7 @@
+from models.match import Match
 from models.tournament import Tournament, load_tournaments
 from models.player import Player, load_players
-
+from models.turn import Turn
 
 class Controller:
 
@@ -76,16 +77,19 @@ class Controller:
 
     def get_tournament_players(self, tournament_name):
         tournaments = load_tournaments()
+        players_in_tournament = []
         for tournament in tournaments:
             if tournament["name"] == tournament_name:
-                players_ids = tournament["players"][0]
-                players_scores = tournament["players"][1]
+                if tournament["players"] == [] :
+                    return players_in_tournament
+                players_infos = tournament["players"]
+
         players = load_players()
-        players_in_tournament = []
         for player in players:
-            for player_id, score in players_ids, players_scores:
-                if player["player_id"] == player_id:
-                    player["score"] = score
+            for player_info in players_infos:
+                if player["player_id"] in player_info:
+                    player["player_number"] = player_info[0]
+                    player["score"] = player_info[2]
                     players_in_tournament.append(player)
         return players_in_tournament
 
@@ -136,6 +140,11 @@ class Controller:
                             #voir la liste des round et match
                             pass
                         elif choice_tournament == "5":
+                            #commancer le tournoi
+                            self.view.display_message(f"Lancement du tournoi {tournament_name}.")
+                            self.run_tournament(tournament_name)
+                            break
+                        elif choice_tournament == "6":
                             #retour au menu principal
                             self.view.display_message("Retour au menu principal. ")
                             break
@@ -150,6 +159,33 @@ class Controller:
                 self.view.display_players(list_dict_sorting(self.get_players()))
             if choice == "6":
                 break
+
+    def run_tournament(self, tournament_name):
+        tournaments = load_tournaments()
+        for tournament in tournaments:
+            if tournament["name"] == tournament_name:
+                players = tournament["players"]
+                turn_number = tournament["turn_number"]
+        # ouverture du menu de gestion du tournoi
+        #gérer la suite dans une boucle
+        turn = Turn(players)
+        while turn.current_turn <= turn_number :
+            pairs = turn.get_players_pairs()
+            matchs = []
+            for pair in pairs:
+                match = Match(pair)
+                match.launch_match()
+                matchs.append(match.players)
+            turn.get_matchs_information()
+            players = turn.players
+            turn_informations = turn.create_turn()
+            #il faut sauvegarder les informations dans le tournoi
+            tournament = Tournament(tournament_name)
+            tournament.add_turn_in_tournament(turn_informations, players)
+
+            turn = Turn(players)
+
+
 
 
 def list_dict_sorting(list_of_dicts):

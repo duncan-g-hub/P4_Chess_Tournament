@@ -5,7 +5,7 @@ from models.constances import DATA_DIR
 
 
 class Tournament:
-    def __init__(self, tournament_name, location=None, start_date=None, end_date=None, turn_number=4, description="",players=None, current_turn=None):
+    def __init__(self, tournament_name, location=None, start_date=None, end_date=None, turn_number=4, description="",players=None):
         self.tournament_name = tournament_name
         self.location = location
         self.start_date = start_date
@@ -16,8 +16,7 @@ class Tournament:
 
         self.players = players or []
 
-        self.current_turn = current_turn
-        # self.turns = []
+        self.turns = []
 
 
     def add_tournament(self):
@@ -27,7 +26,9 @@ class Tournament:
                       "end_date": self.end_date,
                       "turn_number": self.turn_number,
                       "description": self.description,
-                      "players": []}
+                      "players": [],
+                      "turns": []}
+
         self.save_tournament(tournament)
 
 
@@ -35,9 +36,17 @@ class Tournament:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.tournament_name:
-                tournament["players"].append((player_id,0.0))
+                nb_players = len(tournament["players"])
+                tournament["players"].append((f"Joueur {nb_players+1}",player_id,0.0))
                 self.update_tournaments(tournaments)
 
+    def add_turn_in_tournament(self, turns, players):
+        tournaments = load_tournaments()
+        for tournament in tournaments:
+            if tournament["name"] == self.tournament_name:
+                tournament["turns"].append(turns)
+                tournament["players"] = players
+                self.update_tournaments(tournaments)
 
     def update_tournaments(self, tournaments):
         with open(f"{DATA_DIR}/tournaments.json", "w") as file:

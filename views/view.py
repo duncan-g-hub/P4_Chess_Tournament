@@ -80,7 +80,8 @@ class View:
         print("2.Ajouter un joueur au tournoi ")
         print("3.Afficher les joueurs participants au tournoi ")
         print("4.Afficher la liste des tours et matchs du tournoi ")
-        print("5.Revenir au menu principal ")
+        print("5.Commancer le tournoi ")
+        print("6.Revenir au menu principal ")
         print()
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
@@ -117,7 +118,7 @@ class View:
             print("Liste des particpants : ")
             print()
             for player in players:
-                print(f"{player['player_id'].upper()} : {player['last_name'].upper()} {player['first_name'].capitalize()} - score : {player['score']}")
+                print(f"{player['player_number']}  ->  ID : {player['player_id'].upper()} - {player['last_name'].upper()} {player['first_name'].capitalize()} - score : {player['score']}")
         print("----------------------------------")
 
 
