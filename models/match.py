@@ -3,7 +3,7 @@ import random
 class Match:
     def __init__(self, players):
         self.players = players
-        # players est une liste (paire) de tuple (joueur 1, id, score)
+        # players est une liste (paire) de liste (id, score)
 
 
     def launch_match(self):

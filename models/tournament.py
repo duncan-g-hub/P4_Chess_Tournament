@@ -46,7 +46,7 @@ class Tournament:
                 tournament["turns"].append(turns)
                 tournament["players"] = players
 
-                self.update_tournaments(tournaments)
+                # self.update_tournaments(tournaments)
 
     def update_tournaments(self, tournaments):
         with open(f"{DATA_DIR}/tournaments.json", "w") as file:

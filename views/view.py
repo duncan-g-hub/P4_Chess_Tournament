@@ -80,7 +80,7 @@ class View:
         print("2.Ajouter un joueur au tournoi ")
         print("3.Afficher les joueurs participants au tournoi ")
         print("4.Afficher la liste des tours et matchs du tournoi ")
-        print("5.Commancer le tournoi ")
+        print("5.Commencer le tournoi ")
         print("6.Revenir au menu principal ")
         print()
         print("----------------------------------")

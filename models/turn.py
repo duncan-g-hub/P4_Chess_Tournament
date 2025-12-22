@@ -25,35 +25,61 @@ class Turn:
         self.players = sorted(self.players, key=get_key_score)
 
 
-    def get_players_pairs(self):
+    def get_players_pairs(self, pairs_in_turns, players_alone):
         if self.current_turn == 0:
             self.mix_players_randomly()
         else:
             self.sort_players()
 
+        # gestion d'un potentiel joueur seul
+        self.get_player_alone(players_alone)
+
+
+
+
+        # comment gerer le fait qu'une paire ne peut pas se rencontrer plusieurs fois ?
+
         # affectation des paires à partir de self.players
         pairs = []
-        for i in range(0, len(self.players) - 1, 2):  # permet de boucler sur le nombre d'élément de la liste de 2 en 2, -1 exlu le dernier élément au cas ou il s'agit d'un nombre impaire
+        for i in range(0, len(self.players), 2):  # permet de boucler sur le nombre d'élément de la liste de 2 en 2
             pair = [self.players[i], self.players[i + 1]]  # on récupere la pair sous forme de liste
             pairs.append(pair)  # on ajoute chaque paire à la liste de paires
 
-        player_alone = None
+
+
+        return pairs, self.player_alone
+
+    def get_player_alone(self, players_alone):
+        # gestion d'un potentiel joueur seul
+        self.player_alone = None
         if len(self.players) % 2 == 1:  # permet de dire si un joueur n'a pas de paire
-            player_alone = self.players[-1]
+            index = 0
+            self.player_alone = self.players[index]
 
-        self.player_alone = player_alone
+            # un joueur seul ne doit pas etre seul plusieurs fois dans un tournoi
+            while self.player_alone in players_alone:
+                index += 1
+                self.player_alone = self.players[index]
+            #on retire le joueur seul de la liste de joueurs pour pouvoir générer des paires
+            self.players.pop(index)
 
-        return pairs, player_alone
+
 
     def start_turn(self):
         # mise à jour de la date de départ
-        now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.start_datetime = now
+        return now
 
 
     def get_matchs_information(self, matchs):
         # on récupere la liste des matchs avec score mis à jour
-        self.matchs = matchs
+        # on convertit la liste de liste en liste de tuple de liste
+        tuple_matchs = []
+        for match in matchs:
+            match = tuple(match)
+            tuple_matchs.append(match)
+        self.matchs = tuple_matchs
 
 
     def stock_turn_informations(self):
@@ -67,12 +93,10 @@ class Turn:
     def finish_turn(self):
         # on incrémente le nombre de tour
         self.current_turn += 1
-
         # on met à jour la liste de joueur à partir de la liste des matchs
         self.update_players()
-
         # ajout de la date de fin
-        now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.end_datetime = now
 
     def update_players(self):
@@ -87,7 +111,6 @@ class Turn:
             updated_players.append(self.player_alone)
 
         self.players = updated_players
-
 
 
 def get_key_score(player):
