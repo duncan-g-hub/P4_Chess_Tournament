@@ -80,7 +80,7 @@ class View:
         print("2.Ajouter un joueur au tournoi ")
         print("3.Afficher les joueurs participants au tournoi ")
         print("4.Afficher la liste des tours et matchs du tournoi ")
-        print("5.Commencer le tournoi ")
+        print("5.Lancer le tournoi ")
         print("6.Revenir au menu principal ")
         print()
         print("----------------------------------")
@@ -159,6 +159,10 @@ class View:
         print("----------------------------------")
 
 
+    def display_turns(self):
+        pass
+
+
     def control_player_id_format(self, player_id):
         if len(player_id) != 7:
             return False, "L'identifiant national d'échecs du joueur doit etre composé de 7 caractères."
@@ -205,6 +209,44 @@ class View:
         if end_date < start_date :
             return False, f"La date de fin ne peut pas être antérieur à la date de départ."
         return True, ""
+
+    def display_lauched_tournament_informations(self, control, tournament_name):
+        if not control:
+            print(f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament_name.title()}.")
+            print(f"Retour au menu du tournoi {tournament_name.title()}.")
+        else :
+            print(f"Lancement du tournoi {tournament_name}.")
+        print("----------------------------------")
+
+
+
+
+
+    def match_menu(self, current_turn, tournament_name, p1, p2):
+        possible_choices = ["1", "2", "3"]
+        print("----------- Match Menu -----------")
+        print()
+        print(f"Tournoi '{tournament_name.title()}' : tour n°{current_turn + 1} en cours.")
+        print()
+        print(f"Joueur {p1}")
+        print("----- VS -----")
+        print(f"Joueur {p2}")
+        print()
+        print("Résultat : ")
+        print(f"1. Égalité ")
+        print(f"2. Victoire du joueur {p1}")
+        print(f"3. Victoire du joueur {p2}")
+        print()
+        print("----------------------------------")
+        choice = input("Entrer le numéro correspondant : ")
+        print("----------------------------------")
+        while choice not in possible_choices:
+            print("Vous devez entrer un numéro compris entre 1 et 3.")
+            choice = input("Entrer le numéro correspondant : ")
+            print("----------------------------------")
+        return choice
+
+
 
 
     def display_message(self, message):

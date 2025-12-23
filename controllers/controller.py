@@ -96,6 +96,7 @@ class Controller:
         return players_informations
 
     def get_tournament_turns(self):
+        self.view.display_turns()
         pass
 
 
@@ -109,11 +110,12 @@ class Controller:
             self.view.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
 
 
-    def get_players(self):
-        players = load_players()
-        return players
 
 
+    def control_player_number_in_tournament(self, players):
+        if len(players) < 2:
+            return False
+        return True
 
 
 
@@ -148,8 +150,17 @@ class Controller:
 
                         elif choice_tournament == "5":
                             #commancer le tournoi
+                            players, turn_number = self.get_tournament_informations(tournament_name)
 
-                            self.run_tournament(tournament_name)
+                            control = self.control_player_number_in_tournament(players)
+                            self.view.display_lauched_tournament_informations(control, tournament_name)
+
+                            if not control:
+                                continue
+
+
+                            self.view.display_players_in_tournament(self.get_players_informations_from_players(players))
+                            self.run_tournament(tournament_name, players, turn_number)
 
 
                         elif choice_tournament == "6":
@@ -165,7 +176,7 @@ class Controller:
                 self.add_player()
             if choice == "5":
                 # afficher la lsite des joeurs
-                self.view.display_players(list_dict_sorting(self.get_players()))
+                self.view.display_players(list_dict_sorting(load_players()))
             if choice == "6":
                 break
 
@@ -181,31 +192,23 @@ class Controller:
 
 
 
-    def run_tournament(self, tournament_name):
-
-        players, turn_number = self.get_tournament_informations(tournament_name)
-        if len(players) < 2 :
-            self.view.display_message(f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament_name}.")
-            return
-        self.view.display_message(f"Lancement du tournoi {tournament_name}.")
+    def run_tournament(self, tournament_name, players, turn_number):
 
         # plutot que de gerer des messages, il faudrait afficher des vues
 
-        # ouverture du menu de gestion du tournoi
-
         # stocker les joeurs seuls pour éviter qu'ils se retrouvent plusieurs fois tout seul
         players_alone = []
-
         # stocker les paires pour éviter qu'elles se rencontrent plusieurs fois
-        pairs_in_turns = []
-
+        pairs_in_tournament = []
 
         turn = Turn(players)
         while turn.current_turn < turn_number :
-            pairs, player_alone = turn.get_players_pairs(pairs_in_turns, players_alone)
+
+
+            pairs, player_alone = turn.get_players_pairs(pairs_in_tournament, players_alone)
 
             # il faut passer ces listes aux créateurs de pairs
-            pairs_in_turns.append(pairs)
+            pairs_in_tournament.extend(pairs)
             players_alone.append(player_alone)
 
             # commencement du tour
@@ -213,16 +216,6 @@ class Controller:
             self.view.display_message(f"Commencement du tour n°{turn.current_turn+1} {start_datetime}")
 
 
-            # afficher les paires
-            for i, pair in enumerate(pairs):
-                players_in_pair = self.get_players_informations_from_players(pair)
-                p1, p2 = players_in_pair[0], players_in_pair[1]
-                self.view.display_message(
-                    f"Match n°{i+1} :\n"
-                    "\n"
-                    f"Le Joueur {p1["player_id"].upper()} : {p1['last_name'].upper()} {p1['first_name'].capitalize()} ({p1['score']}pt)\n"
-                    "             --- VS ---\n"
-                    f"Le Joueur {p2["player_id"].upper()} : {p2['last_name'].upper()} {p2['first_name'].capitalize()} ({p2['score']}pt)")
 
             # afficher un message si player_alone is not None
             if player_alone is not None:
@@ -234,10 +227,28 @@ class Controller:
 
             matchs = []
             for i, pair in enumerate(pairs):
+
+                # match menu
+                players_in_pair = self.get_players_informations_from_players(pair)
+                p1, p2 = players_in_pair[0], players_in_pair[1]
+                str_p1 = f"{p1["player_id"].upper()} : {p1['last_name'].upper()} {p1['first_name'].capitalize()} ({p1['score']}pt)"
+                str_p2 = f"{p2["player_id"].upper()} : {p2['last_name'].upper()} {p2['first_name'].capitalize()} ({p2['score']}pt)"
+                choice = self.view.match_menu(turn.current_turn, tournament_name, str_p1, str_p2)
+
+
                 match = Match(pair)
-                match.launch_match()
-                #début du match n°x
-                #égalité ou x remporte
+
+                if choice == "2":
+                    winner = p1
+                elif choice == "3":
+                    winner = p2
+                else:
+                    winner = None
+
+                match.launch_match(winner)
+
+
+
 
                 matchs.append(match.players)
 
@@ -251,6 +262,11 @@ class Controller:
             tournament.add_turn_in_tournament(turn_informations, players)
 
             turn = Turn(players, current_turn=turn.current_turn)
+
+        #fin du tournoi afficher le vainqueur
+
+
+
 
 
 

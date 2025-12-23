@@ -6,21 +6,19 @@ class Match:
         # players est une liste (paire) de liste (id, score)
 
 
-    def launch_match(self):
-        # qui gagne la rencontre ?
-        # égalité ?
-        equality = random.choice([True, False])
-        if equality:
-            winner = None
-        # non-égalité ?
-        else :
-            # qui remporte ?
-            winner = random.choice(self.players)
+    def launch_match(self, winner):
+        # # qui gagne la rencontre ?
+        # # égalité ?
+        # equality = random.choice([True, False])
+        # if equality:
+        #     winner = None
+        # # non-égalité ?
+        # else :
+        #     # qui remporte ?
+        #     winner = random.choice(self.players)
 
         # mise à jour des scores
         self.update_scores(winner)
-
-        # formulaire à faire (pour l'instant aléatoire, à gérer par la suite dans view)
 
 
     def update_scores(self, winner):
