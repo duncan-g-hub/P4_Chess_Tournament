@@ -1,9 +1,9 @@
-from controllers.controller import Controller
+from controllers.main_menu_controller import MainMenuController
 from views.view import View
 
 def main():
     view = View()
-    controller = Controller(view)
+    controller = MainMenuController(view)
 
     controller.run_main_menu()
 

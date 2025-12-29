@@ -70,6 +70,46 @@ class View:
         return tournament_name
 
 
+
+
+    def display_tournaments(self, tournaments):
+        print("Liste des tournois : ")
+        print()
+        for tournament in tournaments:
+            print(f"Nom du tournoi : {tournament['name'].title()}")
+            print(f"Lieu : {tournament['location'].title()}")
+            print(f"Date de départ : {tournament['start_date']}")
+            print(f"Date de fin : {tournament['end_date']}")
+            print()
+        print("----------------------------------")
+
+
+    def player_form(self):
+        last_name = cleaning_input(input("Entrer le nom de famille du joueur : "))
+        first_name = cleaning_input(input("Enter le prénom du joueur : "))
+        birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
+        while self.control_birth_date(birth_date)[0] == False:
+            print("----------------------------------")
+            print(self.control_birth_date(birth_date)[1])
+            birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
+        player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
+        while self.control_player_id_format(player_id)[0] == False:
+            print("----------------------------------")
+            print(self.control_player_id_format(player_id)[1])
+            player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
+        print("----------------------------------")
+        return last_name, first_name, birth_date, player_id
+
+
+    def display_players(self, players):
+        print("Liste des joueurs : ")
+        print()
+        for player in players:
+            print(f"{player['player_id'].upper()}  ->  Nom : {player['last_name'].upper()}  -  Prénom : {player['first_name'].capitalize()}  -  Date de naissance : {player['birth_date']}")
+        print("----------------------------------")
+
+
+
     def display_tournament_menu(self, tournament_name):
         possible_choices = ["1", "2", "3", "4", "5", "6"]
         print("---------- Menu Tournoi ----------")
@@ -121,46 +161,67 @@ class View:
                 print(f"{player['player_id'].upper()} -> {player['last_name'].upper()} {player['first_name'].capitalize()} - score : {player['score']}")
         print("----------------------------------")
 
-
-    def display_tournaments(self, tournaments):
-        print("Liste des tournois : ")
-        print()
-        for tournament in tournaments:
-            print(f"Nom du tournoi : {tournament['name'].title()}")
-            print(f"Lieu : {tournament['location'].title()}")
-            print(f"Date de départ : {tournament['start_date']}")
-            print(f"Date de fin : {tournament['end_date']}")
-            print()
-        print("----------------------------------")
-
-
-    def player_form(self):
-        last_name = cleaning_input(input("Entrer le nom de famille du joueur : "))
-        first_name = cleaning_input(input("Enter le prénom du joueur : "))
-        birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
-        while self.control_birth_date(birth_date)[0] == False:
-            print("----------------------------------")
-            print(self.control_birth_date(birth_date)[1])
-            birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
-        player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
-        while self.control_player_id_format(player_id)[0] == False:
-            print("----------------------------------")
-            print(self.control_player_id_format(player_id)[1])
-            player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
-        print("----------------------------------")
-        return last_name, first_name, birth_date, player_id
-
-
-    def display_players(self, players):
-        print("Liste des joueurs : ")
-        print()
-        for player in players:
-            print(f"{player['player_id'].upper()}  ->  Nom : {player['last_name'].upper()}  -  Prénom : {player['first_name'].capitalize()}  -  Date de naissance : {player['birth_date']}")
-        print("----------------------------------")
-
-
     def display_turns(self):
         pass
+
+
+
+
+
+    def display_lauched_tournament_informations(self, control, tournament_name):
+        if not control:
+            print(f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament_name.title()}.")
+            print(f"Retour au menu du tournoi {tournament_name.title()}.")
+        else :
+            print(f"Lancement du tournoi {tournament_name}.")
+        print("----------------------------------")
+
+
+    def display_match_menu(self, current_turn, tournament_name, p1, p2):
+        possible_choices = ["1", "2", "3"]
+        print("----------- Match Menu -----------")
+        print()
+        print(f"Tournoi '{tournament_name.title()}' : tour n°{current_turn + 1} en cours.")
+        print()
+        print(f"Joueur {p1}")
+        print("             --- VS ---")
+        print(f"Joueur {p2}")
+        print()
+        print("Résultat : ")
+        print(f"1. Égalité ")
+        print(f"2. Victoire du joueur {p1}")
+        print(f"3. Victoire du joueur {p2}")
+        print()
+        print("----------------------------------")
+        choice = input("Entrer le numéro correspondant : ")
+        print("----------------------------------")
+        while choice not in possible_choices:
+            print("Vous devez entrer un numéro compris entre 1 et 3.")
+            choice = input("Entrer le numéro correspondant : ")
+            print("----------------------------------")
+        return choice
+
+
+
+
+
+
+
+
+    def display_message(self, message):
+        print(message)
+        print("----------------------------------")
+
+
+
+
+
+
+
+
+
+
+
 
 
     def control_player_id_format(self, player_id):
@@ -210,48 +271,7 @@ class View:
             return False, f"La date de fin ne peut pas être antérieur à la date de départ."
         return True, ""
 
-    def display_lauched_tournament_informations(self, control, tournament_name):
-        if not control:
-            print(f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament_name.title()}.")
-            print(f"Retour au menu du tournoi {tournament_name.title()}.")
-        else :
-            print(f"Lancement du tournoi {tournament_name}.")
-        print("----------------------------------")
 
-
-
-
-
-    def display_match_menu(self, current_turn, tournament_name, p1, p2):
-        possible_choices = ["1", "2", "3"]
-        print("----------- Match Menu -----------")
-        print()
-        print(f"Tournoi '{tournament_name.title()}' : tour n°{current_turn + 1} en cours.")
-        print()
-        print(f"Joueur {p1}")
-        print("             --- VS ---")
-        print(f"Joueur {p2}")
-        print()
-        print("Résultat : ")
-        print(f"1. Égalité ")
-        print(f"2. Victoire du joueur {p1}")
-        print(f"3. Victoire du joueur {p2}")
-        print()
-        print("----------------------------------")
-        choice = input("Entrer le numéro correspondant : ")
-        print("----------------------------------")
-        while choice not in possible_choices:
-            print("Vous devez entrer un numéro compris entre 1 et 3.")
-            choice = input("Entrer le numéro correspondant : ")
-            print("----------------------------------")
-        return choice
-
-
-
-
-    def display_message(self, message):
-        print(message)
-        print("----------------------------------")
 
 
 # fonction de nettoyage pour stockage

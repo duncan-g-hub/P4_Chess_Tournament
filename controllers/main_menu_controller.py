@@ -1,0 +1,102 @@
+from controllers.tournament_menu_controller import TournamentMenuController
+from models.tournament import Tournament, load_tournaments
+from models.player import Player, load_players
+
+
+class MainMenuController:
+
+    def __init__(self, view):
+        self.view = view
+
+
+    def add_tournament(self):
+        tournament_name, location, start_date, end_date, turn_number, descritpion = self.view.tournament_form()
+        tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
+        if self.control_tournament_name(tournament_name) == True:
+            self.view.display_message(f"Le tournoi {tournament_name.title()} existe déja. Veuillez saisir les informations de nouveau en changeant de nom.")
+        else:
+            tournament.add_tournament()
+            self.view.display_message(f"Le tournoi {tournament_name.title()} a bien été créé.")
+
+
+    def control_tournament_name(self, tournament_name):
+        tournaments = load_tournaments()
+        for t in tournaments:
+            if t["name"] == tournament_name:
+                return True
+        return False
+
+
+
+    def get_tournament_informations(self, tournament_name):
+        tournaments = load_tournaments()
+        for tournament in tournaments:
+            if tournament["name"] == tournament_name:
+                return tournament
+
+
+
+    def control_player_in_players(self, player_id):
+        players = load_players()
+        for player in players:
+            if player["player_id"] == player_id:
+                return True
+        return False
+
+
+
+    def get_players_informations_from_players(self, players_in_tournament):
+        players = load_players()
+        players_informations = []
+        for player in players:
+            for player_in_tournament in players_in_tournament:
+                if player["player_id"] in player_in_tournament:
+                    player["score"] = player_in_tournament[1]
+                    players_informations.append(player)
+        return players_informations
+
+
+    def add_player(self):
+        last_name, first_name, birth_date, player_id = self.view.player_form()
+        player = Player(player_id, last_name, first_name, birth_date)
+        if self.control_player_in_players(player_id) :
+            self.view.display_message(f"Le joueur {last_name.uper()} {first_name.capitalize()} existe déja.")
+        else:
+            player.add_player()
+            self.view.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
+
+
+
+
+
+    def run_main_menu(self):
+        while True:
+            choice = self.view.display_main_menu()
+            if choice == "1":
+                self.add_tournament()
+            if choice == "2":
+                tournament_menu = TournamentMenuController(self.view)
+                tournament_menu.run_tournament_menu()
+            if choice == "3":
+                # afficher la  liste des tournois
+                self.view.display_tournaments(load_tournaments())
+            if choice == "4":
+                # ajouter un joueur
+                self.add_player()
+            if choice == "5":
+                # afficher la lsite des joeurs
+                self.view.display_players(list_dict_sorting(load_players()))
+            if choice == "6":
+                break
+
+
+
+
+
+
+def list_dict_sorting(list_of_dicts):
+    list_of_dicts_sorted = sorted(list_of_dicts, key=get_key_in_dict)
+    return list_of_dicts_sorted
+
+def get_key_in_dict(d):
+    return d["last_name"]
