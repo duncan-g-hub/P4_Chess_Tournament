@@ -1,6 +1,6 @@
-from controllers.dict_sorter import list_dict_sorting
+from controllers.list_sorter import sorter
 from models.tournament import Tournament, load_tournaments
-from models.player import Player, load_players
+from models.player import Player
 
 
 class MainMenuController:
@@ -29,9 +29,9 @@ class MainMenuController:
 
 
     def control_player_in_players(self, player_id):
-        players = load_players()
+        players = Player().deserialize()
         for player in players:
-            if player["player_id"] == player_id:
+            if player.player_id == player_id:
                 return True
         return False
 
@@ -61,7 +61,7 @@ class MainMenuController:
                 self.add_player()
             if choice == "5":
                 # afficher la lsite des joeurs
-                self.view.display_players(list_dict_sorting(load_players()))
+                self.view.display_players(sorter(Player().deserialize()))
             if choice == "6":
                 break
 

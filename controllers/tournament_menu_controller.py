@@ -1,6 +1,6 @@
 from models.tournament import Tournament, load_tournaments
-from models.player import  load_players
-from controllers.dict_sorter import list_dict_sorting
+from models.player import  Player
+from controllers.list_sorter import sorter
 
 class TournamentMenuController:
     def __init__(self, view, tournament_controller, message):
@@ -21,11 +21,11 @@ class TournamentMenuController:
         if self.control_player_in_players(player_id) == False:
             self.message.display_message(f"L'identifiant {player_id.upper()} ne correspond à aucun joueur, ajoutez le à partir du menu principal. ")
             return
-        players = load_players()
+        players = Player().deserialize()
         player_name = ""
         for player in players:
-            if player["player_id"] == player_id:
-                player_name = f"{player["last_name"].upper()} {player['first_name'].capitalize()}"
+            if player.player_id == player_id:
+                player_name = f"{player.last_name.upper()} {player.first_name.capitalize()}"
         if self.control_player_in_tournament(player_id, tournament_name) == True:
             self.message.display_message(f"Le joueur '{player_name}' est déja inscrit au tournoi '{tournament_name.title()}'. ")
             return
@@ -35,9 +35,9 @@ class TournamentMenuController:
 
 
     def control_player_in_players(self, player_id):
-        players = load_players()
+        players = Player().deserialize()
         for player in players:
-            if player["player_id"] == player_id:
+            if player.player_id == player_id:
                 return True
         return False
 
@@ -50,14 +50,14 @@ class TournamentMenuController:
                     return True
             return False
 
-
+    # existe dans tournament controller
     def get_players_informations_from_players(self, players_in_tournament):
-        players = load_players()
+        players = Player().deserialize()
         players_informations = []
         for player in players:
             for player_in_tournament in players_in_tournament:
-                if player["player_id"] in player_in_tournament:
-                    player["score"] = player_in_tournament[1]
+                if player.player_id in player_in_tournament:
+                    player.score = player_in_tournament[1]
                     players_informations.append(player)
         return players_informations
 
@@ -90,7 +90,7 @@ class TournamentMenuController:
                     # voir la liste des joueurs
                     tournament = self.get_tournament_informations(tournament_name)
                     players_informations = self.get_players_informations_from_players(tournament["players"])
-                    self.view.display_players_in_tournament(list_dict_sorting(players_informations))
+                    self.view.display_players_in_tournament(sorter(players_informations))
 
                 elif choice_tournament == "4":
                     # voir la liste des round et match

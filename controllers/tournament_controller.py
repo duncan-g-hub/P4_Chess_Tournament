@@ -1,6 +1,6 @@
 from models.match import Match
 from models.tournament import Tournament
-from models.player import load_players
+from models.player import Player
 from models.turn import Turn
 
 class TournamentController:
@@ -8,14 +8,14 @@ class TournamentController:
         self.view = view
         self.message = message
 
-
+    #existe dans tournament menu controller
     def get_players_informations_from_players(self, players_in_tournament):
-        players = load_players()
+        players = Player().deserialize()
         players_informations = []
         for player in players:
             for player_in_tournament in players_in_tournament:
-                if player["player_id"] in player_in_tournament:
-                    player["score"] = player_in_tournament[1]
+                if player.player_id in player_in_tournament:
+                    player.score = player_in_tournament[1]
                     players_informations.append(player)
         return players_informations
 
@@ -31,17 +31,17 @@ class TournamentController:
             self.message.display_message(
                 f"Match n°{i + 1} :\n"
                 "\n"
-                f"Le Joueur {p1["player_id"].upper()} : {p1['last_name'].upper()} {p1['first_name'].capitalize()} ({p1['score']}pt)\n"
+                f"Le Joueur {p1.player_id.upper()} : {p1.last_name.upper()} {p1.first_name.capitalize()} ({p1.score}pt)\n"
                 "             --- VS ---\n"
-                f"Le Joueur {p2["player_id"].upper()} : {p2['last_name'].upper()} {p2['first_name'].capitalize()} ({p2['score']}pt)")
+                f"Le Joueur {p2.player_id.upper()} : {p2.last_name.upper()} {p2.first_name.capitalize()} ({p2.score}pt)")
             winner = None
 
             # # Fonction pour gérer tout ça ?
             # # match menu
             # players_in_pair = self.get_players_informations_from_players(pair)
             # p1, p2 = players_in_pair[0], players_in_pair[1]
-            # str_p1 = f"{p1["player_id"].upper()} : {p1['last_name'].upper()} {p1['first_name'].capitalize()} ({p1['score']}pt)"
-            # str_p2 = f"{p2["player_id"].upper()} : {p2['last_name'].upper()} {p2['first_name'].capitalize()} ({p2['score']}pt)"
+            # str_p1 = f"{p1.player_id.upper()} : {p1.last_name.upper()} {p1.first_name.capitalize()} ({p1.score}pt)"
+            # str_p2 = f"{p2.player_id.upper()} : {p2.last_name.upper()} {p2.first_name.capitalize()} ({p2.score}pt)"
             # choice = self.view.display_match_menu(turn.current_turn, tournament_name, str_p1, str_p2)
 
             # if choice == "2":
@@ -80,7 +80,7 @@ class TournamentController:
             if player_alone is not None:
                 p_alone = self.get_players_informations_from_players([player_alone])
                 for p in p_alone:
-                    self.message.display_message(f"Le Joueur {p["player_id"].upper()} : {p['last_name'].upper()} {p['first_name'].capitalize()} ({p['score']}pt) n'a pas de paire, il ne jouera pas durant ce tour.")
+                    self.message.display_message(f"Le Joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} ({p.score}pt) n'a pas de paire, il ne jouera pas durant ce tour.")
             matchs = self.run_match_menu(pairs)
             turn.get_matchs_information(matchs)
             turn_informations = turn.stock_turn_informations()
