@@ -17,11 +17,13 @@ class Player:
 
 
     def __repr__(self):
-        return str(self)
+        return self.__str__()
 
 
     def add_player(self):
-        self.update_players(self.serialize())
+        players = load_players()
+        players.append(self.serialize())
+        self.update_players(players)
 
 
     def serialize(self):
@@ -30,10 +32,7 @@ class Player:
                 "birth_date": self.birth_date,
                 "player_id": self.player_id}
 
-
-    def update_players(self, player):
-        players = load_players()
-        players.append(player)
+    def update_players(self, players):
         with open(f"{DATA_DIR}/players.json", "w") as file:
             json.dump(players, file, indent=4)
 

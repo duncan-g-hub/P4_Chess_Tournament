@@ -1,4 +1,4 @@
-from models.tournament import Tournament, load_tournaments
+from models.tournament import Tournament
 from models.player import  Player
 from controllers.list_sorter import sorter
 
@@ -10,9 +10,9 @@ class TournamentMenuController:
 
 
     def get_tournament_informations(self, tournament_name):
-        tournaments = load_tournaments()
+        tournaments = Tournament().deserialize()
         for tournament in tournaments:
-            if tournament["name"] == tournament_name:
+            if tournament.name == tournament_name:
                 return tournament
 
 
@@ -26,7 +26,7 @@ class TournamentMenuController:
         for player in players:
             if player.player_id == player_id:
                 player_name = f"{player.last_name.upper()} {player.first_name.capitalize()}"
-        if self.control_player_in_tournament(player_id, tournament_name) == True:
+        if self.control_player_in_tournament(player_id, tournament_name) :
             self.message.display_message(f"Le joueur '{player_name}' est déja inscrit au tournoi '{tournament_name.title()}'. ")
             return
         tournament = Tournament(tournament_name)
@@ -43,12 +43,13 @@ class TournamentMenuController:
 
 
     def control_player_in_tournament(self, player_id, tournament_name):
-        tournaments = load_tournaments()
+        tournaments = Tournament().deserialize()
         for tournament in tournaments:
-            if tournament["name"] == tournament_name:
-                if player_id in tournament["players"]:
-                    return True
-            return False
+            if tournament.name == tournament_name:
+                for player in tournament.players:
+                    if player_id in player:
+                        return True
+        return False
 
     # existe dans tournament controller
     def get_players_informations_from_players(self, players_in_tournament):
@@ -75,7 +76,7 @@ class TournamentMenuController:
 
     def run_tournament_menu(self):
         # faire une selection via un numéro parmi une liste de tournoi
-        tournament_name = self.view.display_tournaments_list(load_tournaments())
+        tournament_name = self.view.display_tournaments_list(Tournament().deserialize())
         if tournament_name:
             # ouvre un nouveau menu tournois
             while True:
@@ -89,7 +90,7 @@ class TournamentMenuController:
                 elif choice_tournament == "3":
                     # voir la liste des joueurs
                     tournament = self.get_tournament_informations(tournament_name)
-                    players_informations = self.get_players_informations_from_players(tournament["players"])
+                    players_informations = self.get_players_informations_from_players(tournament.players)
                     self.view.display_players_in_tournament(sorter(players_informations))
 
                 elif choice_tournament == "4":
@@ -99,7 +100,7 @@ class TournamentMenuController:
                 elif choice_tournament == "5":
                     # commancer le tournoi
                     tournament = self.get_tournament_informations(tournament_name)
-                    players, turn_number = tournament["players"], tournament["turn_number"]
+                    players, turn_number = tournament.players, tournament.turn_number
                     control = self.control_player_number_in_tournament(players)
                     self.view.display_lauched_tournament_informations(control, tournament_name)
                     if not control:

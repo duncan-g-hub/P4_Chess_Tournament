@@ -55,10 +55,10 @@ class MainMenuView:
         print("Liste des tournois : ")
         print()
         for tournament in tournaments:
-            print(f"Nom du tournoi : {tournament['name'].title()}")
-            print(f"Lieu : {tournament['location'].title()}")
-            print(f"Date de départ : {tournament['start_date']}")
-            print(f"Date de fin : {tournament['end_date']}")
+            print(f"Nom du tournoi : {tournament.name.title()}")
+            print(f"Lieu : {tournament.location.title()}")
+            print(f"Date de départ : {tournament.start_date}")
+            print(f"Date de fin : {tournament.end_date}")
             print()
         print("----------------------------------")
 

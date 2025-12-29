@@ -11,7 +11,7 @@ class TournamentMenuView:
             return ""
         possible_choices = []
         for nb, tournament in enumerate(tournaments):
-            print(f"{nb+1}- {tournament['name'].title()}")
+            print(f"{nb+1}- {tournament.name.title()}")
             possible_choices.append(f"{nb+1}")
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
@@ -21,7 +21,7 @@ class TournamentMenuView:
             choice = input("Entrer le numéro correspondant : ")
             print("---------------------------------")
         tournament = tournaments[int(choice)-1]
-        tournament_name = tournament['name']
+        tournament_name = tournament.name
         return tournament_name
 
 
@@ -50,12 +50,12 @@ class TournamentMenuView:
 
     def display_tournament_informations(self, tournament):
         print()
-        print(f"Nom du tournoi : '{tournament['name'].title()}")
-        print(f"Lieu : {tournament['location'].title()}")
-        print(f"Date de départ : {tournament['start_date']}")
-        print(f"Date de fin : {tournament['end_date']}")
-        print(f"Nombre de tour : {tournament['turn_number']}")
-        print(f"Description : {tournament['description'].capitalize()}")
+        print(f"Nom du tournoi : '{tournament.name.title()}")
+        print(f"Lieu : {tournament.location.title()}")
+        print(f"Date de départ : {tournament.start_date}")
+        print(f"Date de fin : {tournament.end_date}")
+        print(f"Nombre de tour : {tournament.turn_number}")
+        print(f"Description : {tournament.description.capitalize()}")
         print()
         print("----------------------------------")
 

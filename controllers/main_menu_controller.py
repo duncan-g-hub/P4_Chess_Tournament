@@ -1,5 +1,5 @@
 from controllers.list_sorter import sorter
-from models.tournament import Tournament, load_tournaments
+from models.tournament import Tournament
 from models.player import Player
 
 
@@ -21,9 +21,9 @@ class MainMenuController:
 
 
     def control_tournament_name(self, tournament_name):
-        tournaments = load_tournaments()
+        tournaments = Tournament().deserialize()
         for t in tournaments:
-            if t["name"] == tournament_name:
+            if t.name == tournament_name:
                 return True
         return False
 
@@ -55,7 +55,7 @@ class MainMenuController:
                 self.tournament_menu_controller.run_tournament_menu()
             if choice == "3":
                 # afficher la  liste des tournois
-                self.view.display_tournaments(load_tournaments())
+                self.view.display_tournaments(Tournament().deserialize())
             if choice == "4":
                 # ajouter un joueur
                 self.add_player()
