@@ -5,19 +5,19 @@ from models.player import Player, load_players
 
 class MainMenuController:
 
-    def __init__(self, view, tournament_menu_controller):
+    def __init__(self, view, tournament_menu_controller, message):
         self.view = view
         self.tournament_menu_controller = tournament_menu_controller
-
+        self.message = message
 
     def add_tournament(self):
         tournament_name, location, start_date, end_date, turn_number, descritpion = self.view.tournament_form()
         tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
         if self.control_tournament_name(tournament_name) == True:
-            self.view.display_message(f"Le tournoi {tournament_name.title()} existe déja. Veuillez saisir les informations de nouveau en changeant de nom.")
+            self.message.display_message(f"Le tournoi {tournament_name.title()} existe déja. Veuillez saisir les informations de nouveau en changeant de nom.")
         else:
             tournament.add_tournament()
-            self.view.display_message(f"Le tournoi {tournament_name.title()} a bien été créé.")
+            self.message.display_message(f"Le tournoi {tournament_name.title()} a bien été créé.")
 
 
     def control_tournament_name(self, tournament_name):
@@ -40,10 +40,10 @@ class MainMenuController:
         last_name, first_name, birth_date, player_id = self.view.player_form()
         player = Player(player_id, last_name, first_name, birth_date)
         if self.control_player_in_players(player_id) :
-            self.view.display_message(f"Le joueur {last_name.uper()} {first_name.capitalize()} existe déja.")
+            self.message.display_message(f"Le joueur {last_name.uper()} {first_name.capitalize()} existe déja.")
         else:
             player.add_player()
-            self.view.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
+            self.message.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
 
 
     def run_main_menu(self):

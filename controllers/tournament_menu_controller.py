@@ -5,9 +5,10 @@ from models.player import  load_players
 
 class TournamentMenuController:
 
-    def __init__(self, view, tournament_controller):
+    def __init__(self, view, tournament_controller, message):
         self.view = view
         self.tournament_controller = tournament_controller
+        self.message = message
 
 
 
@@ -21,7 +22,7 @@ class TournamentMenuController:
     def add_player_in_tournament(self, tournament_name):
         player_id = self.view.form_player_id()
         if self.control_player_in_players(player_id) == False:
-            self.view.display_message(f"L'identifiant {player_id.upper()} ne correspond à aucun joueur, ajoutez le à partir du menu principal. ")
+            self.message.display_message(f"L'identifiant {player_id.upper()} ne correspond à aucun joueur, ajoutez le à partir du menu principal. ")
             return
         players = load_players()
         player_name = ""
@@ -29,11 +30,11 @@ class TournamentMenuController:
             if player["player_id"] == player_id:
                 player_name = f"{player["last_name"].upper()} {player['first_name'].capitalize()}"
         if self.control_player_in_tournament(player_id, tournament_name) == True:
-            self.view.display_message(f"Le joueur '{player_name}' est déja inscrit au tournoi '{tournament_name.title()}'. ")
+            self.message.display_message(f"Le joueur '{player_name}' est déja inscrit au tournoi '{tournament_name.title()}'. ")
             return
         tournament = Tournament(tournament_name)
         tournament.add_player_in_tournament(player_id)
-        self.view.display_message(f"Le joueur '{player_name}' a bien été inscrit au tournoi '{tournament_name.title()}'. ")
+        self.message.display_message(f"Le joueur '{player_name}' a bien été inscrit au tournoi '{tournament_name.title()}'. ")
 
 
     def control_player_in_players(self, player_id):
@@ -114,7 +115,7 @@ class TournamentMenuController:
                     self.tournament_controller.run_tournament(tournament_name, players, turn_number)
                 elif choice_tournament == "6":
                     # retour au menu principal
-                    self.view.display_message("Retour au menu principal. ")
+                    self.message.display_message("Retour au menu principal. ")
                     break
 
 

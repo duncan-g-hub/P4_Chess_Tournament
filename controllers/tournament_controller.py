@@ -5,9 +5,9 @@ from models.turn import Turn
 
 class TournamentController:
 
-    def __init__(self, view):
+    def __init__(self, view, message):
         self.view = view
-
+        self.message = message
 
 
 
@@ -32,7 +32,7 @@ class TournamentController:
             # à garder pour test éxécution aléatoire
             players_in_pair = self.get_players_informations_from_players(pair)
             p1, p2 = players_in_pair[0], players_in_pair[1]
-            self.view.display_message(
+            self.message.display_message(
                 f"Match n°{i + 1} :\n"
                 "\n"
                 f"Le Joueur {p1["player_id"].upper()} : {p1['last_name'].upper()} {p1['first_name'].capitalize()} ({p1['score']}pt)\n"
@@ -76,12 +76,12 @@ class TournamentController:
             players_alone.append(player_alone)
             # commencement du tour
             start_datetime = turn.start_turn()
-            self.view.display_message(f"Commencement du tour n°{turn.current_turn+1} {start_datetime}")
+            self.message.display_message(f"Commencement du tour n°{turn.current_turn+1} {start_datetime}")
             # afficher un message si player_alone is not None
             if player_alone is not None:
                 p_alone = self.get_players_informations_from_players([player_alone])
                 for p in p_alone:
-                    self.view.display_message(f"Le Joueur {p["player_id"].upper()} : {p['last_name'].upper()} {p['first_name'].capitalize()} ({p['score']}pt) n'a pas de paire, il ne jouera pas durant ce tour.")
+                    self.message.display_message(f"Le Joueur {p["player_id"].upper()} : {p['last_name'].upper()} {p['first_name'].capitalize()} ({p['score']}pt) n'a pas de paire, il ne jouera pas durant ce tour.")
 
             matchs = self.run_match_menu(pairs)
             turn.get_matchs_information(matchs)
