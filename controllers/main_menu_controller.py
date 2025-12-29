@@ -1,4 +1,4 @@
-from controllers.list_sorter import sorter
+from controllers.list_sorter import name_sorter
 from models.tournament import Tournament
 from models.player import Player
 
@@ -61,7 +61,7 @@ class MainMenuController:
                 self.add_player()
             if choice == "5":
                 # afficher la lsite des joeurs
-                self.view.display_players(sorter(Player().deserialize()))
+                self.view.display_players(name_sorter(Player().deserialize()))
             if choice == "6":
                 break
 

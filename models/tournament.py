@@ -49,12 +49,16 @@ class Tournament:
         self.update_tournaments(tournaments)
 
 
-    def add_turn_in_tournament(self, turns, players):
+    def add_turn_in_tournament(self, turn):
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
-                tournament["turns"].append(turns)
-                tournament["players"] = players
+                tournament["turns"].append({"name" : turn.name,
+                                            "matchs" : turn.matchs,
+                                            "start_datetime" : turn.start_datetime,
+                                            "end_datetime" : turn.end_datetime,})
+                tournament["players"] = turn.players
+                # print(tournament)
         # self.update_tournaments(tournaments)
 
 

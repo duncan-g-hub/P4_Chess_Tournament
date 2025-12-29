@@ -36,3 +36,29 @@ class TournamentView:
             print("----------------------------------")
         return choice
 
+
+    def display_podium(self, firsts, seconds, thirds, tournament_name):
+        print("------------- Podium -------------")
+        print()
+        if len(firsts) > 1:
+            print(f"Les vainqueurs du tournoi '{tournament_name.title()}' sont :")
+            for first in firsts:
+                print(f" - {first.last_name.capitalize()} {first.first_name.capitalize()}, avec un score de {first.score}")
+        else:
+            print(f"Le vainqueur du tournoi '{tournament_name.title()}' est {firsts[0].last_name.capitalize()} {firsts[0].first_name.capitalize()}, avec un score de {firsts[0].score}")
+        print()
+        if len(seconds) > 1:
+            print(f"Les seconds du tournoi '{tournament_name.title()}' sont :")
+            for second in seconds:
+                print(f" - {second.last_name.capitalize()} {second.first_name.capitalize()}, avec un score de {second.score}")
+        else:
+            print(f"La seconde place revient à {seconds[0].last_name.capitalize()} {seconds[0].first_name.capitalize()}, avec un score de {seconds[0].score}")
+        print()
+        if len(thirds) > 1:
+            print(f"Les troisièmes du tournoi '{tournament_name.title()}' sont :")
+            for third in thirds:
+                print(f" - {third.last_name.capitalize()} {third.first_name.capitalize()}, avec un score de {third.score}")
+        else:
+            print(f"La troisème place revient à {thirds[0].last_name.capitalize()} {thirds[0].first_name.capitalize()}, avec un score de {thirds[0].score}")
+        print()
+        print("----------------------------------")

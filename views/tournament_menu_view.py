@@ -81,11 +81,18 @@ class TournamentMenuView:
         pass
 
 
-    def display_lauched_tournament_informations(self, control, tournament_name):
-        if not control:
+    def display_launched_tournament_informations(self, control_turns, control_nb_players, tournament_name):
+        if control_turns :
+            print(f"Le tournoi {tournament_name.title()} a déjà eu lieu.")
+            print(f"Retour au menu du tournoi {tournament_name.title()}.")
+            print("----------------------------------")
+            return
+        if not control_nb_players:
             print(f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament_name.title()}.")
             print(f"Retour au menu du tournoi {tournament_name.title()}.")
-        else :
-            print(f"Lancement du tournoi {tournament_name}.")
+            print("----------------------------------")
+            return
+
+        print(f"Lancement du tournoi {tournament_name}.")
         print("----------------------------------")
 

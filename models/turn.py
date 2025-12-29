@@ -11,6 +11,7 @@ class Turn:
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
         self.player_alone = player_alone
+        self.name = ""
 
 
     def mix_players_randomly(self):
@@ -30,6 +31,7 @@ class Turn:
             self.sort_players()
         # gestion d'un potentiel joueur seul
         self.get_player_alone(players_alone)
+
 
         # ---------------- à revoir en gerant avec recursivité ------------------
 
@@ -90,18 +92,19 @@ class Turn:
             tuple_matchs.append(match)
         self.matchs = tuple_matchs
 
-
-    def stock_turn_informations(self):
-        # on appel la fonction finish_turn
-        self.finish_turn()
-        #met en form le tour sous forme de dict : round 1 : liste des matchs du round 1
-        turn = {f"round {self.current_turn}": self.matchs, "start_datetime": self.start_datetime, "end_datetime": self.end_datetime}
-        return turn
+    # # il faut stocker des instances
+    # def stock_turn_informations(self):
+    #     # on appel la fonction finish_turn
+    #     self.finish_turn()
+    #     #met en form le tour sous forme de dict : round 1 : liste des matchs du round 1
+    #     turn = {f"round {self.current_turn}": self.matchs, "start_datetime": self.start_datetime, "end_datetime": self.end_datetime}
+    #     return turn
 
 
     def finish_turn(self):
         # on incrémente le nombre de tour
         self.current_turn += 1
+        self.name = f"Round {self.current_turn}"
         # on met à jour la liste de joueur à partir de la liste des matchs
         self.update_players()
         # ajout de la date de fin

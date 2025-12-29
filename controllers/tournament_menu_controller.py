@@ -1,6 +1,6 @@
 from models.tournament import Tournament
 from models.player import  Player
-from controllers.list_sorter import sorter
+from controllers.list_sorter import name_sorter
 
 class TournamentMenuController:
     def __init__(self, view, tournament_controller, message):
@@ -68,6 +68,12 @@ class TournamentMenuController:
         pass
 
 
+    def control_turns_in_tournament(self, turns):
+        if turns :
+            return True
+        return False
+
+
     def control_player_number_in_tournament(self, players):
         if len(players) < 2:
             return False
@@ -91,7 +97,7 @@ class TournamentMenuController:
                     # voir la liste des joueurs
                     tournament = self.get_tournament_informations(tournament_name)
                     players_informations = self.get_players_informations_from_players(tournament.players)
-                    self.view.display_players_in_tournament(sorter(players_informations))
+                    self.view.display_players_in_tournament(name_sorter(players_informations))
 
                 elif choice_tournament == "4":
                     # voir la liste des round et match
@@ -100,13 +106,13 @@ class TournamentMenuController:
                 elif choice_tournament == "5":
                     # commancer le tournoi
                     tournament = self.get_tournament_informations(tournament_name)
-                    players, turn_number = tournament.players, tournament.turn_number
-                    control = self.control_player_number_in_tournament(players)
-                    self.view.display_lauched_tournament_informations(control, tournament_name)
-                    if not control:
+                    players, turn_number, turns = tournament.players, tournament.turn_number, tournament.turns
+                    control_nb_players = self.control_player_number_in_tournament(players)
+                    control_turns = self.control_turns_in_tournament(turns)
+                    self.view.display_launched_tournament_informations(control_turns, control_nb_players, tournament_name)
+                    if not control_nb_players or control_turns:
                         continue
                     self.view.display_players_in_tournament(self.get_players_informations_from_players(players))
-
                     self.tournament_controller.run_tournament(tournament_name, players, turn_number)
                 elif choice_tournament == "6":
                     # retour au menu principal

@@ -1,3 +1,4 @@
+from controllers.list_sorter import score_sorter
 from models.match import Match
 from models.tournament import Tournament
 from models.player import Player
@@ -57,9 +58,27 @@ class TournamentController:
         return matchs
 
 
-    def get_winner(self):
-        pass
-
+    def get_podium(self, players):
+        players_remaining = players[:]
+        firsts = []
+        seconds = []
+        thirds = []
+        firsts.append(players_remaining[-1])
+        players_remaining.pop(-1)
+        while players_remaining[-1].score == firsts[-1].score :
+            firsts.append(players_remaining[-1])
+            players_remaining.pop(-1)
+        seconds.append(players_remaining[-1])
+        players_remaining.pop(-1)
+        while players_remaining[-1].score == seconds[-1].score:
+            seconds.append(players_remaining[-1])
+            players_remaining.pop(-1)
+        thirds.append(players_remaining[-1])
+        players_remaining.pop(-1)
+        while players_remaining[-1].score == thirds[-1].score:
+            thirds.append(players_remaining[-1])
+            players_remaining.pop(-1)
+        return firsts, seconds, thirds
 
     def run_tournament(self, tournament_name, players, turn_number):
         # stocker les joeurs seuls pour éviter qu'ils se retrouvent plusieurs fois tout seul
@@ -83,15 +102,18 @@ class TournamentController:
                     self.message.display_message(f"Le Joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} ({p.score}pt) n'a pas de paire, il ne jouera pas durant ce tour.")
             matchs = self.run_match_menu(pairs)
             turn.get_matchs_information(matchs)
-            turn_informations = turn.stock_turn_informations()
-            players = turn.players
+            turn.finish_turn()
+
             #il faut sauvegarder les informations dans le tournoi
             tournament = Tournament(tournament_name)
-            tournament.add_turn_in_tournament(turn_informations, players)
+            tournament.add_turn_in_tournament(turn)
+
             #on créer un nouveau round
-            turn = Turn(players, current_turn=turn.current_turn)
+            turn = Turn(players=turn.players, current_turn=turn.current_turn)
             #afficher les infos des joueurs avec points
-            self.view.display_players_in_tournament(self.get_players_informations_from_players(players))
+
+            self.view.display_players_in_tournament(score_sorter(self.get_players_informations_from_players(turn.players)))
 
         #fin du tournoi afficher les joueurs et le vainqueur
-        self.get_winner()
+        firsts, seconds, thirds = self.get_podium(score_sorter(self.get_players_informations_from_players(turn.players)))
+        self.view.display_podium(firsts, seconds, thirds, tournament_name)
