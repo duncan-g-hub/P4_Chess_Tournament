@@ -1,12 +1,13 @@
-from controllers.tournament_controller import TournamentController
+
 from models.tournament import Tournament, load_tournaments
 from models.player import  load_players
 
 
 class TournamentMenuController:
 
-    def __init__(self, view):
+    def __init__(self, view, tournament_controller):
         self.view = view
+        self.tournament_controller = tournament_controller
 
 
 
@@ -23,6 +24,7 @@ class TournamentMenuController:
             self.view.display_message(f"L'identifiant {player_id.upper()} ne correspond à aucun joueur, ajoutez le à partir du menu principal. ")
             return
         players = load_players()
+        player_name = ""
         for player in players:
             if player["player_id"] == player_id:
                 player_name = f"{player["last_name"].upper()} {player['first_name'].capitalize()}"
@@ -108,8 +110,8 @@ class TournamentMenuController:
                     if not control:
                         continue
                     self.view.display_players_in_tournament(self.get_players_informations_from_players(players))
-                    tournament_controller = TournamentController(self.view)
-                    tournament_controller.run_tournament(tournament_name, players, turn_number)
+
+                    self.tournament_controller.run_tournament(tournament_name, players, turn_number)
                 elif choice_tournament == "6":
                     # retour au menu principal
                     self.view.display_message("Retour au menu principal. ")

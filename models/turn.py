@@ -111,8 +111,6 @@ class Turn:
         self.current_turn += 1
         # on met à jour la liste de joueur à partir de la liste des matchs
         self.update_players()
-        #on trie la liste de joueur par point
-        self.sort_players()
         # ajout de la date de fin
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.end_datetime = now

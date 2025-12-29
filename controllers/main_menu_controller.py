@@ -1,12 +1,13 @@
-from controllers.tournament_menu_controller import TournamentMenuController
+
 from models.tournament import Tournament, load_tournaments
 from models.player import Player, load_players
 
 
 class MainMenuController:
 
-    def __init__(self, view):
+    def __init__(self, view, tournament_menu_controller):
         self.view = view
+        self.tournament_menu_controller = tournament_menu_controller
 
 
     def add_tournament(self):
@@ -27,33 +28,12 @@ class MainMenuController:
         return False
 
 
-
-    def get_tournament_informations(self, tournament_name):
-        tournaments = load_tournaments()
-        for tournament in tournaments:
-            if tournament["name"] == tournament_name:
-                return tournament
-
-
-
     def control_player_in_players(self, player_id):
         players = load_players()
         for player in players:
             if player["player_id"] == player_id:
                 return True
         return False
-
-
-
-    def get_players_informations_from_players(self, players_in_tournament):
-        players = load_players()
-        players_informations = []
-        for player in players:
-            for player_in_tournament in players_in_tournament:
-                if player["player_id"] in player_in_tournament:
-                    player["score"] = player_in_tournament[1]
-                    players_informations.append(player)
-        return players_informations
 
 
     def add_player(self):
@@ -66,17 +46,13 @@ class MainMenuController:
             self.view.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
 
 
-
-
-
     def run_main_menu(self):
         while True:
             choice = self.view.display_main_menu()
             if choice == "1":
                 self.add_tournament()
             if choice == "2":
-                tournament_menu = TournamentMenuController(self.view)
-                tournament_menu.run_tournament_menu()
+                self.tournament_menu_controller.run_tournament_menu()
             if choice == "3":
                 # afficher la  liste des tournois
                 self.view.display_tournaments(load_tournaments())
