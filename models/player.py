@@ -11,7 +11,7 @@ class Player:
         self.player_id = player_id
 
 
-
+    # serialize
     def add_player(self):
         player = {"last_name": self.last_name, "first_name": self.first_name, "birth_date": self.birth_date, "player_id": self.player_id}
         self.save_player(player)
@@ -23,7 +23,7 @@ class Player:
         with open(f"{DATA_DIR}/players.json", "w") as file:
             json.dump(players, file, indent=4)
 
-
+# ajouter une fonction de deserialize
 def load_players():
     players = None
     while players is None :

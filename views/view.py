@@ -2,7 +2,7 @@ from datetime import datetime
 
 class View:
 
-    def menu(self):
+    def display_main_menu(self):
         possible_choices = ["1","2","3","4","5","6"]
         print("-------------- Menu --------------")
         print()
@@ -70,7 +70,7 @@ class View:
         return tournament_name
 
 
-    def tournament_menu(self, tournament_name):
+    def display_tournament_menu(self, tournament_name):
         possible_choices = ["1", "2", "3", "4", "5", "6"]
         print("---------- Menu Tournoi ----------")
         print()
@@ -222,14 +222,14 @@ class View:
 
 
 
-    def match_menu(self, current_turn, tournament_name, p1, p2):
+    def display_match_menu(self, current_turn, tournament_name, p1, p2):
         possible_choices = ["1", "2", "3"]
         print("----------- Match Menu -----------")
         print()
         print(f"Tournoi '{tournament_name.title()}' : tour n°{current_turn + 1} en cours.")
         print()
         print(f"Joueur {p1}")
-        print("----- VS -----")
+        print("             --- VS ---")
         print(f"Joueur {p2}")
         print()
         print("Résultat : ")

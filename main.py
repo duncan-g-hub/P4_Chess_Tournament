@@ -5,7 +5,7 @@ def main():
     view = View()
     controller = Controller(view)
 
-    controller.run()
+    controller.run_main_menu()
 
 
 

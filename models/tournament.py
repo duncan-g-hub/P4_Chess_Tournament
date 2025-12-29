@@ -18,7 +18,7 @@ class Tournament:
 
         self.turns = []
 
-
+    #serialize
     def add_tournament(self):
         tournament = {"name": self.tournament_name,
                       "location": self.location,
@@ -59,7 +59,7 @@ class Tournament:
         with open(f"{DATA_DIR}/tournaments.json", "w") as file:
             json.dump(tournaments, file, indent=4)
 
-
+# ajouter une fonction de deserialize
 def load_tournaments():
     tournaments = None
     while tournaments is None :

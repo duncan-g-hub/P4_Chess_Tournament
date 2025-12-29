@@ -35,54 +35,31 @@ class Turn:
         self.get_player_alone(players_alone)
 
 
+        # à revoir en gerant avec recursivité
+        # affectation des paires à partir de self.players
 
-# # -----------------------------------------------------------------------------------------------
-#         # comment gerer le fait qu'une paire ne peut pas se rencontrer plusieurs fois ?
-#
-#
-#         # affectation des paires à partir de self.players
-#
-#         #on duplique la liste de joueur
-#         available_players = self.players[:]
-#         pairs = []
-#
-#         # on fait une boucle while tant que la liste n'est pas vide
-#         while available_players:
-#             # on prend le premier joueur et on le retire de la liste
-#             p1 = available_players.pop(0)
-#
-#             index = 0
-#             pair = [p1, available_players[index]]
-#             pair_reverse = [pair[1], pair[0]]
-#
-#             while pair in pairs_in_tournament or pair_reverse in pairs_in_tournament:
-#
-#                 pair = [p1, available_players[index+1]]
-#                 pair_reverse = [pair[1], pair[0]]
-#
-#             p2 = available_players.pop(index)
-#             pair = [p1, p2]
-#             pairs.append(pair)
-#
-#             #on l'attribue au prochain joueur sauf si ils se sont déja rencontrés, dans ce cas ou l'attribue à celui d'apres etc...
-#             #on enleve le joueur attribué de la liste
-#             # et on recommence
-#             # trouver solution pour éviter la boucle infine
-#
-#             # probleme -> p1-p2 = une paire / p2-p1= une autre paire
-#             # frozenset ou pair = [p1, p2]
-#         #                  pair_reverse = [pair[1], pair[0]]
-#
-#
-#
-# # -----------------------------------------------------------------------------------------------
-
-
-        # affectation des paires à partir de self.players (sans systeme pour empecher plusieurs rencontres identiques)
+        #on duplique la liste de joueur
+        available_players = self.players[:]
         pairs = []
-        for i in range(0, len(self.players), 2):  # permet de boucler sur le nombre d'élément de la liste de 2 en 2
-            pair = [self.players[i], self.players[i + 1]]  # on récupere la pair sous forme de liste
-            pairs.append(pair)  # on ajoute chaque paire à la liste de paires
+
+        # on fait une boucle while tant que la liste n'est pas vide
+        while True:
+            # si 2 joueur on les mets ensemble
+            if len(available_players) == 2:
+                pair = [available_players[0], available_players[1]]
+                pairs.append(pair)
+                break
+            # on prend le premier joueur et on le retire de la liste
+            p1 = available_players.pop(0)
+            index = 0
+            pair = [p1, available_players[index]]
+            pair_reverse = [pair[1], pair[0]]
+            while pair in pairs_in_tournament or pair_reverse in pairs_in_tournament:
+                pair = [p1, available_players[index+1]]
+                pair_reverse = [pair[1], pair[0]]
+            p2 = available_players.pop(index)
+            pair = [p1, p2]
+            pairs.append(pair)
         return pairs, self.player_alone
 
 
@@ -134,6 +111,8 @@ class Turn:
         self.current_turn += 1
         # on met à jour la liste de joueur à partir de la liste des matchs
         self.update_players()
+        #on trie la liste de joueur par point
+        self.sort_players()
         # ajout de la date de fin
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.end_datetime = now
