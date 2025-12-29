@@ -1,4 +1,4 @@
-
+from controllers.dict_sorter import list_dict_sorting
 from models.tournament import Tournament, load_tournaments
 from models.player import Player, load_players
 
@@ -66,10 +66,3 @@ class MainMenuController:
                 break
 
 
-
-def list_dict_sorting(list_of_dicts):
-    list_of_dicts_sorted = sorted(list_of_dicts, key=get_key_in_dict)
-    return list_of_dicts_sorted
-
-def get_key_in_dict(d):
-    return d["last_name"]

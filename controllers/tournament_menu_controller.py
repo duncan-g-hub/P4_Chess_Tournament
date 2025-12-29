@@ -1,6 +1,6 @@
 from models.tournament import Tournament, load_tournaments
 from models.player import  load_players
-
+from controllers.dict_sorter import list_dict_sorting
 
 class TournamentMenuController:
     def __init__(self, view, tournament_controller, message):
@@ -114,9 +114,3 @@ class TournamentMenuController:
 
 
 
-def list_dict_sorting(list_of_dicts):
-    list_of_dicts_sorted = sorted(list_of_dicts, key=get_key_in_dict)
-    return list_of_dicts_sorted
-
-def get_key_in_dict(d):
-    return d["last_name"]
