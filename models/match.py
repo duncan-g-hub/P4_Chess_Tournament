@@ -17,7 +17,6 @@ class Match:
         else :
             # qui remporte ?
             winner = random.choice(self.players)
-
         # mise à jour des scores
         self.update_scores(winner)
 
@@ -29,13 +28,11 @@ class Match:
             for player in self.players:
                 player[1] += 0.5
                 updated_players.append([player[0],player[1]])
-
         else :
             for player in self.players:
                 if player == winner:
                     player[1] += 1.0
                 updated_players.append([player[0],player[1]])
-
         # on stock les modifs dans players
         self.players = updated_players
 

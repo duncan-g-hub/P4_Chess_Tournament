@@ -23,6 +23,7 @@ class Player:
         with open(f"{DATA_DIR}/players.json", "w") as file:
             json.dump(players, file, indent=4)
 
+
 # ajouter une fonction de deserialize
 def load_players():
     players = None
@@ -37,7 +38,6 @@ def load_players():
         except FileNotFoundError:
             with open(f"{DATA_DIR}/players.json", "w") as file:
                 json.dump([], file)
-
 
 
 if __name__ == '__main__':

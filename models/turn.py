@@ -6,12 +6,10 @@ class Turn:
     def __init__(self, players, matchs=None, current_turn=0, start_datetime=None, end_datetime=None, player_alone=None):
 
         self.players = players
-
         self.matchs = matchs
         self.current_turn = current_turn
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
-
         self.player_alone = player_alone
 
 
@@ -30,18 +28,15 @@ class Turn:
             self.mix_players_randomly()
         else:
             self.sort_players()
-
         # gestion d'un potentiel joueur seul
         self.get_player_alone(players_alone)
 
+        # ---------------- à revoir en gerant avec recursivité ------------------
 
-        # à revoir en gerant avec recursivité
         # affectation des paires à partir de self.players
-
         #on duplique la liste de joueur
         available_players = self.players[:]
         pairs = []
-
         # on fait une boucle while tant que la liste n'est pas vide
         while True:
             # si 2 joueur on les mets ensemble
@@ -70,7 +65,6 @@ class Turn:
             index = random.randrange(len(self.players))
             # tirage au sort
             self.player_alone = self.players[index]
-
             # un joueur seul ne doit pas etre seul plusieurs fois dans un tournoi
             while self.player_alone in players_alone:
                 # re-tirage au sort
@@ -78,7 +72,6 @@ class Turn:
                 self.player_alone = self.players[index]
             #on retire le joueur seul de la liste de joueurs pour pouvoir générer des paires
             self.players.pop(index)
-
 
 
     def start_turn(self):
@@ -115,18 +108,18 @@ class Turn:
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.end_datetime = now
 
+
     def update_players(self):
         # on met à jour la liste des joueurs à partir de match,
         updated_players = []
         for match in self.matchs:
             updated_players.append(match[0])
             updated_players.append(match[1])
-
         # attention à ne pas oublier si un joueur est solo et n'a pas de match
         if self.player_alone is not None:
             updated_players.append(self.player_alone)
-
         self.players = updated_players
+
 
 
 def get_key_score(player):

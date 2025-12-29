@@ -4,6 +4,7 @@ from views.input_format import cleaning_input
 
 class MainMenuView:
 
+
     def display_main_menu(self):
         possible_choices = ["1","2","3","4","5","6"]
         print("-------------- Menu --------------")

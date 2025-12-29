@@ -1,5 +1,3 @@
-
-
 class TournamentView:
 
 
@@ -37,28 +35,4 @@ class TournamentView:
             choice = input("Entrer le numéro correspondant : ")
             print("----------------------------------")
         return choice
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

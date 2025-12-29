@@ -1,15 +1,12 @@
-
 from models.tournament import Tournament, load_tournaments
 from models.player import  load_players
 
 
 class TournamentMenuController:
-
     def __init__(self, view, tournament_controller, message):
         self.view = view
         self.tournament_controller = tournament_controller
         self.message = message
-
 
 
     def get_tournament_informations(self, tournament_name):
@@ -54,7 +51,6 @@ class TournamentMenuController:
             return False
 
 
-
     def get_players_informations_from_players(self, players_in_tournament):
         players = load_players()
         players_informations = []
@@ -65,18 +61,16 @@ class TournamentMenuController:
                     players_informations.append(player)
         return players_informations
 
+
     def get_tournament_turns(self):
         self.view.display_turns()
         pass
-
-
 
 
     def control_player_number_in_tournament(self, players):
         if len(players) < 2:
             return False
         return True
-
 
 
     def run_tournament_menu(self):
@@ -117,14 +111,6 @@ class TournamentMenuController:
                     # retour au menu principal
                     self.message.display_message("Retour au menu principal. ")
                     break
-
-
-
-
-
-
-
-
 
 
 

@@ -4,11 +4,11 @@ from models.player import Player, load_players
 
 
 class MainMenuController:
-
     def __init__(self, view, tournament_menu_controller, message):
         self.view = view
         self.tournament_menu_controller = tournament_menu_controller
         self.message = message
+
 
     def add_tournament(self):
         tournament_name, location, start_date, end_date, turn_number, descritpion = self.view.tournament_form()
@@ -64,9 +64,6 @@ class MainMenuController:
                 self.view.display_players(list_dict_sorting(load_players()))
             if choice == "6":
                 break
-
-
-
 
 
 

@@ -1,4 +1,3 @@
-
 from views.input_format import cleaning_input
 
 class TournamentMenuView:
@@ -24,10 +23,6 @@ class TournamentMenuView:
         tournament = tournaments[int(choice)-1]
         tournament_name = tournament['name']
         return tournament_name
-
-
-
-
 
 
     def display_tournament_menu(self, tournament_name):
@@ -81,11 +76,9 @@ class TournamentMenuView:
                 print(f"{player['player_id'].upper()} -> {player['last_name'].upper()} {player['first_name'].capitalize()} - score : {player['score']}")
         print("----------------------------------")
 
+
     def display_turns(self):
         pass
-
-
-
 
 
     def display_lauched_tournament_informations(self, control, tournament_name):
@@ -95,14 +88,4 @@ class TournamentMenuView:
         else :
             print(f"Lancement du tournoi {tournament_name}.")
         print("----------------------------------")
-
-
-
-
-
-
-
-
-
-
 
