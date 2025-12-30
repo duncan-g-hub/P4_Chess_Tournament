@@ -60,7 +60,7 @@ class Tournament:
                                             "end_datetime" : turn.end_datetime,})
                 tournament["players"] = turn.players
                 # print(tournament)
-        self.update_tournaments(tournaments)
+        # self.update_tournaments(tournaments)
 
 
     def update_tournaments(self, tournaments):
@@ -68,7 +68,7 @@ class Tournament:
             json.dump(tournaments, file, indent=4)
 
 
-    def deserialize(self):
+    def deserialize_all(self):
         tournaments = []
         for t in load_tournaments():
             tournament = Tournament(name=t["name"],

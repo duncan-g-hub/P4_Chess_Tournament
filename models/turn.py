@@ -127,7 +127,7 @@ class Turn:
 
 
 
-    def deserialize(self, turns_dict):
+    def deserialize_all(self, turns_dict):
         turns = []
         for t in turns_dict:
             turn = Turn(matchs=t["matchs"],

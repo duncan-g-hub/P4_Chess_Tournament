@@ -32,12 +32,13 @@ class Player:
                 "birth_date": self.birth_date,
                 "player_id": self.player_id}
 
+
     def update_players(self, players):
         with open(f"{DATA_DIR}/players.json", "w") as file:
             json.dump(players, file, indent=4)
 
 
-    def deserialize(self):
+    def deserialize_all(self):
         players = []
         for p in load_players():
             player = Player(player_id=p["player_id"],
@@ -65,7 +66,7 @@ def load_players():
 
 
 if __name__ == '__main__':
-    players = Player().deserialize()
+    players = Player().deserialize_all()
     print(players)
 
 

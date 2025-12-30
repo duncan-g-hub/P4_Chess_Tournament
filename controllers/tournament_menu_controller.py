@@ -12,7 +12,7 @@ class TournamentMenuController:
 
 
     def get_tournament_informations(self, tournament_name):
-        tournaments = Tournament().deserialize()
+        tournaments = Tournament().deserialize_all()
         for tournament in tournaments:
             if tournament.name == tournament_name:
                 return tournament
@@ -23,7 +23,7 @@ class TournamentMenuController:
         if self.control_player_in_players(player_id) == False:
             self.message.display_message(f"L'identifiant {player_id.upper()} ne correspond à aucun joueur, ajoutez le à partir du menu principal. ")
             return
-        players = Player().deserialize()
+        players = Player().deserialize_all()
         player_name = ""
         for player in players:
             if player.player_id == player_id:
@@ -37,7 +37,7 @@ class TournamentMenuController:
 
 
     def control_player_in_players(self, player_id):
-        players = Player().deserialize()
+        players = Player().deserialize_all()
         for player in players:
             if player.player_id == player_id:
                 return True
@@ -45,7 +45,7 @@ class TournamentMenuController:
 
 
     def control_player_in_tournament(self, player_id, tournament_name):
-        tournaments = Tournament().deserialize()
+        tournaments = Tournament().deserialize_all()
         for tournament in tournaments:
             if tournament.name == tournament_name:
                 for player in tournament.players:
@@ -53,9 +53,9 @@ class TournamentMenuController:
                         return True
         return False
 
-    # existe dans tournament controller
+    # existe dans tournament controller (à voir pour déplacer dans modeles user à laquelle on envois le user_id)
     def get_players_informations_from_players(self, players_in_tournament):
-        players = Player().deserialize()
+        players = Player().deserialize_all()
         players_informations = []
         for player in players:
             for player_in_tournament in players_in_tournament:
@@ -91,9 +91,10 @@ class TournamentMenuController:
         return True
 
 
+    # à diviser en sous fonction pour limiter le nombre de ligne
     def run_tournament_menu(self):
         # faire une selection via un numéro parmi une liste de tournoi
-        tournament_name = self.view.display_tournaments_list(Tournament().deserialize())
+        tournament_name = self.view.display_tournaments_list(Tournament().deserialize_all())
         if tournament_name:
             # ouvre un nouveau menu tournois
             while True:
@@ -119,10 +120,8 @@ class TournamentMenuController:
                                                      f"Retour au menu du tournoi {tournament_name.title()}.")
                         continue
                     # voir la liste des round et match
-                    turns = Turn().deserialize(tournament.turns)
+                    turns = Turn().deserialize_all(tournament.turns)
                     self.get_tournament_turns(turns)
-
-
 
                 elif choice_tournament == "5":
                     # commancer le tournoi

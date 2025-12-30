@@ -9,9 +9,9 @@ class TournamentController:
         self.view = view
         self.message = message
 
-    #existe dans tournament menu controller
+    #existe dans tournament menu controller (à voir pour déplacer dans modeles user à laquelle on envois le user_id)
     def get_players_informations_from_players(self, players_in_tournament):
-        players = Player().deserialize()
+        players = Player().deserialize_all()
         players_informations = []
         for player in players:
             for player_in_tournament in players_in_tournament:
@@ -70,6 +70,8 @@ class TournamentController:
 
         return winners
 
+
+    # à diviser en sous fonction pour limiter le nombre de ligne
     def run_tournament(self, tournament_name, players, turn_number):
         # stocker les joeurs seuls pour éviter qu'ils se retrouvent plusieurs fois tout seul
         players_alone = []

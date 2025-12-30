@@ -1,14 +1,12 @@
 class TournamentView:
 
-    # présent dans tournament menu view
+    # présent dans tournament menu view (changer le nom, pas exactement la meme utilité)
     def display_players_in_tournament(self, players):
-        if players == [] :
-            print("Il n'y a aucun participant pour ce tournoi, ajoutez en à partir du menu du tournoi.")
-        else :
-            print("Liste des particpants : ")
-            print()
-            for player in players:
-                print(f"{player.player_id.upper()} -> {player.last_name.upper()} {player.first_name.capitalize()} - score : {player.score}")
+
+        print("Liste des participants : ")
+        print()
+        for player in players:
+            print(f"{player.player_id.upper()} -> {player.last_name.upper()} {player.first_name.capitalize()} - score : {player.score}")
         print("----------------------------------")
 
 

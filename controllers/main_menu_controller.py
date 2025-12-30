@@ -21,7 +21,7 @@ class MainMenuController:
 
 
     def control_tournament_name(self, tournament_name):
-        tournaments = Tournament().deserialize()
+        tournaments = Tournament().deserialize_all()
         for t in tournaments:
             if t.name == tournament_name:
                 return True
@@ -29,7 +29,7 @@ class MainMenuController:
 
 
     def control_player_in_players(self, player_id):
-        players = Player().deserialize()
+        players = Player().deserialize_all()
         for player in players:
             if player.player_id == player_id:
                 return True
@@ -55,13 +55,13 @@ class MainMenuController:
                 self.tournament_menu_controller.run_tournament_menu()
             if choice == "3":
                 # afficher la  liste des tournois
-                self.view.display_tournaments(Tournament().deserialize())
+                self.view.display_tournaments(Tournament().deserialize_all())
             if choice == "4":
                 # ajouter un joueur
                 self.add_player()
             if choice == "5":
                 # afficher la lsite des joeurs
-                self.view.display_players(name_sorter(Player().deserialize()))
+                self.view.display_players(name_sorter(Player().deserialize_all()))
             if choice == "6":
                 break
 
