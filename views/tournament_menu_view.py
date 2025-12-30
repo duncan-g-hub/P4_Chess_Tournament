@@ -77,8 +77,27 @@ class TournamentMenuView:
         print("----------------------------------")
 
 
-    def display_turns(self):
-        pass
+    def display_turns(self, turns):
+        for turn in turns:
+            print()
+            print(f"Le {turn.name} commence {turn.start_datetime}.")
+            print()
+            for i, match in enumerate(turn.matchs) :
+                print(f"Match n°{i + 1} :")
+                print(f"{match[0].player_id.upper()} : {match[0].last_name.upper()} {match[0].first_name.capitalize()} - {match[0].score}pt")
+                print("          --- VS ---")
+                print(f"{match[1].player_id.upper()} : {match[1].last_name.upper()} {match[1].first_name.capitalize()} - {match[1].score}pt")
+                print()
+            if turn.player_alone :
+                p = turn.player_alone[0]
+                print(f"Le joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} - {p.score}pt ne jouera pas le {turn.name}. ")
+                print()
+
+            print(f"Le {turn.name} se termine {turn.end_datetime}.")
+            print()
+            print("----------------------------------")
+
+
 
 
     def display_launched_tournament_informations(self, control_turns, control_nb_players, tournament_name):

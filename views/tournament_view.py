@@ -37,28 +37,13 @@ class TournamentView:
         return choice
 
 
-    def display_podium(self, firsts, seconds, thirds, tournament_name):
-        print("------------- Podium -------------")
+    def display_winner(self, winners, tournament_name):
         print()
-        if len(firsts) > 1:
+        if len(winners) > 1:
             print(f"Les vainqueurs du tournoi '{tournament_name.title()}' sont :")
-            for first in firsts:
-                print(f" - {first.last_name.capitalize()} {first.first_name.capitalize()}, avec un score de {first.score}")
+            for winner in winners:
+                print(f" - {winner.last_name.capitalize()} {winner.first_name.capitalize()}, avec un score de {winner.score}")
         else:
-            print(f"Le vainqueur du tournoi '{tournament_name.title()}' est {firsts[0].last_name.capitalize()} {firsts[0].first_name.capitalize()}, avec un score de {firsts[0].score}")
-        print()
-        if len(seconds) > 1:
-            print(f"Les seconds du tournoi '{tournament_name.title()}' sont :")
-            for second in seconds:
-                print(f" - {second.last_name.capitalize()} {second.first_name.capitalize()}, avec un score de {second.score}")
-        else:
-            print(f"La seconde place revient à {seconds[0].last_name.capitalize()} {seconds[0].first_name.capitalize()}, avec un score de {seconds[0].score}")
-        print()
-        if len(thirds) > 1:
-            print(f"Les troisièmes du tournoi '{tournament_name.title()}' sont :")
-            for third in thirds:
-                print(f" - {third.last_name.capitalize()} {third.first_name.capitalize()}, avec un score de {third.score}")
-        else:
-            print(f"La troisème place revient à {thirds[0].last_name.capitalize()} {thirds[0].first_name.capitalize()}, avec un score de {thirds[0].score}")
+            print(f"Le vainqueur du tournoi '{tournament_name.title()}' est {winners[0].last_name.capitalize()} {winners[0].first_name.capitalize()}, avec un score de {winners[0].score}")
         print()
         print("----------------------------------")

@@ -55,11 +55,12 @@ class Tournament:
             if tournament["name"] == self.name:
                 tournament["turns"].append({"name" : turn.name,
                                             "matchs" : turn.matchs,
+                                            "player_alone" : turn.player_alone,
                                             "start_datetime" : turn.start_datetime,
                                             "end_datetime" : turn.end_datetime,})
                 tournament["players"] = turn.players
                 # print(tournament)
-        # self.update_tournaments(tournaments)
+        self.update_tournaments(tournaments)
 
 
     def update_tournaments(self, tournaments):

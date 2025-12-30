@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Turn:
-    def __init__(self, players, matchs=None, current_turn=0, start_datetime=None, end_datetime=None, player_alone=None):
+    def __init__(self, players=None, matchs=None, current_turn=0, start_datetime=None, end_datetime=None, player_alone=None, name=None):
 
         self.players = players
         self.matchs = matchs
@@ -11,7 +11,15 @@ class Turn:
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
         self.player_alone = player_alone
-        self.name = ""
+        self.name = name
+
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+    def __repr__(self):
+        return self.__str__()
 
 
     def mix_players_randomly(self):
@@ -92,13 +100,7 @@ class Turn:
             tuple_matchs.append(match)
         self.matchs = tuple_matchs
 
-    # # il faut stocker des instances
-    # def stock_turn_informations(self):
-    #     # on appel la fonction finish_turn
-    #     self.finish_turn()
-    #     #met en form le tour sous forme de dict : round 1 : liste des matchs du round 1
-    #     turn = {f"round {self.current_turn}": self.matchs, "start_datetime": self.start_datetime, "end_datetime": self.end_datetime}
-    #     return turn
+
 
 
     def finish_turn(self):
@@ -122,6 +124,19 @@ class Turn:
         if self.player_alone is not None:
             updated_players.append(self.player_alone)
         self.players = updated_players
+
+
+
+    def deserialize(self, turns_dict):
+        turns = []
+        for t in turns_dict:
+            turn = Turn(matchs=t["matchs"],
+                        start_datetime=t["start_datetime"],
+                        end_datetime=t["end_datetime"],
+                        player_alone=t["player_alone"],
+                        name=t["name"])
+            turns.append(turn)
+        return turns
 
 
 

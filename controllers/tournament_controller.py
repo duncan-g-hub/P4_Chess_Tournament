@@ -58,27 +58,17 @@ class TournamentController:
         return matchs
 
 
-    def get_podium(self, players):
+    def get_winner(self, players):
         players_remaining = players[:]
-        firsts = []
-        seconds = []
-        thirds = []
-        firsts.append(players_remaining[-1])
+        winners = []
+
+        winners.append(players_remaining[-1])
         players_remaining.pop(-1)
-        while players_remaining[-1].score == firsts[-1].score :
-            firsts.append(players_remaining[-1])
+        while players_remaining[-1].score == winners[-1].score :
+            winners.append(players_remaining[-1])
             players_remaining.pop(-1)
-        seconds.append(players_remaining[-1])
-        players_remaining.pop(-1)
-        while players_remaining[-1].score == seconds[-1].score:
-            seconds.append(players_remaining[-1])
-            players_remaining.pop(-1)
-        thirds.append(players_remaining[-1])
-        players_remaining.pop(-1)
-        while players_remaining[-1].score == thirds[-1].score:
-            thirds.append(players_remaining[-1])
-            players_remaining.pop(-1)
-        return firsts, seconds, thirds
+
+        return winners
 
     def run_tournament(self, tournament_name, players, turn_number):
         # stocker les joeurs seuls pour éviter qu'ils se retrouvent plusieurs fois tout seul
@@ -115,5 +105,5 @@ class TournamentController:
             self.view.display_players_in_tournament(score_sorter(self.get_players_informations_from_players(turn.players)))
 
         #fin du tournoi afficher les joueurs et le vainqueur
-        firsts, seconds, thirds = self.get_podium(score_sorter(self.get_players_informations_from_players(turn.players)))
-        self.view.display_podium(firsts, seconds, thirds, tournament_name)
+        winners = self.get_winner(score_sorter(self.get_players_informations_from_players(turn.players)))
+        self.view.display_winner(winners, tournament_name)
