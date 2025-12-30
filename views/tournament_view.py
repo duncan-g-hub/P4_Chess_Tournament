@@ -1,47 +1,117 @@
+from views import view_checker
+from views.input_format import cleaning_input
+
 class TournamentView:
 
-    # présent dans tournament menu view (changer le nom, pas exactement la meme utilité)
-    def display_players_in_tournament(self, players):
 
-        print("Liste des participants : ")
+    def tournament_form(self):
+        tournament_name = cleaning_input(input("Entrer le nom du tournoi : "))
+        location = cleaning_input(input("Entrer le lieu du tournoi : "))
+        start_date = cleaning_input(input("Entrer le date de début du tournoi (jj/mm/aaaa) : "))
+        while view_checker.control_start_date(start_date)[0] == False:
+            print("----------------------------------")
+            print(view_checker.control_start_date(start_date)[1])
+            start_date = cleaning_input(input("Entrer le date de début du tournoi (jj/mm/aaaa) : "))
+        end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
+        while view_checker.control_end_date(end_date, start_date)[0] == False:
+            print("----------------------------------")
+            print(view_checker.control_end_date(end_date, start_date)[1])
+            end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
+        turn_number = cleaning_input(input("Entrer le nombre de tour du tournoi (par défaut 4) : "))
+        if turn_number.isdigit():
+            turn_number = int(turn_number)
+        else :
+            turn_number = 4
+        description = cleaning_input(input("Indiquer une description (si besoin) : "))
+        if not description:
+            description = tournament_name
+        print("----------------------------------")
+        return tournament_name, location, start_date, end_date, turn_number, description
+
+
+    def display_tournaments(self, tournaments):
+        print("Liste des tournois : ")
         print()
-        for player in players:
-            print(f"{player.player_id.upper()} -> {player.last_name.upper()} {player.first_name.capitalize()} - score : {player.score}")
+        for tournament in tournaments:
+            print(f"Nom du tournoi : {tournament.name.title()}")
+            print(f"Lieu : {tournament.location.title()}")
+            print(f"Date de départ : {tournament.start_date}")
+            print(f"Date de fin : {tournament.end_date}")
+            print()
         print("----------------------------------")
 
 
-    def display_match_menu(self, current_turn, tournament_name, p1, p2):
-        possible_choices = ["1", "2", "3"]
-        print("----------- Match Menu -----------")
+    def display_tournaments_list(self, tournaments):
+        #control pour vérifier que la liste ne soit pas vide
+        if tournaments == [] :
+            print("Il n'existe aucun tournoi, veuillez en ajouter un. Retour au menu principal.")
+            print("---------------------------------")
+            return ""
+        possible_choices = []
+        for nb, tournament in enumerate(tournaments):
+            print(f"{nb+1}- {tournament.name.title()}")
+            possible_choices.append(f"{nb+1}")
+        print("----------------------------------")
+        choice = input("Entrer le numéro correspondant : ")
+        print("----------------------------------")
+        while choice not in possible_choices :
+            print("Vous devez entrer un numéro compris entre 1 et 6.")
+            choice = input("Entrer le numéro correspondant : ")
+            print("---------------------------------")
+        tournament = tournaments[int(choice)-1]
+        tournament_name = tournament.name
+        return tournament_name
+
+
+    def display_tournament_menu(self, tournament_name):
+        possible_choices = ["1", "2", "3", "4", "5", "6"]
+        print("---------- Menu Tournoi ----------")
         print()
-        print(f"Tournoi '{tournament_name.title()}' : tour n°{current_turn + 1} en cours.")
+        print(f"Tournoi '{tournament_name.title()}' séléctionné.")
         print()
-        print(f"Joueur {p1}")
-        print("             --- VS ---")
-        print(f"Joueur {p2}")
-        print()
-        print("Résultat : ")
-        print(f"1. Égalité ")
-        print(f"2. Victoire du joueur {p1}")
-        print(f"3. Victoire du joueur {p2}")
+        print("1.Afficher les informations du tournoi ")
+        print("2.Ajouter un joueur au tournoi ")
+        print("3.Afficher les joueurs participants au tournoi ")
+        print("4.Afficher la liste des tours et matchs du tournoi ")
+        print("5.Lancer le tournoi ")
+        print("6.Revenir au menu principal ")
         print()
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
         print("----------------------------------")
         while choice not in possible_choices:
-            print("Vous devez entrer un numéro compris entre 1 et 3.")
+            print("Vous devez entrer un numéro compris entre 1 et 6.")
             choice = input("Entrer le numéro correspondant : ")
             print("----------------------------------")
         return choice
 
 
-    def display_winner(self, winners, tournament_name):
+    def display_tournament_informations(self, tournament):
         print()
-        if len(winners) > 1:
-            print(f"Les vainqueurs du tournoi '{tournament_name.title()}' sont :")
-            for winner in winners:
-                print(f" - {winner.last_name.capitalize()} {winner.first_name.capitalize()}, avec un score de {winner.score}")
-        else:
-            print(f"Le vainqueur du tournoi '{tournament_name.title()}' est {winners[0].last_name.capitalize()} {winners[0].first_name.capitalize()}, avec un score de {winners[0].score}")
+        print(f"Nom du tournoi : '{tournament.name.title()}")
+        print(f"Lieu : {tournament.location.title()}")
+        print(f"Date de départ : {tournament.start_date}")
+        print(f"Date de fin : {tournament.end_date}")
+        print(f"Nombre de tour : {tournament.turn_number}")
+        print(f"Description : {tournament.description.capitalize()}")
         print()
         print("----------------------------------")
+
+
+    def display_launched_tournament_informations(self, control_turns, control_nb_players, tournament_name):
+        if control_turns :
+            print(f"Le tournoi {tournament_name.title()} a déjà eu lieu.")
+            print(f"Retour au menu du tournoi {tournament_name.title()}.")
+            print("----------------------------------")
+            return
+        if not control_nb_players:
+            print(f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament_name.title()}.")
+            print(f"Retour au menu du tournoi {tournament_name.title()}.")
+            print("----------------------------------")
+            return
+
+        print(f"Lancement du tournoi {tournament_name}.")
+        print("----------------------------------")
+
+
+

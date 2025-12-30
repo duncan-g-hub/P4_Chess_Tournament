@@ -5,10 +5,13 @@ from models.turn import Turn
 
 
 class TournamentMenuController:
-    def __init__(self, view, tournament_controller, message):
-        self.view = view
-        self.tournament_controller = tournament_controller
+    def __init__(self, player_view, tournament_view, p_in_t_view, message, tournament_controller):
+        self.player_view = player_view
+        self.tournament_view = tournament_view
+        self.p_in_t_view = p_in_t_view
         self.message = message
+        self.tournament_controller = tournament_controller
+
 
 
     def get_tournament_informations(self, tournament_name):
@@ -19,7 +22,7 @@ class TournamentMenuController:
 
 
     def add_player_in_tournament(self, tournament_name):
-        player_id = self.view.form_player_id()
+        player_id = self.player_view.form_player_id()
         if self.control_player_in_players(player_id) == False:
             self.message.display_message(f"L'identifiant {player_id.upper()} ne correspond à aucun joueur, ajoutez le à partir du menu principal. ")
             return
@@ -75,7 +78,7 @@ class TournamentMenuController:
             turn.matchs = matchs
             if turn.player_alone :
                 turn.player_alone = self.get_players_informations_from_players([turn.player_alone])
-        self.view.display_turns(turns)
+        self.p_in_t_view.display_turns(turns)
 
 
 
@@ -94,14 +97,14 @@ class TournamentMenuController:
     # à diviser en sous fonction pour limiter le nombre de ligne
     def run_tournament_menu(self):
         # faire une selection via un numéro parmi une liste de tournoi
-        tournament_name = self.view.display_tournaments_list(Tournament().deserialize_all())
+        tournament_name = self.tournament_view.display_tournaments_list(Tournament().deserialize_all())
         if tournament_name:
             # ouvre un nouveau menu tournois
             while True:
-                choice_tournament = self.view.display_tournament_menu(tournament_name)
+                choice_tournament = self.tournament_view.display_tournament_menu(tournament_name)
                 if choice_tournament == "1":
                     # afficher les infos
-                    self.view.display_tournament_informations(self.get_tournament_informations(tournament_name))
+                    self.tournament_view.display_tournament_informations(self.get_tournament_informations(tournament_name))
                 elif choice_tournament == "2":
                     # ajouter un joueur
                     self.add_player_in_tournament(tournament_name)
@@ -109,7 +112,7 @@ class TournamentMenuController:
                     # voir la liste des joueurs
                     tournament = self.get_tournament_informations(tournament_name)
                     players_informations = self.get_players_informations_from_players(tournament.players)
-                    self.view.display_players_in_tournament(name_sorter(players_informations))
+                    self.p_in_t_view.display_players_in_tournament(name_sorter(players_informations))
 
                 elif choice_tournament == "4":
                     tournament = self.get_tournament_informations(tournament_name)
@@ -128,10 +131,10 @@ class TournamentMenuController:
                     tournament = self.get_tournament_informations(tournament_name)
                     control_nb_players = self.control_player_number_in_tournament(tournament.players)
                     control_turns = self.control_turns_in_tournament(tournament.turns)
-                    self.view.display_launched_tournament_informations(control_turns, control_nb_players, tournament_name)
+                    self.tournament_view.display_launched_tournament_informations(control_turns, control_nb_players, tournament_name)
                     if not control_nb_players or control_turns:
                         continue
-                    self.view.display_players_in_tournament(self.get_players_informations_from_players(tournament.players))
+                    self.p_in_t_view.display_players_in_tournament(self.get_players_informations_from_players(tournament.players))
                     self.tournament_controller.run_tournament(tournament_name, tournament.players, tournament.turn_number)
                 elif choice_tournament == "6":
                     # retour au menu principal

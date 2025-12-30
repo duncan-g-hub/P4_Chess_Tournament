@@ -5,8 +5,8 @@ from models.player import Player
 from models.turn import Turn
 
 class TournamentController:
-    def __init__(self, view, message):
-        self.view = view
+    def __init__(self, p_in_t_view, message):
+        self.p_in_t_view = p_in_t_view
         self.message = message
 
     #existe dans tournament menu controller (à voir pour déplacer dans modeles user à laquelle on envois le user_id)
@@ -43,7 +43,7 @@ class TournamentController:
             # p1, p2 = players_in_pair[0], players_in_pair[1]
             # str_p1 = f"{p1.player_id.upper()} : {p1.last_name.upper()} {p1.first_name.capitalize()} ({p1.score}pt)"
             # str_p2 = f"{p2.player_id.upper()} : {p2.last_name.upper()} {p2.first_name.capitalize()} ({p2.score}pt)"
-            # choice = self.view.display_match_menu(turn.current_turn, tournament_name, str_p1, str_p2)
+            # choice = self.p_in_t_view.display_match_menu(turn.current_turn, tournament_name, str_p1, str_p2)
 
             # if choice == "2":
             #     winner = p1
@@ -104,8 +104,8 @@ class TournamentController:
             turn = Turn(players=turn.players, current_turn=turn.current_turn)
             #afficher les infos des joueurs avec points
 
-            self.view.display_players_in_tournament(score_sorter(self.get_players_informations_from_players(turn.players)))
+            self.p_in_t_view.display_players_in_tournament(score_sorter(self.get_players_informations_from_players(turn.players)))
 
         #fin du tournoi afficher les joueurs et le vainqueur
         winners = self.get_winner(score_sorter(self.get_players_informations_from_players(turn.players)))
-        self.view.display_winner(winners, tournament_name)
+        self.p_in_t_view.display_winner(winners, tournament_name)
