@@ -48,6 +48,16 @@ class Player:
             players.append(player)
         return players
 
+    def get_players_informations(self, players_in_tournament):
+        players = Player().deserialize_all()
+        players_informations = []
+        for player in players:
+            for player_in_tournament in players_in_tournament:
+                if player.player_id in player_in_tournament:
+                    player.score = player_in_tournament[1]
+                    players_informations.append(player)
+        return players_informations
+
 
 
 def load_players():
