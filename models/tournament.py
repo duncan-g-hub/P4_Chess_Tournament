@@ -5,7 +5,8 @@ from models.constances import DATA_DIR
 
 
 class Tournament:
-    def __init__(self, name=None, location=None, start_date=None, end_date=None, turn_number=4, description="", players=None, turns=None ):
+    def __init__(self, name=None, location=None, start_date=None, end_date=None, turn_number=4, description="",
+                 players=None, turns=None):
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -18,7 +19,8 @@ class Tournament:
 
 
     def __str__(self):
-        return f"{self.name} {self.location} {self.start_date} {self.end_date} {self.turn_number} {self.description} {self.players} {self.turns}"
+        return (f"{self.name} {self.location} {self.start_date} {self.end_date} {self.turn_number} {self.description} "
+                f"{self.players} {self.turns}")
 
     def __repr__(self):
         return self.__str__()
@@ -60,7 +62,7 @@ class Tournament:
                                             "end_datetime" : turn.end_datetime,})
                 tournament["players"] = turn.players
                 # print(tournament)
-        # self.update_tournaments(tournaments)
+        self.update_tournaments(tournaments)
 
 
     def update_tournaments(self, tournaments):

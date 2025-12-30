@@ -48,6 +48,7 @@ class Player:
             players.append(player)
         return players
 
+
     def get_players_informations(self, players_in_tournament):
         players = Player().deserialize_all()
         players_informations = []

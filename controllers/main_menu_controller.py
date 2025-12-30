@@ -13,10 +13,12 @@ class MainMenuController:
 
 
     def add_tournament(self):
-        tournament_name, location, start_date, end_date, turn_number, descritpion = self.tournament_view.tournament_form()
+        tournament_name, location, start_date, end_date, turn_number, descritpion = (
+            self.tournament_view.tournament_form())
         tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
-        if self.control_tournament_name(tournament_name) == True:
-            self.message.display_message(f"Le tournoi {tournament_name.title()} existe déja. Veuillez saisir les informations de nouveau en changeant de nom.")
+        if self.control_tournament_name(tournament_name):
+            self.message.display_message(f"Le tournoi {tournament_name.title()} existe déja. "
+                                         f"Veuillez saisir les informations de nouveau en changeant de nom.")
         else:
             tournament.add_tournament()
             self.message.display_message(f"Le tournoi {tournament_name.title()} a bien été créé.")
@@ -48,13 +50,42 @@ class MainMenuController:
             self.message.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
 
 
+    # attendre réponse de guillaume pour voir ce qui est le mieux
+    # # control de la présence
+    # def control_to_run_tournament_menu(self):
+    #     tournaments = Tournament().deserialize_all()
+    #     if len(tournaments) == 0:
+    #         self.message.display_message("Il n'existe aucun tournoi, veuillez en ajouter un.\n"
+    #                                      "Retour au menu principal.")
+    #         return False
+    #     return True
+    #
+    # # lancement du menu
+    # def run_tournament_menu(self):
+    #     if self.control_to_run_tournament_menu():
+    #         self.tournament_menu_controller.run_tournament_menu()
+
+
+    def control_to_run_tournament_menu(self):
+        tournaments = Tournament().deserialize_all()
+        # control de la présence
+        if len(tournaments) == 0:
+            self.message.display_message("Il n'existe aucun tournoi, veuillez en ajouter un.\n"
+                                         "Retour au menu principal.")
+            return False
+        # lancement du menu
+        self.tournament_menu_controller.run_tournament_menu()
+        return True
+
+
+
     def run_main_menu(self):
         while True:
             choice = self.main_menu_view.display_main_menu()
             if choice == "1":
                 self.add_tournament()
             if choice == "2":
-                self.tournament_menu_controller.run_tournament_menu()
+                self.control_to_run_tournament_menu()
             if choice == "3":
                 # afficher la  liste des tournois
                 self.tournament_view.display_tournaments(Tournament().deserialize_all())

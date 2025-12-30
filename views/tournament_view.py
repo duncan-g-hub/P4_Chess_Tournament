@@ -3,7 +3,6 @@ from views.input_format import cleaning_input
 
 class TournamentView:
 
-
     def tournament_form(self):
         tournament_name = cleaning_input(input("Entrer le nom du tournoi : "))
         location = cleaning_input(input("Entrer le lieu du tournoi : "))
@@ -40,13 +39,8 @@ class TournamentView:
             print()
         print("----------------------------------")
 
-
+    # placer la partie control dans le controlleur + message d'erreur ?
     def display_tournaments_list(self, tournaments):
-        #control pour vérifier que la liste ne soit pas vide
-        if tournaments == [] :
-            print("Il n'existe aucun tournoi, veuillez en ajouter un. Retour au menu principal.")
-            print("---------------------------------")
-            return ""
         possible_choices = []
         for nb, tournament in enumerate(tournaments):
             print(f"{nb+1}- {tournament.name.title()}")
@@ -98,6 +92,10 @@ class TournamentView:
         print("----------------------------------")
 
 
+
+
+
+
     def display_launched_tournament_informations(self, control_turns, control_nb_players, tournament_name):
         if control_turns :
             print(f"Le tournoi {tournament_name.title()} a déjà eu lieu.")
@@ -109,7 +107,6 @@ class TournamentView:
             print(f"Retour au menu du tournoi {tournament_name.title()}.")
             print("----------------------------------")
             return
-
         print(f"Lancement du tournoi {tournament_name}.")
         print("----------------------------------")
 

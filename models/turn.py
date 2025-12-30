@@ -3,8 +3,8 @@ from datetime import datetime
 
 
 class Turn:
-    def __init__(self, players=None, matchs=None, current_turn=0, start_datetime=None, end_datetime=None, player_alone=None, name=None):
-
+    def __init__(self, players=None, matchs=None, current_turn=0, start_datetime=None, end_datetime=None,
+                 player_alone=None, name=None):
         self.players = players
         self.matchs = matchs
         self.current_turn = current_turn
@@ -65,6 +65,7 @@ class Turn:
             p2 = available_players.pop(index)
             pair = [p1, p2]
             pairs.append(pair)
+
         return pairs, self.player_alone
 
 
@@ -88,7 +89,7 @@ class Turn:
         # mise à jour de la date de départ
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.start_datetime = now
-        return now
+
 
 
     def get_matchs_information(self, matchs):
