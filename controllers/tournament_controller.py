@@ -27,24 +27,41 @@ class TournamentController:
         return turn
 
 
+    def get_players_color(self, match, players_in_pair):
+        white, black = match.get_random_sides()
+        if players_in_pair[0].player_id in white:
+            players_in_pair[0].color = "Blanc"
+            players_in_pair[1].color = "Noir"
+        else:
+            players_in_pair[0].color = "Noir"
+            players_in_pair[1].color = "Blanc"
+        return players_in_pair
+
+
+
     def run_match_menu(self, pairs):
         matchs = []
         for i, pair in enumerate(pairs):
             match = Match(pair)
 
+
             # à garder pour test éxécution aléatoire
             players_in_pair = Player().get_players_informations(pair)
+            self.get_players_color(match, players_in_pair)
             p1, p2 = players_in_pair[0], players_in_pair[1]
             self.message.display_message(
                 f"Match n°{i + 1} :\n"
                 "\n"
-                f"Le Joueur {p1.player_id.upper()} : {p1.last_name.upper()} {p1.first_name.capitalize()} ({p1.score}pt)\n"
+                f"Joueur {p1.color} : {p1.player_id.upper()} - {p1.last_name.upper()} {p1.first_name.capitalize()} "
+                f"({p1.score}pt)\n"
                 "             --- VS ---\n"
-                f"Le Joueur {p2.player_id.upper()} : {p2.last_name.upper()} {p2.first_name.capitalize()} ({p2.score}pt)")
+                f"Joueur {p2.color} : {p2.player_id.upper()} - {p2.last_name.upper()} {p2.first_name.capitalize()} "
+                f"({p2.score}pt)")
             winner = None
 
             # # match menu
             # players_in_pair = Player().get_players_informations(pair)
+            # self.get_players_color(match, players_in_pair)
             # p1, p2 = players_in_pair[0], players_in_pair[1]
             # choice = self.p_in_t_view.display_match_menu(turn.current_turn, tournament_name, p1, p2)
             # if choice == "2":

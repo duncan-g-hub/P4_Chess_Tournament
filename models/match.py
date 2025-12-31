@@ -21,6 +21,15 @@ class Match:
         self.update_scores(winner)
 
 
+    def get_random_sides(self):
+        white = random.choice(self.players)
+        if white == self.players[0]:
+            black = self.players[1]
+        else :
+            black = self.players[1]
+        return white, black
+
+
     def update_scores(self, winner):
         # mise à jour des scores en fonction de resultat de launch match
         updated_players = []

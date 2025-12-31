@@ -40,9 +40,11 @@ class PLayersInTournamentView:
         print()
         print(f"Tournoi '{tournament_name.title()}' : tour n°{current_turn + 1} en cours.")
         print()
-        print(f"Joueur {p1.player_id.upper()} : {p1.last_name.upper()} {p1.first_name.capitalize()} ({p1.score}pt)")
+        print(f"Joueur {p1.color} : {p1.player_id.upper()} - {p1.last_name.upper()} {p1.first_name.capitalize()} "
+              f"({p1.score}pt)")
         print("             --- VS ---")
-        print(f"Joueur {p2.player_id.upper()} : {p2.last_name.upper()} {p2.first_name.capitalize()} ({p2.score}pt)")
+        print(f"Joueur {p2.color} : {p2.player_id.upper()} - {p2.last_name.upper()} {p2.first_name.capitalize()} "
+              f"({p2.score}pt)")
         print()
         print("Résultat : ")
         print(f"1. Égalité ")

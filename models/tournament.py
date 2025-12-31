@@ -61,8 +61,8 @@ class Tournament:
                                             "start_datetime" : turn.start_datetime,
                                             "end_datetime" : turn.end_datetime,})
                 tournament["players"] = turn.players
-                # print(tournament)
-        self.update_tournaments(tournaments)
+                print(tournament)
+        # self.update_tournaments(tournaments)
 
 
     def update_tournaments(self, tournaments):

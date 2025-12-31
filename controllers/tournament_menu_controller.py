@@ -65,9 +65,6 @@ class TournamentMenuController:
             self.message.display_message(f"Le tournoi {tournament_name.title()} n'a toujours pas eu lieu.\n"
                                          f"Retour au menu du tournoi {tournament_name.title()}.")
             return False
-
-        # dois je sépare le controle du run ? -------------------
-
         # voir la liste des round et match
         tournament = self.get_tournament_informations(tournament_name)
         turns = Turn().deserialize_all(tournament.turns)
@@ -97,9 +94,6 @@ class TournamentMenuController:
                                          f"ajoutez en à partir du menu du tournoi.\n"
                                          f"Retour au menu du tournoi {tournament_name.title()}.")
             return False
-
-        # dois je sépare le controle du run ? -------------------
-
         tournament = self.get_tournament_informations(tournament_name)
         players_informations = Player().get_players_informations(tournament.players)
         self.p_in_t_view.display_players_in_tournament(name_sorter(players_informations))
@@ -113,18 +107,15 @@ class TournamentMenuController:
 
 
     def control_to_run_tournament(self, tournament_name):
-        if self.control_player_number_in_tournament(tournament_name) < 2:
+        if self.control_turns_in_tournament(tournament_name):
             self.message.display_message(f"Le tournoi {tournament_name.title()} a déjà eu lieu.\n"
                                          f"Retour au menu du tournoi {tournament_name.title()}.")
             return False
-        if self.control_turns_in_tournament(tournament_name):
+        if self.control_player_number_in_tournament(tournament_name) < 2:
             self.message.display_message(
                 f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament_name.title()}.\n"
                 f"Retour au menu du tournoi {tournament_name.title()}.")
             return False
-
-        # dois je sépare le controle du run ? -------------------
-
         tournament = self.get_tournament_informations(tournament_name)
         self.p_in_t_view.display_players_in_tournament(Player().get_players_informations(tournament.players))
         self.tournament_controller.run_tournament(tournament_name, tournament.players, tournament.turn_number)

@@ -50,22 +50,6 @@ class MainMenuController:
             self.message.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
 
 
-    # attendre réponse de guillaume pour voir ce qui est le mieux
-    # # control de la présence
-    # def control_to_run_tournament_menu(self):
-    #     tournaments = Tournament().deserialize_all()
-    #     if len(tournaments) == 0:
-    #         self.message.display_message("Il n'existe aucun tournoi, veuillez en ajouter un.\n"
-    #                                      "Retour au menu principal.")
-    #         return False
-    #     return True
-    #
-    # # lancement du menu
-    # def run_tournament_menu(self):
-    #     if self.control_to_run_tournament_menu():
-    #         self.tournament_menu_controller.run_tournament_menu()
-
-
     def control_to_run_tournament_menu(self):
         tournaments = Tournament().deserialize_all()
         # control de la présence
