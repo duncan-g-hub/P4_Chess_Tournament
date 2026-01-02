@@ -28,7 +28,7 @@ class PLayersInTournamentView:
                     f"- {match[1].score}pt")
                 print()
             if turn.player_alone:
-                p = turn.player_alone[0]
+                p = turn.player_alone
                 print(f"Le joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} "
                       f"- {p.score}pt ne jouera pas le {turn.name}. ")
                 print()

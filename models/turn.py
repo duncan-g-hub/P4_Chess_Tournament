@@ -2,17 +2,18 @@ import random
 from datetime import datetime
 
 from models.match import Match
+from models.player import Player
 
 
 class Turn:
     def __init__(
             self,
-            players: list[list] | None = None,
+            players: list[Player] | None = None,
             matchs: list[tuple[list]] | None = None,
             current_turn: int = 0,
             start_datetime: str | None = None,
             end_datetime: str | None = None,
-            player_alone: list | None = None,
+            player_alone: Player | None = None,
             name: str | None = None
     ) -> None:
         self.players = players
@@ -31,15 +32,15 @@ class Turn:
         # on trie la liste à partir du score
         self.players = sorted(self.players, key=get_key_score)
 
-    def get_players_pairs(self, pairs_in_tournament: list[list[list]], players_alone: list[list]) -> tuple[
-        list[list[list]], list]:
+    def get_players_pairs(self, pairs_in_tournament: list[list[Player]], players_alone: list[Player]) -> tuple[
+        list[list[Player]], Player]:
         if self.current_turn == 0:
             self.mix_players_randomly()
         else:
             self.sort_players()
         # gestion d'un potentiel joueur seul
         self.get_player_alone(players_alone)
-
+        # gestion des paires, on copie la liste des joueurs
         available_players = self.players[:]
         pairs = self.get_pairs(available_players, pairs_in_tournament)
         if pairs is None:
@@ -49,8 +50,8 @@ class Turn:
     # ----------- fonction recursives ------------
 
     # fonction recursive pour obtenir des paires uniques
-    def get_pairs(self, available_players: list[list], pairs_in_tournament: list[list[list]]) -> list[list[
-        list]] | None:
+    def get_pairs(self, available_players: list[Player], pairs_in_tournament: list[list[Player]]) -> list[list[
+        Player]] | None:
         # condition d'arret (cas de base)
         if len(available_players) == 0:
             return []
@@ -81,8 +82,8 @@ class Turn:
         return None
 
     # fonction recusrive pour obtenir le moins de paires non-unique possible
-    def get_pairs_with_penalty(self, available_players: list[list], pairs_in_tournament: list[list[list]]) -> tuple[
-        list[list[list]], int]:
+    def get_pairs_with_penalty(self, available_players: list[Player], pairs_in_tournament: list[list[Player]]) -> \
+            tuple[list[list[Player]], int]:
         # condition d'arret (cas de base)
         if not available_players:
             return [], 0
@@ -128,7 +129,7 @@ class Turn:
 
     # -------------------------------------------
 
-    def get_player_alone(self, players_alone: list[list]) -> None:
+    def get_player_alone(self, players_alone: list[Player]) -> None:
         # gestion d'un potentiel joueur seul
         self.player_alone = None
         if len(self.players) % 2 == 1:  # permet de dire si un joueur n'a pas de paire
@@ -150,10 +151,11 @@ class Turn:
 
     def get_matchs_information(self, matchs: list[Match]) -> None:
         # on récupère la liste des matchs avec score mis à jour
-        # on convertit la liste de liste en liste de tuple de liste
+        # on convertit la liste de player en liste de tuple de liste
         tuple_matchs = []
         for match in matchs:
-            tuple_matchs.append(tuple(match.players))
+            tuple_matchs.append(([match.pair[0].player_id, match.pair[0].score],
+                                 [match.pair[1].player_id, match.pair[1].score]))
         self.matchs = tuple_matchs
 
     def finish_turn(self) -> None:
@@ -170,12 +172,20 @@ class Turn:
         # on met à jour la liste des joueurs à partir de match,
         updated_players = []
         for match in self.matchs:
-            updated_players.append(match[0])
-            updated_players.append(match[1])
+            updated_players.extend(self.get_players_from_match(match))
         # attention à ne pas oublier si un joueur est solo et n'a pas de match
         if self.player_alone is not None:
             updated_players.append(self.player_alone)
         self.players = updated_players
+
+    def get_players_from_match(self, match: tuple[list]) -> list[Player]:
+        players = []
+        for p in match:
+            for player in self.players:
+                if p[0] == player.player_id:
+                    player.score = p[1]
+                    players.append(player)
+        return players
 
     def deserialize_all(self, turns_dict: list[dict]) -> list["Turn"]:
         turns = []
@@ -183,11 +193,11 @@ class Turn:
             turn = Turn(matchs=t["matchs"],
                         start_datetime=t["start_datetime"],
                         end_datetime=t["end_datetime"],
-                        player_alone=t["player_alone"],
+                        player_alone=Player().get_players_from_list_dict([t["player_alone"]])[0],
                         name=t["name"])
             turns.append(turn)
         return turns
 
 
-def get_key_score(player: list) -> float:
-    return player[1]
+def get_key_score(player: Player) -> float:
+    return player.score

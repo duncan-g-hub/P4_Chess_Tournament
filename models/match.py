@@ -1,11 +1,13 @@
 import random
 
+from models.player import Player
+
 
 class Match:
-    def __init__(self, players: list[list]) -> None:
-        self.players = players
+    def __init__(self, pair: list[Player]) -> None:
+        self.pair = pair
 
-    def launch_match(self, winner: list) -> None:
+    def launch_match(self, winner: Player) -> None:
         # # à garder pour test éxécution aléatoire
         # # qui gagne la rencontre ?
         # # égalité ?
@@ -19,25 +21,25 @@ class Match:
         # mise à jour des scores
         self.update_scores(winner)
 
-    def get_random_sides(self) -> tuple[list, list]:
-        white = random.choice(self.players)
-        if white == self.players[0]:
-            black = self.players[1]
+    def get_random_sides(self) -> tuple[Player, Player]:
+        white = random.choice(self.pair)
+        if white == self.pair[0]:
+            black = self.pair[1]
         else:
-            black = self.players[1]
+            black = self.pair[1]
         return white, black
 
-    def update_scores(self, winner: list) -> None:
+    def update_scores(self, winner: Player) -> None:
         # mise à jour des scores en fonction de resultat de launch match
         updated_players = []
         if winner is None:
-            for player in self.players:
-                player[1] += 0.5
-                updated_players.append([player[0], player[1]])
+            for player in self.pair:
+                player.score += 0.5
+                updated_players.append(player)
         else:
-            for player in self.players:
+            for player in self.pair:
                 if player == winner:
-                    player[1] += 1.0
-                updated_players.append([player[0], player[1]])
+                    player.score += 1.0
+                updated_players.append(player)
         # on stock les modifs dans players
-        self.players = updated_players
+        self.pair = updated_players

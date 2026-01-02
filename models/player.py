@@ -30,7 +30,8 @@ class Player:
         return {"last_name": self.last_name,
                 "first_name": self.first_name,
                 "birth_date": self.birth_date,
-                "player_id": self.player_id}
+                "player_id": self.player_id,
+                "score": self.score}
 
     def update_players(self, players: list[dict]) -> None:
         with open(f"{DATA_DIR}/players.json", "w") as file:
@@ -42,19 +43,17 @@ class Player:
             player = Player(player_id=p["player_id"],
                             last_name=p["last_name"],
                             first_name=p["first_name"],
-                            birth_date=p["birth_date"])
+                            birth_date=p["birth_date"],
+                            score=p["score"])
             players.append(player)
         return players
 
-    def get_players_informations(self, players_in_tournament: list[list]) -> list["Player"]:
-        players = Player().deserialize_all()
-        players_informations = []
-        for player in players:
-            for player_in_tournament in players_in_tournament:
-                if player.player_id == player_in_tournament[0]:
-                    player.score = player_in_tournament[1]
-                    players_informations.append(player)
-        return players_informations
+    def get_players_from_list_dict(self, dict_players: list[dict]) -> list["Player"]:
+        players = []
+        for dict_player in dict_players:
+            player = Player(**dict_player)
+            players.append(player)
+        return players
 
 
 def load_players() -> list[dict]:

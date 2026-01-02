@@ -1,6 +1,7 @@
 import json
 
 from models.constances import DATA_DIR
+from models.player import Player
 from models.turn import Turn
 
 
@@ -13,7 +14,7 @@ class Tournament:
             end_date: str | None = None,
             turn_number: int = 4,
             description: str = "",
-            players: list[list] | None = None,
+            players: list[Player] | None = None,
             turns: int | None = None
     ) -> None:
         self.name = name
@@ -41,11 +42,13 @@ class Tournament:
                 "players": self.players,
                 "turns": self.turns}
 
-    def add_player_in_tournament(self, player_id: str) -> None:
+    def add_player_in_tournament(self, player: Player) -> None:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
-                tournament["players"].append([player_id, 0.0])
+                player = player.serialize()
+                player["score"] = 0.0
+                tournament["players"].append(player)
         self.update_tournaments(tournaments)
 
     def add_turn_in_tournament(self, turn: Turn) -> None:
@@ -54,10 +57,15 @@ class Tournament:
             if tournament["name"] == self.name:
                 tournament["turns"].append({"name": turn.name,
                                             "matchs": turn.matchs,
-                                            "player_alone": turn.player_alone,
+                                            "player_alone": turn.player_alone.serialize(),
                                             "start_datetime": turn.start_datetime,
                                             "end_datetime": turn.end_datetime, })
-                tournament["players"] = turn.players
+
+                players = []
+                for player in turn.players:
+                    print(player)
+                    players.append(player.serialize())
+                tournament["players"] = players
         self.update_tournaments(tournaments)
 
     def update_tournaments(self, tournaments: list[dict]) -> None:
@@ -73,7 +81,7 @@ class Tournament:
                                     end_date=t["end_date"],
                                     turn_number=t["turn_number"],
                                     description=t["description"],
-                                    players=t["players"],
+                                    players=Player().get_players_from_list_dict(t["players"]),
                                     turns=t["turns"])
             tournaments.append(tournament)
         return tournaments

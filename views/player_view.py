@@ -9,12 +9,12 @@ class PlayerView:
         last_name = cleaning_input(input("Entrer le nom de famille du joueur : "))
         first_name = cleaning_input(input("Enter le prénom du joueur : "))
         birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
-        while view_checker.control_birth_date(birth_date)[0] == False:
+        while not view_checker.control_birth_date(birth_date)[0]:
             print("----------------------------------")
             print(view_checker.control_birth_date(birth_date)[1])
             birth_date = cleaning_input(input("Entrer la date de naissance du joueur (jj/mm/aaaa) : "))
         player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))
-        while view_checker.control_player_id_format(player_id)[0] == False:
+        while not view_checker.control_player_id_format(player_id)[0]:
             print("----------------------------------")
             print(view_checker.control_player_id_format(player_id)[1])
             player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur (AB12345) : "))

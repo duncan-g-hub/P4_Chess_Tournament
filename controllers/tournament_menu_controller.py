@@ -26,18 +26,17 @@ class TournamentMenuController:
                                          f"ajoutez le à partir du menu principal. ")
             return
         players = Player().deserialize_all()
-        player_name = ""
         for player in players:
             if player.player_id == player_id:
                 player_name = f"{player.last_name.upper()} {player.first_name.capitalize()}"
-        if self.control_player_in_tournament(player_id, tournament_name):
-            self.message.display_message(f"Le joueur '{player_name}' est déja inscrit au tournoi "
-                                         f"'{tournament_name.title()}'. ")
-            return
-        tournament = Tournament(tournament_name)
-        tournament.add_player_in_tournament(player_id)
-        self.message.display_message(f"Le joueur '{player_name}' a bien été inscrit au tournoi "
-                                     f"'{tournament_name.title()}'. ")
+                if self.control_player_in_tournament(player_id, tournament_name):
+                    self.message.display_message(f"Le joueur '{player_name}' est déja inscrit au tournoi "
+                                                 f"'{tournament_name.title()}'. ")
+                    return
+                tournament = Tournament(tournament_name)
+                tournament.add_player_in_tournament(player)
+                self.message.display_message(f"Le joueur '{player_name}' a bien été inscrit au tournoi "
+                                             f"'{tournament_name.title()}'. ")
 
     def control_player_in_players(self, player_id: str) -> bool:
         players = Player().deserialize_all()
@@ -51,7 +50,7 @@ class TournamentMenuController:
         for tournament in tournaments:
             if tournament.name == tournament_name:
                 for player in tournament.players:
-                    if player_id in player:
+                    if player.player_id == player_id:
                         return True
         return False
 
@@ -65,13 +64,12 @@ class TournamentMenuController:
         tournament = self.get_tournament_informations(tournament_name)
         turns = Turn().deserialize_all(tournament.turns)
         for turn in turns:
+            turn.players = tournament.players
             matchs = []
             for match in turn.matchs:
-                match = Player().get_players_informations(match)
+                match = turn.get_players_from_match(match)
                 matchs.append(match)
             turn.matchs = matchs
-            if turn.player_alone:
-                turn.player_alone = Player().get_players_informations([turn.player_alone])
         self.p_in_t_view.display_turns(turns)
         return True
 
@@ -89,8 +87,8 @@ class TournamentMenuController:
                                          f"Retour au menu du tournoi {tournament_name.title()}.")
             return False
         tournament = self.get_tournament_informations(tournament_name)
-        players_informations = Player().get_players_informations(tournament.players)
-        self.p_in_t_view.display_players_in_tournament(name_sorter(players_informations))
+
+        self.p_in_t_view.display_players_in_tournament(name_sorter(tournament.players))
         return True
 
     def control_player_number_in_tournament(self, tournament_name: str) -> int:
@@ -108,7 +106,7 @@ class TournamentMenuController:
                 f"Retour au menu du tournoi {tournament_name.title()}.")
             return False
         tournament = self.get_tournament_informations(tournament_name)
-        self.p_in_t_view.display_players_in_tournament(Player().get_players_informations(tournament.players))
+        self.p_in_t_view.display_players_in_tournament(tournament.players)
         self.tournament_controller.run_tournament(tournament_name, tournament.players, tournament.turn_number)
         return True
 
