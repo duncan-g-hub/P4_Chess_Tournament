@@ -5,22 +5,23 @@ from models.turn import Turn
 
 
 class TournamentMenuController:
-    def __init__(self, player_view, tournament_view, p_in_t_view, message, tournament_controller):
+    def __init__(self, player_view, tournament_view, p_in_t_view, message, tournament_controller) -> None:
         self.player_view = player_view
         self.tournament_view = tournament_view
         self.p_in_t_view = p_in_t_view
         self.message = message
         self.tournament_controller = tournament_controller
 
-    def get_tournament_informations(self, tournament_name):
+    def get_tournament_informations(self, tournament_name: str) -> Tournament | None:
         tournaments = Tournament().deserialize_all()
         for tournament in tournaments:
             if tournament.name == tournament_name:
                 return tournament
+        return None
 
-    def add_player_in_tournament(self, tournament_name):
+    def add_player_in_tournament(self, tournament_name: str) -> None:
         player_id = self.player_view.form_player_id()
-        if self.control_player_in_players(player_id) == False:
+        if not self.control_player_in_players(player_id):
             self.message.display_message(f"L'identifiant {player_id.upper()} ne correspond à aucun joueur, "
                                          f"ajoutez le à partir du menu principal. ")
             return
@@ -38,14 +39,14 @@ class TournamentMenuController:
         self.message.display_message(f"Le joueur '{player_name}' a bien été inscrit au tournoi "
                                      f"'{tournament_name.title()}'. ")
 
-    def control_player_in_players(self, player_id):
+    def control_player_in_players(self, player_id: str) -> bool:
         players = Player().deserialize_all()
         for player in players:
             if player.player_id == player_id:
                 return True
         return False
 
-    def control_player_in_tournament(self, player_id, tournament_name):
+    def control_player_in_tournament(self, player_id: str, tournament_name: str) -> bool:
         tournaments = Tournament().deserialize_all()
         for tournament in tournaments:
             if tournament.name == tournament_name:
@@ -54,7 +55,7 @@ class TournamentMenuController:
                         return True
         return False
 
-    def get_tournament_turns(self, tournament_name):
+    def get_tournament_turns(self, tournament_name: str) -> bool:
         # control présence turn
         if not self.control_turns_in_tournament(tournament_name):
             self.message.display_message(f"Le tournoi {tournament_name.title()} n'a toujours pas eu lieu.\n"
@@ -74,13 +75,13 @@ class TournamentMenuController:
         self.p_in_t_view.display_turns(turns)
         return True
 
-    def control_turns_in_tournament(self, tournament_name):
+    def control_turns_in_tournament(self, tournament_name: str) -> bool:
         tournament = self.get_tournament_informations(tournament_name)
         if tournament.turns:
             return True
         return False
 
-    def get_players_in_tournament(self, tournament_name):
+    def get_players_in_tournament(self, tournament_name: str) -> bool:
         # control nb players
         if self.control_player_number_in_tournament(tournament_name) < 1:
             self.message.display_message(f"Il n'y a aucun participant pour le tournoi {tournament_name.title()}, "
@@ -92,11 +93,11 @@ class TournamentMenuController:
         self.p_in_t_view.display_players_in_tournament(name_sorter(players_informations))
         return True
 
-    def control_player_number_in_tournament(self, tournament_name):
+    def control_player_number_in_tournament(self, tournament_name: str) -> int:
         tournament = self.get_tournament_informations(tournament_name)
         return len(tournament.players)
 
-    def control_to_run_tournament(self, tournament_name):
+    def control_to_run_tournament(self, tournament_name: str) -> bool:
         if self.control_turns_in_tournament(tournament_name):
             self.message.display_message(f"Le tournoi {tournament_name.title()} a déjà eu lieu.\n"
                                          f"Retour au menu du tournoi {tournament_name.title()}.")
@@ -111,8 +112,7 @@ class TournamentMenuController:
         self.tournament_controller.run_tournament(tournament_name, tournament.players, tournament.turn_number)
         return True
 
-    # à diviser en sous fonction pour limiter le nombre de ligne
-    def run_tournament_menu(self):
+    def run_tournament_menu(self) -> None:
         # faire une selection via un numéro parmi une liste de tournoi
         tournament_name = self.tournament_view.display_tournaments_list(Tournament().deserialize_all())
         if tournament_name:

@@ -1,4 +1,4 @@
 # fonction de nettoyage pour stockage
-def cleaning_input(input_string):
+def cleaning_input(input_string: str) -> str:
     cleaned_input_string = input_string.lower().strip()
     return cleaned_input_string

@@ -1,19 +1,20 @@
+from models.tournament import Tournament
 from views import view_checker
 from views.input_format import cleaning_input
 
 
 class TournamentView:
 
-    def tournament_form(self):
+    def tournament_form(self) -> tuple[str, str, str, str, int, str]:
         tournament_name = cleaning_input(input("Entrer le nom du tournoi : "))
         location = cleaning_input(input("Entrer le lieu du tournoi : "))
         start_date = cleaning_input(input("Entrer le date de début du tournoi (jj/mm/aaaa) : "))
-        while view_checker.control_start_date(start_date)[0] == False:
+        while not view_checker.control_start_date(start_date)[0]:
             print("----------------------------------")
             print(view_checker.control_start_date(start_date)[1])
             start_date = cleaning_input(input("Entrer le date de début du tournoi (jj/mm/aaaa) : "))
         end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
-        while view_checker.control_end_date(end_date, start_date)[0] == False:
+        while not view_checker.control_end_date(end_date, start_date)[0]:
             print("----------------------------------")
             print(view_checker.control_end_date(end_date, start_date)[1])
             end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
@@ -28,7 +29,7 @@ class TournamentView:
         print("----------------------------------")
         return tournament_name, location, start_date, end_date, turn_number, description
 
-    def display_tournaments(self, tournaments):
+    def display_tournaments(self, tournaments: Tournament) -> None:
         print("Liste des tournois : ")
         print()
         for tournament in tournaments:
@@ -40,7 +41,7 @@ class TournamentView:
         print("----------------------------------")
 
     # placer la partie control dans le controlleur + message d'erreur ?
-    def display_tournaments_list(self, tournaments):
+    def display_tournaments_list(self, tournaments: list[Tournament]) -> str:
         possible_choices = []
         for nb, tournament in enumerate(tournaments):
             print(f"{nb + 1}- {tournament.name.title()}")
@@ -56,7 +57,7 @@ class TournamentView:
         tournament_name = tournament.name
         return tournament_name
 
-    def display_tournament_menu(self, tournament_name):
+    def display_tournament_menu(self, tournament_name: str) -> str:
         possible_choices = ["1", "2", "3", "4", "5", "6"]
         print("---------- Menu Tournoi ----------")
         print()
@@ -78,7 +79,7 @@ class TournamentView:
             print("----------------------------------")
         return choice
 
-    def display_tournament_informations(self, tournament):
+    def display_tournament_informations(self, tournament: Tournament) -> None:
         print()
         print(f"Nom du tournoi : '{tournament.name.title()}")
         print(f"Lieu : {tournament.location.title()}")
@@ -89,7 +90,8 @@ class TournamentView:
         print()
         print("----------------------------------")
 
-    def display_launched_tournament_informations(self, control_turns, control_nb_players, tournament_name):
+    def display_launched_tournament_informations(self, control_turns: bool, control_nb_players: bool,
+                                                 tournament_name: str) -> None:
         if control_turns:
             print(f"Le tournoi {tournament_name.title()} a déjà eu lieu.")
             print(f"Retour au menu du tournoi {tournament_name.title()}.")

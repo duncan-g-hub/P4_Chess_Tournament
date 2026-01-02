@@ -1,7 +1,10 @@
+from models.player import Player
+from models.turn import Turn
+
+
 class PLayersInTournamentView:
 
-    # placer la partie controle dans les controlleur + message d'erreur ?
-    def display_players_in_tournament(self, players):
+    def display_players_in_tournament(self, players: list[Player]) -> None:
         print("Liste des participants : ")
         print()
         for player in players:
@@ -9,18 +12,20 @@ class PLayersInTournamentView:
                   f"score : {player.score}")
         print("----------------------------------")
 
-    def display_turns(self, turns):
+    def display_turns(self, turns: list[Turn]) -> None:
         for turn in turns:
             print()
             print(f"Le {turn.name} commence {turn.start_datetime}.")
             print()
             for i, match in enumerate(turn.matchs):
                 print(f"Match n°{i + 1} :")
-                print(f"{match[0].player_id.upper()} : {match[0].last_name.upper()} {match[0].first_name.capitalize()} "
-                      f"- {match[0].score}pt")
+                print(
+                    f"{match[0].player_id.upper()} : {match[0].last_name.upper()} {match[0].first_name.capitalize()} "
+                    f"- {match[0].score}pt")
                 print("          --- VS ---")
-                print(f"{match[1].player_id.upper()} : {match[1].last_name.upper()} {match[1].first_name.capitalize()} "
-                      f"- {match[1].score}pt")
+                print(
+                    f"{match[1].player_id.upper()} : {match[1].last_name.upper()} {match[1].first_name.capitalize()} "
+                    f"- {match[1].score}pt")
                 print()
             if turn.player_alone:
                 p = turn.player_alone[0]
@@ -32,7 +37,7 @@ class PLayersInTournamentView:
             print()
             print("----------------------------------")
 
-    def display_match_menu(self, current_turn, current_match, p1, p2):
+    def display_match_menu(self, current_turn: int, current_match: int, p1: Player, p2: Player) -> str:
         possible_choices = ["1", "2", "3"]
         print("----------- Match Menu -----------")
         print()
@@ -59,7 +64,7 @@ class PLayersInTournamentView:
             print("----------------------------------")
         return choice
 
-    def display_winner(self, winners, tournament_name):
+    def display_winner(self, winners: list[Player], tournament_name: str) -> None:
         print()
         if len(winners) > 1:
             print(f"Les vainqueurs du tournoi '{tournament_name.title()}' sont :")

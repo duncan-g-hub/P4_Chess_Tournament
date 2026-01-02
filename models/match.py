@@ -2,11 +2,10 @@ import random
 
 
 class Match:
-    def __init__(self, players):
+    def __init__(self, players: list[list]) -> None:
         self.players = players
-        # players est une liste (paire) de liste (id, score)
 
-    def launch_match(self, winner):
+    def launch_match(self, winner: list) -> None:
         # # à garder pour test éxécution aléatoire
         # # qui gagne la rencontre ?
         # # égalité ?
@@ -20,7 +19,7 @@ class Match:
         # mise à jour des scores
         self.update_scores(winner)
 
-    def get_random_sides(self):
+    def get_random_sides(self) -> tuple[list, list]:
         white = random.choice(self.players)
         if white == self.players[0]:
             black = self.players[1]
@@ -28,7 +27,7 @@ class Match:
             black = self.players[1]
         return white, black
 
-    def update_scores(self, winner):
+    def update_scores(self, winner: list) -> None:
         # mise à jour des scores en fonction de resultat de launch match
         updated_players = []
         if winner is None:
@@ -42,9 +41,3 @@ class Match:
                 updated_players.append([player[0], player[1]])
         # on stock les modifs dans players
         self.players = updated_players
-
-
-if __name__ == '__main__':
-    match = Match([["ed78945", 0.0], ["dz78945", 0.0]])
-    match.launch_match()
-    print(match.players)

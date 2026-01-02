@@ -1,11 +1,21 @@
 import json
 
 from models.constances import DATA_DIR
+from models.turn import Turn
 
 
 class Tournament:
-    def __init__(self, name=None, location=None, start_date=None, end_date=None, turn_number=4, description="",
-                 players=None, turns=None):
+    def __init__(
+            self,
+            name: str | None = None,
+            location: str | None = None,
+            start_date: str | None = None,
+            end_date: str | None = None,
+            turn_number: int = 4,
+            description: str = "",
+            players: list[list] | None = None,
+            turns: int | None = None
+    ) -> None:
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -16,19 +26,12 @@ class Tournament:
         self.players = players or []
         self.turns = turns or []
 
-    def __str__(self):
-        return (f"{self.name} {self.location} {self.start_date} {self.end_date} {self.turn_number} {self.description} "
-                f"{self.players} {self.turns}")
-
-    def __repr__(self):
-        return self.__str__()
-
-    def add_tournament(self):
+    def add_tournament(self) -> None:
         tournaments = load_tournaments()
         tournaments.append(self.serialize())
         self.update_tournaments(tournaments)
 
-    def serialize(self):
+    def serialize(self) -> dict:
         return {"name": self.name,
                 "location": self.location,
                 "start_date": self.start_date,
@@ -38,14 +41,14 @@ class Tournament:
                 "players": self.players,
                 "turns": self.turns}
 
-    def add_player_in_tournament(self, player_id):
+    def add_player_in_tournament(self, player_id: str) -> None:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
                 tournament["players"].append([player_id, 0.0])
         self.update_tournaments(tournaments)
 
-    def add_turn_in_tournament(self, turn):
+    def add_turn_in_tournament(self, turn: Turn) -> None:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
@@ -55,13 +58,13 @@ class Tournament:
                                             "start_datetime": turn.start_datetime,
                                             "end_datetime": turn.end_datetime, })
                 tournament["players"] = turn.players
-        # self.update_tournaments(tournaments)
+        self.update_tournaments(tournaments)
 
-    def update_tournaments(self, tournaments):
+    def update_tournaments(self, tournaments: list[dict]) -> None:
         with open(f"{DATA_DIR}/tournaments.json", "w") as file:
             json.dump(tournaments, file, indent=4)
 
-    def deserialize_all(self):
+    def deserialize_all(self) -> list["Tournament"]:
         tournaments = []
         for t in load_tournaments():
             tournament = Tournament(name=t["name"],
@@ -76,7 +79,7 @@ class Tournament:
         return tournaments
 
 
-def load_tournaments():
+def load_tournaments() -> list[dict]:
     tournaments = None
     while tournaments is None:
         try:
@@ -89,8 +92,4 @@ def load_tournaments():
         except FileNotFoundError:
             with open(f"{DATA_DIR}/tournaments.json", "w") as file:
                 json.dump([], file)
-
-
-if __name__ == "__main__":
-    tournament = Tournament("Tournament 1", "lyon", "24/12/2025", "25/12/2025")
-    tournament.add_tournament()
+    return tournaments

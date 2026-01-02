@@ -1,6 +1,6 @@
 class MainMenuView:
 
-    def display_main_menu(self):
+    def display_main_menu(self) -> str:
         possible_choices = ["1", "2", "3", "4", "5", "6"]
         print("-------------- Menu --------------")
         print()

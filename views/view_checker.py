@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-def control_player_id_format(player_id):
+def control_player_id_format(player_id: str) -> tuple[bool, str]:
     if len(player_id) != 7:
         return False, "L'identifiant national d'échecs du joueur doit etre composé de 7 caractères."
     if not player_id[0:2].isalpha():
@@ -11,7 +11,7 @@ def control_player_id_format(player_id):
     return True, ""
 
 
-def control_date_format(date):
+def control_date_format(date: str) -> tuple[bool, str]:
     try:
         datetime.strptime(date, "%d/%m/%Y")
         return True, ""
@@ -19,8 +19,8 @@ def control_date_format(date):
         return False, "La date doit etre valide et correspondre au format 'jj/mm/aaaa'."
 
 
-def control_birth_date(birth_date):
-    if control_date_format(birth_date)[0] == False:
+def control_birth_date(birth_date: str) -> tuple[bool, str]:
+    if not control_date_format(birth_date)[0]:
         return False, control_date_format(birth_date)[1]
     birth_date = datetime.strptime(birth_date, "%d/%m/%Y")
     today = datetime.today()
@@ -29,8 +29,8 @@ def control_birth_date(birth_date):
     return True, ""
 
 
-def control_start_date(start_date):
-    if control_date_format(start_date)[0] == False:
+def control_start_date(start_date: str) -> tuple[bool, str]:
+    if not control_date_format(start_date)[0]:
         return False, control_date_format(start_date)[1]
     start_date = datetime.strptime(start_date, "%d/%m/%Y")
     today = datetime.today()
@@ -39,11 +39,11 @@ def control_start_date(start_date):
     return True, ""
 
 
-def control_end_date(end_date, start_date):
-    if control_date_format(end_date)[0] == False:
+def control_end_date(end_date: str, start_date: str) -> tuple[bool, str]:
+    if not control_date_format(end_date)[0]:
         return False, control_date_format(end_date)[1]
     start_date = datetime.strptime(start_date, "%d/%m/%Y")
     end_date = datetime.strptime(end_date, "%d/%m/%Y")
     if end_date < start_date:
-        return False, f"La date de fin ne peut pas être antérieur à la date de départ."
+        return False, "La date de fin ne peut pas être antérieur à la date de départ."
     return True, ""
