@@ -7,16 +7,16 @@ class Match:
 
 
     def launch_match(self, winner):
-        # à garder pour test éxécution aléatoire
-        # qui gagne la rencontre ?
-        # égalité ?
-        equality = random.choice([True, False])
-        if equality:
-            winner = None
-        # non-égalité ?
-        else :
-            # qui remporte ?
-            winner = random.choice(self.players)
+        # # à garder pour test éxécution aléatoire
+        # # qui gagne la rencontre ?
+        # # égalité ?
+        # equality = random.choice([True, False])
+        # if equality:
+        #     winner = None
+        # # non-égalité ?
+        # else :
+        #     # qui remporte ?
+        #     winner = random.choice(self.players)
         # mise à jour des scores
         self.update_scores(winner)
 

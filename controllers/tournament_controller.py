@@ -21,7 +21,7 @@ class TournamentController:
                 self.message.display_message(
                     f"Le Joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} ({p.score}pt)"
                     f" n'a pas de paire, il ne jouera pas durant ce tour.")
-        matchs = self.run_match_menu(pairs)
+        matchs = self.run_match_menu(pairs, turn.current_turn)
         turn.get_matchs_information(matchs)
         turn.finish_turn()
         return turn
@@ -39,37 +39,37 @@ class TournamentController:
 
 
 
-    def run_match_menu(self, pairs):
+    def run_match_menu(self, pairs, current_turn):
         matchs = []
-        for i, pair in enumerate(pairs):
+        for current_match, pair in enumerate(pairs):
             match = Match(pair)
 
 
-            # à garder pour test éxécution aléatoire
-            players_in_pair = Player().get_players_informations(pair)
-            self.get_players_color(match, players_in_pair)
-            p1, p2 = players_in_pair[0], players_in_pair[1]
-            self.message.display_message(
-                f"Match n°{i + 1} :\n"
-                "\n"
-                f"Joueur {p1.color} : {p1.player_id.upper()} - {p1.last_name.upper()} {p1.first_name.capitalize()} "
-                f"({p1.score}pt)\n"
-                "             --- VS ---\n"
-                f"Joueur {p2.color} : {p2.player_id.upper()} - {p2.last_name.upper()} {p2.first_name.capitalize()} "
-                f"({p2.score}pt)")
-            winner = None
-
-            # # match menu
+            # # à garder pour test éxécution aléatoire
             # players_in_pair = Player().get_players_informations(pair)
             # self.get_players_color(match, players_in_pair)
             # p1, p2 = players_in_pair[0], players_in_pair[1]
-            # choice = self.p_in_t_view.display_match_menu(turn.current_turn, tournament_name, p1, p2)
-            # if choice == "2":
-            #     winner = p1
-            # elif choice == "3":
-            #     winner = p2
-            # else:
-            #     winner = None
+            # self.message.display_message(
+            #     f"Match n°{current_match + 1} :\n"
+            #     "\n"
+            #     f"Joueur {p1.color} : {p1.player_id.upper()} - {p1.last_name.upper()} {p1.first_name.capitalize()} "
+            #     f"({p1.score}pt)\n"
+            #     "             --- VS ---\n"
+            #     f"Joueur {p2.color} : {p2.player_id.upper()} - {p2.last_name.upper()} {p2.first_name.capitalize()} "
+            #     f"({p2.score}pt)")
+            # winner = None
+
+            # match menu
+            players_in_pair = Player().get_players_informations(pair)
+            self.get_players_color(match, players_in_pair)
+            p1, p2 = players_in_pair[0], players_in_pair[1]
+            choice = self.p_in_t_view.display_match_menu(current_turn+1, current_match+1, p1, p2)
+            if choice == "2":
+                winner = [p1.player_id, p1.score]
+            elif choice == "3":
+                winner = [p2.player_id, p2.score]
+            else:
+                winner = None
             match.launch_match(winner)
             matchs.append(match.players)
         return matchs

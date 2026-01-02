@@ -34,12 +34,13 @@ class PLayersInTournamentView:
             print("----------------------------------")
 
 
-    def display_match_menu(self, current_turn, tournament_name, p1, p2):
+    def display_match_menu(self, current_turn, current_match, p1, p2):
         possible_choices = ["1", "2", "3"]
         print("----------- Match Menu -----------")
         print()
-        print(f"Tournoi '{tournament_name.title()}' : tour n°{current_turn + 1} en cours.")
+        print(f"Tour n°{current_turn} en cours.")
         print()
+        print(f"Match n°{current_match} : ")
         print(f"Joueur {p1.color} : {p1.player_id.upper()} - {p1.last_name.upper()} {p1.first_name.capitalize()} "
               f"({p1.score}pt)")
         print("             --- VS ---")
@@ -47,9 +48,9 @@ class PLayersInTournamentView:
               f"({p2.score}pt)")
         print()
         print("Résultat : ")
-        print(f"1. Égalité ")
-        print(f"2. Victoire du joueur {p1.player_id.upper()} : {p1.last_name.upper()} {p1.first_name.capitalize()}")
-        print(f"3. Victoire du joueur {p2.player_id.upper()} : {p2.last_name.upper()} {p2.first_name.capitalize()}")
+        print(f" 1. Égalité ")
+        print(f" 2. Victoire du joueur {p1.player_id.upper()} : {p1.last_name.upper()} {p1.first_name.capitalize()}")
+        print(f" 3. Victoire du joueur {p2.player_id.upper()} : {p2.last_name.upper()} {p2.first_name.capitalize()}")
         print()
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
