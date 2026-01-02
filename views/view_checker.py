@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 def control_player_id_format(player_id):
     if len(player_id) != 7:
         return False, "L'identifiant national d'échecs du joueur doit etre composé de 7 caractères."

@@ -4,11 +4,11 @@ from models.tournament import Tournament
 from models.player import Player
 from models.turn import Turn
 
+
 class TournamentController:
     def __init__(self, p_in_t_view, message):
         self.p_in_t_view = p_in_t_view
         self.message = message
-
 
     def run_turn(self, turn, pairs, player_alone):
         # commencement du tour
@@ -26,7 +26,6 @@ class TournamentController:
         turn.finish_turn()
         return turn
 
-
     def get_players_color(self, match, players_in_pair):
         white, black = match.get_random_sides()
         if players_in_pair[0].player_id in white:
@@ -37,13 +36,10 @@ class TournamentController:
             players_in_pair[1].color = "Blanc"
         return players_in_pair
 
-
-
     def run_match_menu(self, pairs, current_turn):
         matchs = []
         for current_match, pair in enumerate(pairs):
             match = Match(pair)
-
 
             # # à garder pour test éxécution aléatoire
             # players_in_pair = Player().get_players_informations(pair)
@@ -63,7 +59,7 @@ class TournamentController:
             players_in_pair = Player().get_players_informations(pair)
             self.get_players_color(match, players_in_pair)
             p1, p2 = players_in_pair[0], players_in_pair[1]
-            choice = self.p_in_t_view.display_match_menu(current_turn+1, current_match+1, p1, p2)
+            choice = self.p_in_t_view.display_match_menu(current_turn + 1, current_match + 1, p1, p2)
             if choice == "2":
                 winner = [p1.player_id, p1.score]
             elif choice == "3":
@@ -74,17 +70,15 @@ class TournamentController:
             matchs.append(match.players)
         return matchs
 
-
     def get_tournament_winner(self, players, tournament_name):
         players_remaining = players[:]
         winners = []
         winners.append(players_remaining[-1])
         players_remaining.pop(-1)
-        while players_remaining[-1].score == winners[-1].score :
+        while players_remaining[-1].score == winners[-1].score:
             winners.append(players_remaining[-1])
             players_remaining.pop(-1)
         self.p_in_t_view.display_winner(winners, tournament_name)
-
 
     def run_tournament(self, tournament_name, players, turn_number):
         # stocker les joeurs seuls pour éviter qu'ils se retrouvent plusieurs fois tout seul
@@ -92,22 +86,21 @@ class TournamentController:
         # stocker les paires pour éviter qu'elles se rencontrent plusieurs fois
         pairs_in_tournament = []
         turn = Turn(players)
-        while turn.current_turn < turn_number :
-            #on récupere les paires et le joueur seul en passant à la fonction la liste des paires et des joueurs seuls
+        while turn.current_turn < turn_number:
+            # on récupere les paires et le joueur seul en passant à la fonction la liste des paires et des joueurs seuls
             pairs, player_alone = turn.get_players_pairs(pairs_in_tournament, players_alone)
             # on ajoute les jouerus seuls et paires aux listes
             pairs_in_tournament.extend(pairs)
             players_alone.append(player_alone)
-            #Lancement du round
+            # Lancement du round
             self.run_turn(turn, pairs, player_alone)
-            #il faut sauvegarder les informations dans le tournoi
+            # il faut sauvegarder les informations dans le tournoi
             tournament = Tournament(tournament_name)
             tournament.add_turn_in_tournament(turn)
-            #on créer un nouveau round
+            # on créer un nouveau round
             turn = Turn(players=turn.players, current_turn=turn.current_turn)
-            #afficher les infos des joueurs avec points
+            # afficher les infos des joueurs avec points
             self.p_in_t_view.display_players_in_tournament(score_sorter(
                 Player().get_players_informations(turn.players)))
-        #fin du tournoi afficher le vainqueur
-        self.get_tournament_winner(score_sorter(Player().get_players_informations(turn.players)),tournament_name)
-
+        # fin du tournoi afficher le vainqueur
+        self.get_tournament_winner(score_sorter(Player().get_players_informations(turn.players)), tournament_name)

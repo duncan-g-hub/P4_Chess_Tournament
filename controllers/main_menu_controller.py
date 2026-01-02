@@ -11,7 +11,6 @@ class MainMenuController:
         self.message = message
         self.tournament_menu_controller = tournament_menu_controller
 
-
     def add_tournament(self):
         tournament_name, location, start_date, end_date, turn_number, descritpion = (
             self.tournament_view.tournament_form())
@@ -23,14 +22,12 @@ class MainMenuController:
             tournament.add_tournament()
             self.message.display_message(f"Le tournoi {tournament_name.title()} a bien été créé.")
 
-
     def control_tournament_name(self, tournament_name):
         tournaments = Tournament().deserialize_all()
         for t in tournaments:
             if t.name == tournament_name:
                 return True
         return False
-
 
     def control_player_in_players(self, player_id):
         players = Player().deserialize_all()
@@ -39,16 +36,14 @@ class MainMenuController:
                 return True
         return False
 
-
     def add_player(self):
         last_name, first_name, birth_date, player_id = self.player_view.player_form()
         player = Player(player_id, last_name, first_name, birth_date)
-        if self.control_player_in_players(player_id) :
+        if self.control_player_in_players(player_id):
             self.message.display_message(f"Le joueur {last_name.uper()} {first_name.capitalize()} existe déja.")
         else:
             player.add_player()
             self.message.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
-
 
     def control_to_run_tournament_menu(self):
         tournaments = Tournament().deserialize_all()
@@ -60,8 +55,6 @@ class MainMenuController:
         # lancement du menu
         self.tournament_menu_controller.run_tournament_menu()
         return True
-
-
 
     def run_main_menu(self):
         while True:
@@ -81,5 +74,3 @@ class MainMenuController:
                 self.player_view.display_players(name_sorter(Player().deserialize_all()))
             if choice == "6":
                 break
-
-

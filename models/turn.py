@@ -13,16 +13,13 @@ class Turn:
         self.player_alone = player_alone
         self.name = name
 
-
     def mix_players_randomly(self):
         # trier de maniere aléatoire les joeurs de la liste players
         random.shuffle(self.players)
 
-
     def sort_players(self):
         # on trie la liste à partir du score
         self.players = sorted(self.players, key=get_key_score)
-
 
     def get_players_pairs(self, pairs_in_tournament, players_alone):
         if self.current_turn == 0:
@@ -37,7 +34,6 @@ class Turn:
         if pairs is None:
             pairs = self.get_pairs_with_penalty(available_players, pairs_in_tournament)[0]
         return pairs, self.player_alone
-
 
     # ----------- fonction recursives ------------
 
@@ -71,7 +67,6 @@ class Turn:
 
         # si une paire ne peut pas etre afiliée à une autre on retourne none
         return None
-
 
     # fonction recusrive pour obtenir le moins de paires non-unique possible
     def get_pairs_with_penalty(self, available_players, pairs_in_tournament):
@@ -118,10 +113,7 @@ class Turn:
         # on retourne la liste des paires avec la pénalité correpondante
         return best_solution, best_penalty
 
-
-
     # -------------------------------------------
-
 
     def get_player_alone(self, players_alone):
         # gestion d'un potentiel joueur seul
@@ -135,15 +127,13 @@ class Turn:
                 # re-tirage au sort
                 index = random.randrange(len(self.players))
                 self.player_alone = self.players[index]
-            #on retire le joueur seul de la liste de joueurs pour pouvoir générer des paires
+            # on retire le joueur seul de la liste de joueurs pour pouvoir générer des paires
             self.players.pop(index)
-
 
     def start_turn(self):
         # mise à jour de la date de départ
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.start_datetime = now
-
 
     def get_matchs_information(self, matchs):
         # on récupere la liste des matchs avec score mis à jour
@@ -153,7 +143,6 @@ class Turn:
             match = tuple(match)
             tuple_matchs.append(match)
         self.matchs = tuple_matchs
-
 
     def finish_turn(self):
         # on incrémente le nombre de tour
@@ -165,7 +154,6 @@ class Turn:
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.end_datetime = now
 
-
     def update_players(self):
         # on met à jour la liste des joueurs à partir de match,
         updated_players = []
@@ -176,7 +164,6 @@ class Turn:
         if self.player_alone is not None:
             updated_players.append(self.player_alone)
         self.players = updated_players
-
 
     def deserialize_all(self, turns_dict):
         turns = []
@@ -190,9 +177,5 @@ class Turn:
         return turns
 
 
-
 def get_key_score(player):
     return player[1]
-
-
-

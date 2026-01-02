@@ -1,7 +1,7 @@
 class MainMenuView:
 
     def display_main_menu(self):
-        possible_choices = ["1","2","3","4","5","6"]
+        possible_choices = ["1", "2", "3", "4", "5", "6"]
         print("-------------- Menu --------------")
         print()
         print("1.Ajouter un tournoi ")
@@ -14,27 +14,8 @@ class MainMenuView:
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
         print("----------------------------------")
-        while choice not in possible_choices :
+        while choice not in possible_choices:
             print("Vous devez entrer un numéro compris entre 1 et 6.")
             choice = input("Entrer le numéro correspondant : ")
             print("---------------------------------")
         return choice
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

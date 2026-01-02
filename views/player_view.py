@@ -20,14 +20,13 @@ class PlayerView:
         print("----------------------------------")
         return last_name, first_name, birth_date, player_id
 
-
     def display_players(self, players):
         print("Liste des joueurs : ")
         print()
         for player in players:
-            print(f"{player.player_id.upper()}  ->  Nom : {player.last_name.upper()}  -  Prénom : {player.first_name.capitalize()}  -  Date de naissance : {player.birth_date}")
+            print(
+                f"{player.player_id.upper()}  ->  Nom : {player.last_name.upper()}  -  Prénom : {player.first_name.capitalize()}  -  Date de naissance : {player.birth_date}")
         print("----------------------------------")
-
 
     def form_player_id(self):
         player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur' : "))

@@ -12,20 +12,16 @@ class Player:
         self.score = score
         self.color = color
 
-
     def __str__(self):
         return f'{self.player_id} {self.last_name} {self.first_name} {self.birth_date}'
 
-
     def __repr__(self):
         return self.__str__()
-
 
     def add_player(self):
         players = load_players()
         players.append(self.serialize())
         self.update_players(players)
-
 
     def serialize(self):
         return {"last_name": self.last_name,
@@ -33,11 +29,9 @@ class Player:
                 "birth_date": self.birth_date,
                 "player_id": self.player_id}
 
-
     def update_players(self, players):
         with open(f"{DATA_DIR}/players.json", "w") as file:
             json.dump(players, file, indent=4)
-
 
     def deserialize_all(self):
         players = []
@@ -48,7 +42,6 @@ class Player:
                             birth_date=p["birth_date"])
             players.append(player)
         return players
-
 
     def get_players_informations(self, players_in_tournament):
         players = Player().deserialize_all()
@@ -61,11 +54,10 @@ class Player:
         return players_informations
 
 
-
 def load_players():
     players = None
-    while players is None :
-        try :
+    while players is None:
+        try:
             with open(f"{DATA_DIR}/players.json", "r") as file:
                 players = json.load(file)
                 return players
@@ -80,5 +72,3 @@ def load_players():
 if __name__ == '__main__':
     players = Player().deserialize_all()
     print(players)
-
-

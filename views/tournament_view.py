@@ -1,6 +1,7 @@
 from views import view_checker
 from views.input_format import cleaning_input
 
+
 class TournamentView:
 
     def tournament_form(self):
@@ -19,14 +20,13 @@ class TournamentView:
         turn_number = cleaning_input(input("Entrer le nombre de tour du tournoi (par défaut 4) : "))
         if turn_number.isdigit():
             turn_number = int(turn_number)
-        else :
+        else:
             turn_number = 4
         description = cleaning_input(input("Indiquer une description (si besoin) : "))
         if not description:
             description = tournament_name
         print("----------------------------------")
         return tournament_name, location, start_date, end_date, turn_number, description
-
 
     def display_tournaments(self, tournaments):
         print("Liste des tournois : ")
@@ -43,19 +43,18 @@ class TournamentView:
     def display_tournaments_list(self, tournaments):
         possible_choices = []
         for nb, tournament in enumerate(tournaments):
-            print(f"{nb+1}- {tournament.name.title()}")
-            possible_choices.append(f"{nb+1}")
+            print(f"{nb + 1}- {tournament.name.title()}")
+            possible_choices.append(f"{nb + 1}")
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
         print("----------------------------------")
-        while choice not in possible_choices :
+        while choice not in possible_choices:
             print("Vous devez entrer un numéro compris entre 1 et 6.")
             choice = input("Entrer le numéro correspondant : ")
             print("---------------------------------")
-        tournament = tournaments[int(choice)-1]
+        tournament = tournaments[int(choice) - 1]
         tournament_name = tournament.name
         return tournament_name
-
 
     def display_tournament_menu(self, tournament_name):
         possible_choices = ["1", "2", "3", "4", "5", "6"]
@@ -79,7 +78,6 @@ class TournamentView:
             print("----------------------------------")
         return choice
 
-
     def display_tournament_informations(self, tournament):
         print()
         print(f"Nom du tournoi : '{tournament.name.title()}")
@@ -91,13 +89,8 @@ class TournamentView:
         print()
         print("----------------------------------")
 
-
-
-
-
-
     def display_launched_tournament_informations(self, control_turns, control_nb_players, tournament_name):
-        if control_turns :
+        if control_turns:
             print(f"Le tournoi {tournament_name.title()} a déjà eu lieu.")
             print(f"Retour au menu du tournoi {tournament_name.title()}.")
             print("----------------------------------")
@@ -109,6 +102,3 @@ class TournamentView:
             return
         print(f"Lancement du tournoi {tournament_name}.")
         print("----------------------------------")
-
-
-

@@ -1,5 +1,5 @@
 from models.tournament import Tournament
-from models.player import  Player
+from models.player import Player
 from controllers.list_sorter import name_sorter
 from models.turn import Turn
 
@@ -12,13 +12,11 @@ class TournamentMenuController:
         self.message = message
         self.tournament_controller = tournament_controller
 
-
     def get_tournament_informations(self, tournament_name):
         tournaments = Tournament().deserialize_all()
         for tournament in tournaments:
             if tournament.name == tournament_name:
                 return tournament
-
 
     def add_player_in_tournament(self, tournament_name):
         player_id = self.player_view.form_player_id()
@@ -31,7 +29,7 @@ class TournamentMenuController:
         for player in players:
             if player.player_id == player_id:
                 player_name = f"{player.last_name.upper()} {player.first_name.capitalize()}"
-        if self.control_player_in_tournament(player_id, tournament_name) :
+        if self.control_player_in_tournament(player_id, tournament_name):
             self.message.display_message(f"Le joueur '{player_name}' est déja inscrit au tournoi "
                                          f"'{tournament_name.title()}'. ")
             return
@@ -40,14 +38,12 @@ class TournamentMenuController:
         self.message.display_message(f"Le joueur '{player_name}' a bien été inscrit au tournoi "
                                      f"'{tournament_name.title()}'. ")
 
-
     def control_player_in_players(self, player_id):
         players = Player().deserialize_all()
         for player in players:
             if player.player_id == player_id:
                 return True
         return False
-
 
     def control_player_in_tournament(self, player_id, tournament_name):
         tournaments = Tournament().deserialize_all()
@@ -57,7 +53,6 @@ class TournamentMenuController:
                     if player_id in player:
                         return True
         return False
-
 
     def get_tournament_turns(self, tournament_name):
         # control présence turn
@@ -70,22 +65,20 @@ class TournamentMenuController:
         turns = Turn().deserialize_all(tournament.turns)
         for turn in turns:
             matchs = []
-            for match in turn.matchs :
+            for match in turn.matchs:
                 match = Player().get_players_informations(match)
                 matchs.append(match)
             turn.matchs = matchs
-            if turn.player_alone :
+            if turn.player_alone:
                 turn.player_alone = Player().get_players_informations([turn.player_alone])
         self.p_in_t_view.display_turns(turns)
         return True
 
-
     def control_turns_in_tournament(self, tournament_name):
         tournament = self.get_tournament_informations(tournament_name)
-        if tournament.turns :
+        if tournament.turns:
             return True
         return False
-
 
     def get_players_in_tournament(self, tournament_name):
         # control nb players
@@ -99,12 +92,9 @@ class TournamentMenuController:
         self.p_in_t_view.display_players_in_tournament(name_sorter(players_informations))
         return True
 
-
     def control_player_number_in_tournament(self, tournament_name):
         tournament = self.get_tournament_informations(tournament_name)
         return len(tournament.players)
-
-
 
     def control_to_run_tournament(self, tournament_name):
         if self.control_turns_in_tournament(tournament_name):
@@ -120,8 +110,6 @@ class TournamentMenuController:
         self.p_in_t_view.display_players_in_tournament(Player().get_players_informations(tournament.players))
         self.tournament_controller.run_tournament(tournament_name, tournament.players, tournament.turn_number)
         return True
-
-
 
     # à diviser en sous fonction pour limiter le nombre de ligne
     def run_tournament_menu(self):
@@ -151,7 +139,3 @@ class TournamentMenuController:
                     # retour au menu principal
                     self.message.display_message("Retour au menu principal. ")
                     break
-
-
-
-

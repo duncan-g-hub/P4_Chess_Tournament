@@ -9,13 +9,12 @@ class PLayersInTournamentView:
                   f"score : {player.score}")
         print("----------------------------------")
 
-
     def display_turns(self, turns):
         for turn in turns:
             print()
             print(f"Le {turn.name} commence {turn.start_datetime}.")
             print()
-            for i, match in enumerate(turn.matchs) :
+            for i, match in enumerate(turn.matchs):
                 print(f"Match n°{i + 1} :")
                 print(f"{match[0].player_id.upper()} : {match[0].last_name.upper()} {match[0].first_name.capitalize()} "
                       f"- {match[0].score}pt")
@@ -23,7 +22,7 @@ class PLayersInTournamentView:
                 print(f"{match[1].player_id.upper()} : {match[1].last_name.upper()} {match[1].first_name.capitalize()} "
                       f"- {match[1].score}pt")
                 print()
-            if turn.player_alone :
+            if turn.player_alone:
                 p = turn.player_alone[0]
                 print(f"Le joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} "
                       f"- {p.score}pt ne jouera pas le {turn.name}. ")
@@ -32,7 +31,6 @@ class PLayersInTournamentView:
             print(f"Le {turn.name} se termine {turn.end_datetime}.")
             print()
             print("----------------------------------")
-
 
     def display_match_menu(self, current_turn, current_match, p1, p2):
         possible_choices = ["1", "2", "3"]
@@ -60,7 +58,6 @@ class PLayersInTournamentView:
             choice = input("Entrer le numéro correspondant : ")
             print("----------------------------------")
         return choice
-
 
     def display_winner(self, winners, tournament_name):
         print()
