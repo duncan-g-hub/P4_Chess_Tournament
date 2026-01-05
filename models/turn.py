@@ -93,7 +93,6 @@ class Turn:
             return []
         # on recupère le premier joueur
         p1 = available_players[0]
-
         # on boucle sur la longueur de la liste de joueur
         for i in range(1, len(available_players)):
             # on récupère p2
@@ -101,19 +100,16 @@ class Turn:
             # on crée la paire
             pair = [p1, p2]
             pair_reverse = [p2, p1]
-
             # si la paire n'est pas déja présente dans pairs_in_tournament
             if pair not in pairs_in_tournament and pair_reverse not in pairs_in_tournament:
                 # on crée une liste des joueurs restant en enlevant p1 et p2
                 remaining_players = available_players[1:i] + available_players[i + 1:]
                 # on applique la recursivité pour générer des paires avec le reste
                 rest = self.get_pairs(remaining_players, pairs_in_tournament)
-
                 # si le resultat de get_pairs n'est pas none, on retourne la liste de pair et le reste
                 if rest is not None:
                     # pair = la paire qui vient d'etre crée, rest = paires créee et stockée par la recursivité
                     return [pair] + rest
-
         # si une paire ne peut pas etre afiliée à une autre, on retourne none
         return None
 
@@ -141,14 +137,11 @@ class Turn:
         # condition d'arret (cas de base)
         if not available_players:
             return [], 0
-
         # on recupere le premier joueur
         p1 = available_players[0]
-
         best_solution = None
         # on crée la variable : meilleure pénalité = infini
         best_penalty = float("inf")
-
         # on boucle sur la longueur de la liste de joueur
         for i in range(1, len(available_players)):
             # on récupère p2
@@ -156,30 +149,25 @@ class Turn:
             # on crée la paire
             pair = [p1, p2]
             pair_reverse = [p2, p1]
-
             # si la paire existe déja, on ajoute une pénalité
             if pair in pairs_in_tournament or pair_reverse in pairs_in_tournament:
                 penalty = 1
             else:
                 penalty = 0
-
             # on retire la paire de la liste
             remaining_players = available_players[1:i] + available_players[i + 1:]
             # on applique la recusivité pour générer des paires et pénalité avec le reste
             rest_pairs, rest_penalty = self.get_pairs_with_penalty(remaining_players, pairs_in_tournament)
             # on ajoute la pénalité actuelle aux pénalités obtenue recursivement
             total_penalty = penalty + rest_penalty
-
             # si le total de penalité est plus petit que best_penalty (infini à la premiere recursion)
             if total_penalty < best_penalty:
                 # best penalty devient total penalty
                 best_penalty = total_penalty
                 # il faudra que total penalty soit plus petit que best penalty pour générer une paire
                 best_solution = [pair] + rest_pairs
-
         # on retourne la liste des paires avec la pénalité correpondante
         return best_solution, best_penalty
-
 
     def get_player_alone(self, players_alone: list[Player]) -> None:
         """Récupère un joueur seul pour le tour courant si nécessaire.
@@ -187,7 +175,6 @@ class Turn:
         Si le nombre de joueurs est impair, un joueur est tiré au sort.
         Le tirage est répété tant que le joueur sélectionné est présent
         dans la liste players_alone.
-
         Le joueur seul est retiré de la liste des joueurs pour permettre
         la génération des paires.
 
