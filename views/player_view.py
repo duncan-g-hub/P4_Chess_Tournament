@@ -26,7 +26,8 @@ class PlayerView:
         print()
         for player in players:
             print(
-                f"{player.player_id.upper()}  ->  Nom : {player.last_name.upper()}  -  Prénom : {player.first_name.capitalize()}  -  Date de naissance : {player.birth_date}")
+                f"{player.player_id.upper()}  ->  Nom : {player.last_name.upper()}  "
+                f"-  Prénom : {player.first_name.capitalize()}  -  Date de naissance : {player.birth_date}")
         print("----------------------------------")
 
     def form_player_id(self) -> str:

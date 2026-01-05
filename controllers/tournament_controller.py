@@ -86,9 +86,9 @@ class TournamentController:
         pairs_in_tournament = []
         turn = Turn(players)
         while turn.current_turn < turn_number:
-            # on récupère les paires et le joueur seul en passant à la fonction la liste des paires et des joueurs seuls
+            # recupérer les paires et le joueur seul en passant à la fonction la liste des paires et des joueurs seuls
             pairs, player_alone = turn.get_players_pairs(pairs_in_tournament, players_alone)
-            # on ajoute les jouerus seuls et paires aux listes
+            # ajouter les jouerus seuls et paires aux listes
             pairs_in_tournament.extend(pairs)
             players_alone.append(player_alone)
             # Lancement du round

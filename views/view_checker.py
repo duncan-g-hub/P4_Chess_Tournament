@@ -25,7 +25,7 @@ def control_birth_date(birth_date: str) -> tuple[bool, str]:
     birth_date = datetime.strptime(birth_date, "%d/%m/%Y")
     today = datetime.today()
     if today < birth_date:
-        return False, f"La date de naissance ne peut pas être antérieur à la date d'aujourd'hui."
+        return False, "La date de naissance ne peut pas être antérieur à la date d'aujourd'hui."
     return True, ""
 
 
@@ -35,7 +35,7 @@ def control_start_date(start_date: str) -> tuple[bool, str]:
     start_date = datetime.strptime(start_date, "%d/%m/%Y")
     today = datetime.today()
     if start_date < today:
-        return False, f"La date de départ ne peut pas être antérieur à la date d'aujourd'hui."
+        return False, "La date de départ ne peut pas être antérieur à la date d'aujourd'hui."
     return True, ""
 
 

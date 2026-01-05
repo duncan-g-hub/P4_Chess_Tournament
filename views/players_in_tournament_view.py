@@ -51,7 +51,7 @@ class PLayersInTournamentView:
               f"({p2.score}pt)")
         print()
         print("Résultat : ")
-        print(f" 1. Égalité ")
+        print(" 1. Égalité ")
         print(f" 2. Victoire du joueur {p1.player_id.upper()} : {p1.last_name.upper()} {p1.first_name.capitalize()}")
         print(f" 3. Victoire du joueur {p2.player_id.upper()} : {p2.last_name.upper()} {p2.first_name.capitalize()}")
         print()

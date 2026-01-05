@@ -33,7 +33,7 @@ class Turn:
         self.players = sorted(self.players, key=get_key_score)
 
     def get_players_pairs(self, pairs_in_tournament: list[list[Player]], players_alone: list[Player]) -> tuple[
-        list[list[Player]], Player]:
+            list[list[Player]], Player]:
         if self.current_turn == 0:
             self.mix_players_randomly()
         else:
@@ -51,7 +51,7 @@ class Turn:
 
     # fonction recursive pour obtenir des paires uniques
     def get_pairs(self, available_players: list[Player], pairs_in_tournament: list[list[Player]]) -> list[list[
-        Player]] | None:
+            Player]] | None:
         # condition d'arret (cas de base)
         if len(available_players) == 0:
             return []
