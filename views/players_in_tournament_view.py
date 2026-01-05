@@ -3,8 +3,15 @@ from models.turn import Turn
 
 
 class PLayersInTournamentView:
+    """Gère l'affichage et la saisie des informations liées aux joueurs dans un tournoi."""
 
-    def display_players_in_tournament(self, players: list[Player]) -> None:
+    @staticmethod
+    def display_players_in_tournament(players: list[Player]) -> None:
+        """Affiche les joueurs participants au tournoi.
+
+        Args:
+            players (list[Player]): Liste d'instances de Player
+        """
         print("Liste des participants : ")
         print()
         for player in players:
@@ -12,7 +19,15 @@ class PLayersInTournamentView:
                   f"score : {player.score}")
         print("----------------------------------")
 
-    def display_turns(self, turns: list[Turn]) -> None:
+    @staticmethod
+    def display_turns(turns: list[Turn]) -> None:
+        """Affiche les tours et matchs qui les composent.
+
+        Pour chaque tour, affiche le nom, la date et l'heure de départ et de fin.
+        Pour chaque match, affiche le numéro et la paire de joueurs qui le compose.
+        Args:
+            turns (list[Turn]): Liste d'instances de Turn
+        """
         for turn in turns:
             print()
             print(f"Le {turn.name} commence {turn.start_datetime}.")
@@ -37,7 +52,24 @@ class PLayersInTournamentView:
             print()
             print("----------------------------------")
 
-    def display_match_menu(self, current_turn: int, current_match: int, p1: Player, p2: Player) -> str:
+    @staticmethod
+    def display_match_menu(current_turn: int, current_match: int, p1: Player, p2: Player) -> str:
+        """Affiche le menu du match et récupère le choix de l'utilisateur.
+
+        Affiche le numéro du tour en cours et du match en cours.
+        Pour chaque joueur, affiche sa couleur, son identifiant, son nom et son score.
+        Retourne le résultat du match demandé à l'utilisateur.
+
+        Args:
+            current_turn (int): Numéro du tour courant
+            current_match (int): Numéro du match courant
+            p1 (Player): Joueur 1
+            p2 (Player): Joueur 2
+
+        Returns:
+            str: Choix de l'utilisateur (1 = égalité, 2 = victoire p1, 3 = victoire p2)
+
+        """
         possible_choices = ["1", "2", "3"]
         print("----------- Match Menu -----------")
         print()
@@ -64,7 +96,14 @@ class PLayersInTournamentView:
             print("----------------------------------")
         return choice
 
-    def display_winner(self, winners: list[Player], tournament_name: str) -> None:
+    @staticmethod
+    def display_winner(winners: list[Player], tournament_name: str) -> None:
+        """ Affiche le(s) vainqueur(s) du tournoi avec leur score.
+
+        Args:
+            winners (list[Player]): Liste des vainqueur
+            tournament_name (str): Nom du tournoi
+        """
         print()
         if len(winners) > 1:
             print(f"Les vainqueurs du tournoi '{tournament_name.title()}' sont :")

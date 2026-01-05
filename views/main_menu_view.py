@@ -1,6 +1,13 @@
 class MainMenuView:
+    """Gère la vue du menu principal."""
 
-    def display_main_menu(self) -> str:
+    @staticmethod
+    def display_main_menu() -> str:
+        """Affiche le menu principal et récupère le choix de l'utilisateur.
+
+        Returns:
+            str: Numéro correspondant au choix de l'utilisateur
+        """
         possible_choices = ["1", "2", "3", "4", "5", "6"]
         print("-------------- Menu --------------")
         print()

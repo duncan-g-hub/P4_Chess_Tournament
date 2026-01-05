@@ -4,24 +4,27 @@ from models.player import Player
 
 
 class Match:
+    """Représente un match d'un tour.
+
+    Gère une paire de joueur, attribue des couleurs et met les scores à jour.
+    """
     def __init__(self, pair: list[Player]) -> None:
         self.pair = pair
 
     def launch_match(self, winner: Player) -> None:
-        # # à garder pour test éxécution aléatoire
-        # # qui gagne la rencontre ?
-        # # égalité ?
-        # equality = random.choice([True, False])
-        # if equality:
-        #     winner = None
-        # # non-égalité ?
-        # else :
-        #     # qui remporte ?
-        #     winner = random.choice(self.players)
-        # mise à jour des scores
+        """Lance le match et met à jour les scores.
+
+        Args:
+            winner (Player): Le joueur gagnant du match, ou none en cas d'égalité.
+        """
         self.update_scores(winner)
 
     def get_random_sides(self) -> tuple[Player, Player]:
+        """Attribue aléatoirement les couleurs aux joueurs.
+
+        Returns:
+            tuple[Player, Player]: Joueur blanc, joueur noir.
+        """
         white = random.choice(self.pair)
         if white == self.pair[0]:
             black = self.pair[1]
@@ -30,7 +33,14 @@ class Match:
         return white, black
 
     def update_scores(self, winner: Player) -> None:
-        # mise à jour des scores en fonction de resultat de launch match
+        """Met à jour les scores de la paire après le match.
+
+        Si winner = None, alors égalité, les deux joueurs reçoivent 0.5 point.
+        Sinon le joueur gagnant reçoit 1 point et l'autre 0.
+
+        Args:
+            winner (Player): Joueur gagnant du match, ou None en cas d'égalité.
+        """
         updated_players = []
         if winner is None:
             for player in self.pair:

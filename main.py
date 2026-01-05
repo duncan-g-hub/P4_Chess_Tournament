@@ -8,7 +8,11 @@ from controllers.tournament_controller import TournamentController
 from controllers.tournament_menu_controller import TournamentMenuController
 
 
-def main():
+def main() -> None:
+    """Point d'entrée de l'application.
+
+    Crée les instances des vues et des contrôleurs, puis lance le menu principal.
+    """
     main_menu_view = MainMenuView()
     player_view = PlayerView()
     tournament_view = TournamentView()

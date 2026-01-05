@@ -6,6 +6,11 @@ from models.turn import Turn
 
 
 class Tournament:
+    """Représente un tournoi d'échecs.
+
+    Gère les joueurs, les tours et les informations générales du tournoi.
+    Permet la sauvegarde et le chargement des données.
+    """
     def __init__(
             self,
             name: str | None = None,
@@ -15,7 +20,7 @@ class Tournament:
             turn_number: int = 4,
             description: str = "",
             players: list[Player] | None = None,
-            turns: int | None = None
+            turns: list[Turn] | None = None
     ) -> None:
         self.name = name
         self.location = location
@@ -28,11 +33,17 @@ class Tournament:
         self.turns = turns or []
 
     def add_tournament(self) -> None:
+        """Ajoute le tournoi courant au fichier tournaments.json. """
         tournaments = load_tournaments()
         tournaments.append(self.serialize())
         self.update_tournaments(tournaments)
 
     def serialize(self) -> dict:
+        """Création d'un dictionnaire à partir des attributs d'instance.
+
+        Returns:
+            dict: informations du tournoi
+        """
         return {"name": self.name,
                 "location": self.location,
                 "start_date": self.start_date,
@@ -43,6 +54,12 @@ class Tournament:
                 "turns": self.turns}
 
     def add_player_in_tournament(self, player: Player) -> None:
+        """Ajoute un joueur au tournoi courant.
+         Met à jour le tournoi dans le fichier tournaments.json.
+
+        Args:
+            player (Player): instance de la classe Player.
+        """
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
@@ -52,6 +69,11 @@ class Tournament:
         self.update_tournaments(tournaments)
 
     def add_turn_in_tournament(self, turn: Turn) -> None:
+        """Ajoute un tour au tournoi courant et met à jour le tournoi dans le fichier tournaments.json
+
+        Args:
+            turn (Turn): instance de la classe Turn.
+        """
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
@@ -60,7 +82,6 @@ class Tournament:
                                             "player_alone": turn.player_alone.serialize(),
                                             "start_datetime": turn.start_datetime,
                                             "end_datetime": turn.end_datetime, })
-
                 players = []
                 for player in turn.players:
                     print(player)
@@ -68,11 +89,24 @@ class Tournament:
                 tournament["players"] = players
         self.update_tournaments(tournaments)
 
-    def update_tournaments(self, tournaments: list[dict]) -> None:
+    @staticmethod
+    def update_tournaments(tournaments: list[dict]) -> None:
+        """Met à jour du fichier tournaments.json.
+
+        Args:
+            tournaments (list[dict]): liste des informations tournois
+        """
         with open(f"{DATA_DIR}/tournaments.json", "w") as file:
             json.dump(tournaments, file, indent=4)
 
-    def deserialize_all(self) -> list["Tournament"]:
+    @staticmethod
+    def deserialize_all() -> list["Tournament"]:
+        """Crée une liste d'instance Tournament à partir de tournaments.json.
+
+        Returns:
+            list[Tournament]: liste d'isntances Tournament
+
+        """
         tournaments = []
         for t in load_tournaments():
             tournament = Tournament(name=t["name"],
@@ -88,6 +122,11 @@ class Tournament:
 
 
 def load_tournaments() -> list[dict]:
+    """Récupération des tournaments dans tournaments.json.
+
+    Returns:
+        list[dict]: liste des informations tournois chargés depuis tournaments.json
+    """
     tournaments = None
     while tournaments is None:
         try:
