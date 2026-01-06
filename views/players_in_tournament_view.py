@@ -1,4 +1,5 @@
 from models.player import Player
+from models.tournament import Tournament
 from models.turn import Turn
 
 
@@ -97,23 +98,23 @@ class PLayersInTournamentView:
         return choice
 
     @staticmethod
-    def display_winner(winners: list[Player], tournament_name: str) -> None:
+    def display_winner(winners: list[Player], tournament: Tournament) -> None:
         """ Affiche le(s) vainqueur(s) du tournoi avec leur score.
 
         Args:
-            winners (list[Player]): Liste des vainqueur
-            tournament_name (str): Nom du tournoi
+            winners (list[Player]): Liste des vainqueurs
+            tournament (Tournament): Instance de Tournament
         """
         print()
         if len(winners) > 1:
-            print(f"Les vainqueurs du tournoi '{tournament_name.title()}' sont :")
+            print(f"Les vainqueurs du tournoi '{tournament.name.title()}' sont :")
             for winner in winners:
                 print(
                     f" - {winner.last_name.capitalize()} {winner.first_name.capitalize()}, "
                     f"avec un score de {winner.score}")
         else:
             print(
-                f"Le vainqueur du tournoi '{tournament_name.title()}' est {winners[0].last_name.capitalize()} "
+                f"Le vainqueur du tournoi '{tournament.name.title()}' est {winners[0].last_name.capitalize()} "
                 f"{winners[0].first_name.capitalize()}, avec un score de {winners[0].score}")
         print()
         print("----------------------------------")

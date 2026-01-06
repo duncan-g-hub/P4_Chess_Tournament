@@ -37,15 +37,15 @@ class MainMenuController:
         tournament_name, location, start_date, end_date, turn_number, descritpion = (
             self.tournament_view.tournament_form())
         tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
-        if self.control_tournament_name(tournament_name):
-            self.message.display_message(f"Le tournoi {tournament_name.title()} existe déja. "
+        if self.control_tournament(tournament.name):
+            self.message.display_message(f"Le tournoi {tournament.name.title()} existe déja. "
                                          f"Veuillez saisir les informations de nouveau en changeant de nom.")
         else:
             tournament.add_tournament()
-            self.message.display_message(f"Le tournoi {tournament_name.title()} a bien été créé.")
+            self.message.display_message(f"Le tournoi {tournament.name.title()} a bien été créé.")
 
     @staticmethod
-    def control_tournament_name(tournament_name: str) -> bool:
+    def control_tournament(tournament_name: str) -> bool:
         """Vérifie si un tournoi portant ce nom existe déjà.
 
         Args:
@@ -59,6 +59,22 @@ class MainMenuController:
             if t.name == tournament_name:
                 return True
         return False
+
+    def add_player(self) -> None:
+        """Ajoute un nouveau joueur.
+
+        Récupère les informations via la vue 'player_view'.
+        Vérifie si le joueur existe déjà.
+        Affiche un message d'erreur si le joueur existe, sinon ajoute le joueur
+        et confirme l'ajout via la vue 'message'.
+        """
+        last_name, first_name, birth_date, player_id = self.player_view.player_form()
+        player = Player(player_id, last_name, first_name, birth_date)
+        if self.control_player_in_players(player_id):
+            self.message.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} existe déja.")
+        else:
+            player.add_player()
+            self.message.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
 
     @staticmethod
     def control_player_in_players(player_id: str) -> bool:
@@ -75,22 +91,6 @@ class MainMenuController:
             if player.player_id == player_id:
                 return True
         return False
-
-    def add_player(self) -> None:
-        """Ajoute un nouveau joueur.
-
-        Récupère les informations via la vue 'player_view'.
-        Vérifie si le joueur existe déjà.
-        Affiche un message d'erreur si le joueur existe, sinon ajoute le joueur
-        et confirme l'ajout via la vue 'message'.
-        """
-        last_name, first_name, birth_date, player_id = self.player_view.player_form()
-        player = Player(player_id, last_name, first_name, birth_date)
-        if self.control_player_in_players(player_id):
-            self.message.display_message(f"Le joueur {last_name.uper()} {first_name.capitalize()} existe déja.")
-        else:
-            player.add_player()
-            self.message.display_message(f"Le joueur {last_name.upper()} {first_name.capitalize()} à bien été ajouté.")
 
     def control_to_run_tournament_menu(self) -> bool:
         """Vérifie la présence de tournois et lance le menu tournoi si possible.

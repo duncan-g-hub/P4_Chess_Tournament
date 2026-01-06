@@ -19,6 +19,7 @@ class Tournament:
             end_date: str | None = None,
             turn_number: int = 4,
             description: str = "",
+            current_turn: int = 0,
             players: list[Player] | None = None,
             turns: list[Turn] | None = None
     ) -> None:
@@ -28,7 +29,7 @@ class Tournament:
         self.end_date = end_date
         self.turn_number = turn_number
         self.description = description
-
+        self.current_turn = current_turn
         self.players = players or []
         self.turns = turns or []
 
@@ -50,6 +51,7 @@ class Tournament:
                 "end_date": self.end_date,
                 "turn_number": self.turn_number,
                 "description": self.description,
+                "current_turn": self.current_turn,
                 "players": self.players,
                 "turns": self.turns}
 
@@ -74,6 +76,7 @@ class Tournament:
         Args:
             turn (Turn): instance de la classe Turn.
         """
+        self.current_turn += 1
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
@@ -114,6 +117,7 @@ class Tournament:
                                     end_date=t["end_date"],
                                     turn_number=t["turn_number"],
                                     description=t["description"],
+                                    current_turn=t["current_turn"],
                                     players=Player().get_players_from_list_dict(t["players"]),
                                     turns=t["turns"])
             tournaments.append(tournament)

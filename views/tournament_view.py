@@ -89,30 +89,30 @@ class TournamentView:
             choice = input("Entrer le numéro correspondant : ")
             print("---------------------------------")
         tournament = tournaments[int(choice) - 1]
-        tournament_name = tournament.name
-        return tournament_name
+        return tournament
 
     @staticmethod
-    def display_tournament_menu(tournament_name: str) -> str:
+    def display_tournament_menu(tournament: Tournament) -> str:
         """Affiche le menu du tournoi et récupère le choix de l'utilisateur.
 
         Args:
-            tournament_name (str): Nom du tournoi
+            tournament (Tournament): Instance de Tournament
 
         Returns:
             str: Numéro correspondant au choix de l'utilisateur
         """
-        possible_choices = ["1", "2", "3", "4", "5", "6"]
+        possible_choices = ["1", "2", "3", "4", "5", "6", "7"]
         print("---------- Menu Tournoi ----------")
         print()
-        print(f"Tournoi '{tournament_name.title()}' séléctionné.")
+        print(f"Tournoi '{tournament.name.title()}' séléctionné.")
         print()
         print("1.Afficher les informations du tournoi ")
         print("2.Ajouter un joueur au tournoi ")
         print("3.Afficher les joueurs participants au tournoi ")
         print("4.Afficher la liste des tours et matchs du tournoi ")
-        print("5.Lancer le tournoi ")
-        print("6.Revenir au menu principal ")
+        print("5.Commencer le prochain tour ")
+        print("6.Finir le tour actuel ")
+        print("7.Revenir au menu principal ")
         print()
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
@@ -140,31 +140,3 @@ class TournamentView:
         print()
         print("----------------------------------")
 
-    @staticmethod
-    def display_launched_tournament_informations(control_turns: bool, control_nb_players: bool,
-                                                 tournament_name: str) -> None:
-        """Affiche des informations sur les conditions de lancement d'un tournoi.
-
-         Selon les contrôles passés, indique si le tournoi a déjà eu lieu,
-        si le nombre de joueurs est suffisant, ou signale le lancement du tournoi.
-
-        Args:
-            control_turns (bool): True si le tournoi a déjà commencé (des tours existent)
-            control_nb_players (bool): True si le nombre de joueurs est supérieur à 1
-            tournament_name (str): Nom du tournoi
-
-        Returns:
-            None
-        """
-        if control_turns:
-            print(f"Le tournoi {tournament_name.title()} a déjà eu lieu.")
-            print(f"Retour au menu du tournoi {tournament_name.title()}.")
-            print("----------------------------------")
-            return
-        if not control_nb_players:
-            print(f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament_name.title()}.")
-            print(f"Retour au menu du tournoi {tournament_name.title()}.")
-            print("----------------------------------")
-            return
-        print(f"Lancement du tournoi {tournament_name}.")
-        print("----------------------------------")

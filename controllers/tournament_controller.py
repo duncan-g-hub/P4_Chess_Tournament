@@ -96,14 +96,14 @@ class TournamentController:
             matchs.append(match)
         return matchs
 
-    def get_tournament_winner(self, players: list[Player], tournament_name: str) -> None:
+    def get_tournament_winner(self, players: list[Player], tournament: Tournament) -> None:
         """Détermine et affiche le(s) vainqueur(s) du tournoi.
 
         Gère les égalités en sélectionnant tous les joueurs ayant le score maximal.
 
         Args:
             players (list[Player]): Liste des joueurs triés par score
-            tournament_name (str): Nom du tournoi
+            tournament (Tournament): Instance de tournament
         """
         players_remaining = players[:]
         winners = [players_remaining[-1]]
@@ -111,9 +111,9 @@ class TournamentController:
         while players_remaining[-1].score == winners[-1].score:
             winners.append(players_remaining[-1])
             players_remaining.pop(-1)
-        self.p_in_t_view.display_winner(winners, tournament_name)
+        self.p_in_t_view.display_winner(winners, tournament)
 
-    def run_tournament(self, tournament_name: str, players: list[Player], turn_number: int) -> None:
+    def run_tournament(self, tournament : Tournament) -> None:
         """Lance le déroulement complet d'un tournoi.
 
         Génère les paires de joueurs, exécute les tours successifs,
@@ -121,20 +121,18 @@ class TournamentController:
         À la fin, affiche le ou les vainqueurs du tournoi.
 
         Args:
-            tournament_name (str): Nom du tournoi
-            players (list[Player]): Liste des joueurs participants
-            turn_number (int): Nombre total de tours du tournoi
+            tournament (Tournament): Instance de tournament
         """
         players_alone = []
         pairs_in_tournament = []
-        turn = Turn(players)
-        while turn.current_turn < turn_number:
+        turn = Turn(players=tournament.players)
+        while turn.current_turn < tournament.turn_number:
             pairs, player_alone = turn.get_players_pairs(pairs_in_tournament, players_alone)
             pairs_in_tournament.extend(pairs)
             players_alone.append(player_alone)
             self.run_turn(turn, pairs, player_alone)
-            tournament = Tournament(tournament_name)
+
             tournament.add_turn_in_tournament(turn)
             turn = Turn(players=turn.players, current_turn=turn.current_turn)
             self.p_in_t_view.display_players_in_tournament(score_sorter(turn.players))
-        self.get_tournament_winner(score_sorter(turn.players), tournament_name)
+        self.get_tournament_winner(score_sorter(turn.players), tournament)
