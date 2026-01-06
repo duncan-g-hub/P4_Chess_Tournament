@@ -1,6 +1,7 @@
 # P4 : Application d'organisation de tournois d'échecs
 
 Projet réalisé dans le cadre du développement d'un logiciel d'organisation pour un club d'échecs.
+
 Il s'agit d'une application permettant la gestion et l'organisation de tournois d'échecs.
 
 L'objectif est de constituer un outil qui ne nécessite aucune connexion internet et qui permet de sauvegarder et d'afficher les données de chaque tournoi.
@@ -10,9 +11,9 @@ L'objectif est de constituer un outil qui ne nécessite aucune connexion interne
 ## Fonctionnalités
 
 - Gestion des joueurs : 
-  - Ajout de joueurs
+  - Ajouter des joueurs
 - Gestion des tournois : 
-  - Ajout de tournois
+  - Ajoutet des tournois
   - Sélection d'un tournoi :
     - Ajouter des joueurs au tournoi
     - Commencer un tournoi
@@ -110,7 +111,7 @@ P4_Chess_Tournament/
 ### Prérequis :
 
 - Python 3.10 ou plus récent
-- Connexion Internet uniquement pour la récupération du code via github et l'installation des dépendances 
+- Connexion Internet uniquement pour la récupération du code via GitHub et l'installation des dépendances 
 
 ### Cloner le repository : 
 
@@ -136,7 +137,7 @@ pip install -r requirements.txt
 
 ---
 
-## Exécution application
+## Exécution de l'application
 
 ```bash
 cd P4_Chess_Tournament/
@@ -146,7 +147,7 @@ Le menu principal apparaîtra dans le terminal sous forme de ligne de commande.
 
 ---
 
-## Mise à jour rapport flake8-html
+## Mise à jour du rapport flake8-html
 
 ```bash
 cd P4_Chess_Tournament/
