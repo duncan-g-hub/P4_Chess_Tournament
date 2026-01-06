@@ -131,27 +131,20 @@ class Turn:
             tuple[list[list[Player]], int]:
                 - Liste de paires générées.
                 - Pénalité totale associée à cette solution."""
-        # condition d'arret (cas de base)
         if not available_players:
             return [], 0
-        # on recupere le premier joueur
         p1 = available_players[0]
         best_solution = None
         # on crée la variable : meilleure pénalité = infini
         best_penalty = float("inf")
-        # on boucle sur la longueur de la liste de joueur
         for i in range(1, len(available_players)):
-            # on récupère p2
             p2 = available_players[i]
-            # on crée la paire
             pair = [p1, p2]
             pair_reverse = [p2, p1]
-            # si la paire existe déja, on ajoute une pénalité
             if pair in pairs_in_tournament or pair_reverse in pairs_in_tournament:
                 penalty = 1
             else:
                 penalty = 0
-            # on retire la paire de la liste
             remaining_players = available_players[1:i] + available_players[i + 1:]
             # on applique la recusivité pour générer des paires et pénalité avec le reste
             rest_pairs, rest_penalty = self.get_pairs_with_penalty(remaining_players, pairs_in_tournament)
