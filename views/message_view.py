@@ -1,7 +1,5 @@
 class MessageView:
-    """Représente la vue pour l'affichage des messages.
-
-    Permet l'affichage d'un message"""
+    """Gère l'affichage des messages."""
 
     @staticmethod
     def display_message(message: str) -> None:

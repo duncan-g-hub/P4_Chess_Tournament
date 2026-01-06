@@ -1,5 +1,5 @@
 class MainMenuView:
-    """Gère la vue du menu principal."""
+    """Gère l'affichage du menu principal."""
 
     @staticmethod
     def display_main_menu() -> str:
@@ -9,7 +9,7 @@ class MainMenuView:
             str: Numéro correspondant au choix de l'utilisateur
         """
         possible_choices = ["1", "2", "3", "4", "5", "6"]
-        print("-------------- Menu --------------")
+        print("--------- Menu principal ---------")
         print()
         print("1.Ajouter un tournoi ")
         print("2.Sélectionner un tournoi ")

@@ -44,7 +44,6 @@ class Turn:
         Mélange ou trie les joueurs selon le numéro du tour, gère un éventuel
         joueur seul, puis génère des paires en évitant autant que possible
         les paires déjà jouées dans le tournoi.
-
         Si une combinaison de paire unique n'est possible, une solution
         avec pénalité minimale est calculée.
 
@@ -75,7 +74,6 @@ class Turn:
         Tente de créer des paires sans répétition par rapport aux paires déjà
         jouées dans le tournoi. Si aucune combinaison valide n'est possible,
         retourne None.
-
         Algorithme récursif :
             - Sélectionne un joueur
             - Tente de l'associer avec chaque autre joueur disponible
@@ -120,7 +118,6 @@ class Turn:
         Calcule toutes les combinaisons possibles de paires et retourne celle
         ayant la pénalité la plus faible. Une pénalité correspond à une
         paire déjà jouée dans le tournoi.
-
         Cette méthode est utilisée lorsque aucune solution entièrement unique
         n'est possible.
 

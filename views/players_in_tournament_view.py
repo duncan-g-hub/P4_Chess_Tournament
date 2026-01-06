@@ -71,7 +71,7 @@ class PLayersInTournamentView:
 
         """
         possible_choices = ["1", "2", "3"]
-        print("----------- Match Menu -----------")
+        print("----------- Menu Match -----------")
         print()
         print(f"Tour n°{current_turn} en cours.")
         print()
