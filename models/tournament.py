@@ -1,6 +1,6 @@
 import json
 
-from models.constances import DATA_DIR
+from models.constants import DATA_DIR
 from models.player import Player
 from models.turn import Turn
 
