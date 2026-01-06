@@ -62,12 +62,12 @@ class Turn:
             self.sort_players()
         self.get_player_alone(players_alone)
         available_players = self.players[:]
-        pairs = self.get_pairs(available_players, pairs_in_tournament)
+        pairs = self.get_unique_pairs(available_players, pairs_in_tournament)
         if pairs is None:
             pairs = self.get_pairs_with_penalty(available_players, pairs_in_tournament)[0]
         return pairs, self.player_alone
 
-    def get_pairs(self, available_players: list[Player], pairs_in_tournament: list[list[Player]]) -> list[list[
+    def get_unique_pairs(self, available_players: list[Player], pairs_in_tournament: list[list[Player]]) -> list[list[
             Player]] | None:
         """Génère récursivement des paires de joueurs uniques.
 
@@ -103,7 +103,7 @@ class Turn:
                 # on crée une liste des joueurs restant en enlevant p1 et p2
                 remaining_players = available_players[1:i] + available_players[i + 1:]
                 # on applique la recursivité pour générer des paires avec le reste
-                rest = self.get_pairs(remaining_players, pairs_in_tournament)
+                rest = self.get_unique_pairs(remaining_players, pairs_in_tournament)
                 # si le resultat de get_pairs n'est pas none, on retourne la liste de pair et le reste
                 if rest is not None:
                     # pair = la paire qui vient d'etre crée, rest = paires créee et stockée par la recursivité
