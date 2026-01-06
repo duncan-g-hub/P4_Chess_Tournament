@@ -130,13 +130,6 @@ class TournamentMenuController:
             return False
         tournament = self.get_tournament_informations(tournament_name)
         turns = Turn().deserialize_all(tournament.turns)
-        for turn in turns:
-            turn.players = tournament.players
-            matchs = []
-            for match in turn.matchs:
-                match = turn.get_players_from_match(match)
-                matchs.append(match)
-            turn.matchs = matchs
         self.p_in_t_view.display_turns(turns)
         return True
 

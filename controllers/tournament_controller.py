@@ -25,7 +25,7 @@ class TournamentController:
         """Lance un tour du tournoi.
 
         Démarre le tour, affiche les informations du joueur seul s'il existe,
-        exécute les matchs et met à jour les informations du tour.
+        exécute les matchs et met à jour les matchs dans le tour.
 
         Args:
             turn (Turn): Instance du tour en cours
@@ -37,7 +37,6 @@ class TournamentController:
         """
         turn.start_turn()
         self.message.display_message(f"Commencement du tour n°{turn.current_turn + 1} {turn.start_datetime}")
-        # afficher un message si player_alone is not None
         if player_alone is not None:
             p = player_alone
             self.message.display_message(
@@ -88,9 +87,9 @@ class TournamentController:
             p1, p2 = pair[0], pair[1]
             choice = self.p_in_t_view.display_match_menu(current_turn + 1, current_match + 1, p1, p2)
             if choice == "2":
-                winner = [p1.player_id, p1.score]
+                winner = p1
             elif choice == "3":
-                winner = [p2.player_id, p2.score]
+                winner = p2
             else:
                 winner = None
             match.launch_match(winner)

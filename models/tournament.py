@@ -78,13 +78,12 @@ class Tournament:
         for tournament in tournaments:
             if tournament["name"] == self.name:
                 tournament["turns"].append({"name": turn.name,
-                                            "matchs": turn.matchs,
+                                            "matchs": turn.serialize_matchs(),
                                             "player_alone": turn.player_alone.serialize(),
                                             "start_datetime": turn.start_datetime,
                                             "end_datetime": turn.end_datetime, })
                 players = []
                 for player in turn.players:
-                    print(player)
                     players.append(player.serialize())
                 tournament["players"] = players
         self.update_tournaments(tournaments)

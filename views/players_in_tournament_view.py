@@ -35,12 +35,12 @@ class PLayersInTournamentView:
             for i, match in enumerate(turn.matchs):
                 print(f"Match n°{i + 1} :")
                 print(
-                    f"{match[0].player_id.upper()} : {match[0].last_name.upper()} {match[0].first_name.capitalize()} "
-                    f"- {match[0].score}pt")
+                    f"{match[0][0].player_id.upper()} : {match[0][0].last_name.upper()} "
+                    f"{match[0][0].first_name.capitalize()} - {match[0][0].score}pt")
                 print("          --- VS ---")
                 print(
-                    f"{match[1].player_id.upper()} : {match[1].last_name.upper()} {match[1].first_name.capitalize()} "
-                    f"- {match[1].score}pt")
+                    f"{match[1][0].player_id.upper()} : {match[1][0].last_name.upper()} "
+                    f"{match[1][0].first_name.capitalize()} - {match[1][0].score}pt")
                 print()
             if turn.player_alone:
                 p = turn.player_alone

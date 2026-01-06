@@ -1,7 +1,9 @@
 import random
 from datetime import datetime
 
+from controllers.list_sorter import score_sorter
 from models.match import Match
+
 from models.player import Player
 
 
@@ -59,7 +61,7 @@ class Turn:
         if self.current_turn == 0:
             self.mix_players_randomly()
         else:
-            self.sort_players()
+            self.players = score_sorter(self.players)
         self.get_player_alone(players_alone)
         available_players = self.players[:]
         pairs = self.get_unique_pairs(available_players, pairs_in_tournament)
@@ -197,8 +199,8 @@ class Turn:
         """
         tuple_matchs = []
         for match in matchs:
-            tuple_matchs.append(([match.pair[0].player_id, match.pair[0].score],
-                                 [match.pair[1].player_id, match.pair[1].score]))
+            tuple_matchs.append(([match.pair[0], match.pair[0].score],
+                                 [match.pair[1], match.pair[1].score]))
         self.matchs = tuple_matchs
 
     def finish_turn(self) -> None:
@@ -218,30 +220,13 @@ class Turn:
         """
         updated_players = []
         for match in self.matchs:
-            updated_players.extend(self.get_players_from_match(match))
+            for player in match:
+                updated_players.append(player[0])
         if self.player_alone is not None:
             updated_players.append(self.player_alone)
         self.players = updated_players
 
-    def get_players_from_match(self, match: tuple[list]) -> list[Player]:
-        """Reconstruit les joueurs d'un match avec leurs scores mis à jour.
-
-        Args:
-            match (tuple[list]): Match contenant les identifiants et scores des joueurs.
-
-        Returns:
-            list[Player]: Liste d'instances de Player du match.
-        """
-        players = []
-        for p in match:
-            for player in self.players:
-                if p[0] == player.player_id:
-                    player.score = p[1]
-                    players.append(player)
-        return players
-
-    @staticmethod
-    def deserialize_all(turns_dict: list[dict]) -> list["Turn"]:
+    def deserialize_all(self, turns_dict: list[dict]) -> list["Turn"]:
         """Crée une liste d'instance Turn à partir de dictionnaires.
 
             Args :
@@ -252,13 +237,53 @@ class Turn:
         """
         turns = []
         for t in turns_dict:
-            turn = Turn(matchs=t["matchs"],
+            turn = Turn(matchs=self.deserialize_matchs(t["matchs"]),
                         start_datetime=t["start_datetime"],
                         end_datetime=t["end_datetime"],
                         player_alone=Player().get_players_from_list_dict([t["player_alone"]])[0],
                         name=t["name"])
             turns.append(turn)
         return turns
+
+    def serialize_matchs(self) -> list[tuple[dict, float]]:
+        """Sérialise les matchs du tour.
+
+        Transforme la liste des matchs en une structure sérialisable
+        (liste de listes) afin de permettre l'enregistrement des données.
+        Chaque joueur est converti en dictionnaire via sa méthode `serialize`
+        et conserve son score associé au match.
+
+        Returns:
+            list: Liste des matchs sérialisés
+        """
+        serialized_matchs = []
+        for match in self.matchs:
+            serialized_match = []
+            for player in match:
+                serialized_match.append([player[0].serialize(), player[1]])
+            serialized_matchs.append(serialized_match)
+        return serialized_matchs
+
+    @staticmethod
+    def deserialize_matchs(serialized_matchs: list[list[list]]) -> list[tuple]:
+        """Désérialise une liste de matchs.
+
+        Reconstruit les objets joueurs à partir des données sérialisées
+        et recompose la structure des matchs avec les scores associés.
+
+        Args:
+            serialized_matchs (list): Liste de matchs sérialisés
+
+        Returns:
+            list[tuple]: Liste des matchs désérialisés
+        """
+        deserialized_matchs = []
+        for match in serialized_matchs:
+            deserialized_match = []
+            for player in match:
+                deserialized_match.append([Player().get_players_from_list_dict([player[0]])[0],player[1]])
+            deserialized_matchs.append(tuple(deserialized_match))
+        return deserialized_matchs
 
 
 def get_key_score(player: Player) -> float:
