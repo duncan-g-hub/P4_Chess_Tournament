@@ -21,41 +21,42 @@ class PlayersInTournamentView:
         print("----------------------------------")
 
     @staticmethod
-    def display_turns(turns: list[Turn]) -> None:
-        """Affiche les tours et matchs qui les composent.
+    def display_turn(turn: Turn) -> None:
+        """Affiche le tour et matchs qui les composent.
 
-        Pour chaque tour, affiche le nom, la date et l'heure de départ et de fin.
+        Affiche le nom, la date et l'heure de départ et de fin d'un tour
         Pour chaque match, affiche les joueurs et leurs scores à partir de la structure sérialisée des matchs.
         Si un joueur est seul, il est affiché.
         Args:
-            turns (list[Turn]): Liste d'instances de Turn
+            turn (Turn): Instances de Turn
         """
-        for turn in turns:
-            print()
-            print(f"Le {turn.name} commence {turn.start_datetime}.")
-            print()
-            for i, match in enumerate(turn.matchs):
-                print(f"Match n°{i + 1} :")
-                print(
-                    f"{match[0][0].player_id.upper()} : {match[0][0].last_name.upper()} "
-                    f"{match[0][0].first_name.capitalize()} - {match[0][0].score}pt")
-                print("          --- VS ---")
-                print(
-                    f"{match[1][0].player_id.upper()} : {match[1][0].last_name.upper()} "
-                    f"{match[1][0].first_name.capitalize()} - {match[1][0].score}pt")
-                print()
-            if turn.player_alone:
-                p = turn.player_alone
-                print(f"Le joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} "
-                      f"- {p.score}pt ne jouera pas le {turn.name}. ")
-                print()
 
+        print()
+        print(f"Le {turn.name} commence {turn.start_datetime}.")
+        print()
+        for i, pair in enumerate(turn.pairs):
+            print(f"Match n°{i + 1} :")
+            print(f"Joueur {pair[0].color} : "
+                f"{pair[0].player_id.upper()} - {pair[0].last_name.upper()} "
+                f"{pair[0].first_name.capitalize()} - {pair[0].score}pt")
+            print("          --- VS ---")
+            print(f"Joueur {pair[1].color} : "
+                f"{pair[1].player_id.upper()} - {pair[1].last_name.upper()} "
+                f"{pair[1].first_name.capitalize()} - {pair[1].score}pt")
+            print()
+        if turn.player_alone:
+            p = turn.player_alone
+            print(f"Le joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} "
+                  f"- {p.score}pt n'a pas de paire, il ne jouera pas le {turn.name}. ")
+            print()
+
+        if turn.end_datetime:
             print(f"Le {turn.name} se termine {turn.end_datetime}.")
             print()
-            print("----------------------------------")
+        print("----------------------------------")
 
     @staticmethod
-    def display_match_menu(current_turn: int, current_match: int, p1: Player, p2: Player) -> str:
+    def display_match_menu(turn, current_match: int, p1: Player, p2: Player) -> str:
         """Affiche le menu du match et récupère le choix de l'utilisateur.
 
         Affiche le numéro du tour en cours et du match en cours.
@@ -75,7 +76,7 @@ class PlayersInTournamentView:
         possible_choices = ["1", "2", "3"]
         print("----------- Menu Match -----------")
         print()
-        print(f"Tour n°{current_turn} en cours.")
+        print(f"{turn.name} en cours.")
         print()
         print(f"Match n°{current_match} : ")
         print(f"Joueur {p1.color} : {p1.player_id.upper()} - {p1.last_name.upper()} {p1.first_name.capitalize()} "

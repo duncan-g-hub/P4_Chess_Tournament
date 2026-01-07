@@ -11,41 +11,75 @@ class TournamentController:
     Orchestre l'exécution des tours et des matchs, met à jour les scores,
     et détermine le(s) vainqueur(s) du tournoi.
     """
-    def __init__(self, p_in_t_view, message) -> None:
+    def __init__(self, p_in_t_view, tournament_view, message) -> None:
         """Initialise le contrôleur de tournoi.
 
         Args:
             p_in_t_view: Vue des joueurs et matchs dans le tournoi
+            tournament_view: Vue des tournois
             message: Vue pour l'affichage des messages
         """
         self.p_in_t_view = p_in_t_view
+        self.tournament_view = tournament_view
         self.message = message
 
-    def run_turn(self, turn: Turn, pairs: list[list[Player]], player_alone: Player | None) -> Turn:
+    def start_and_display_turn(self, tournament) -> Turn:
         """Lance un tour du tournoi.
 
-        Démarre le tour, affiche les informations du joueur seul s'il existe,
-        exécute les matchs et met à jour les matchs dans le tour.
+        Démarre le tour, affiche les informations du tour via la vue 'p_in_t_view'.
 
         Args:
             turn (Turn): Instance du tour en cours
-            pairs (list[list[Player]]): Liste des paires de joueurs pour les matchs
-            player_alone (Player): Joueur sans adversaire pour ce tour (ou None)
 
         Returns:
             Turn: Tour mis à jour après son exécution
         """
+
+        if not self.control_to_start_turn(tournament):
+            return tournament
+
+        players_alone = []
+        pairs_in_tournament = []
+        if tournament.turns:
+            for turn in tournament.turns:
+                pairs_in_tournament.append(turn.pairs)
+                players_alone.append(turn.player_alone)
+            turn = tournament.turns[-1]
+        else:
+            turn = Turn(players=tournament.players)
+
+        turn.get_players_pairs(pairs_in_tournament, players_alone)
+        pairs_in_tournament.extend(turn.pairs)
+        if turn.player_alone is not None:
+            players_alone.append(turn.player_alone)
         turn.start_turn()
-        self.message.display_message(f"Commencement du tour n°{turn.current_turn + 1} {turn.start_datetime}")
-        if player_alone is not None:
-            p = player_alone
-            self.message.display_message(
-                f"Le Joueur {p.player_id.upper()} : {p.last_name.upper()} {p.first_name.capitalize()} ({p.score}pt)"
-                f" n'a pas de paire, il ne jouera pas durant ce tour.")
-        matchs = self.run_match_menu(pairs, turn.current_turn)
-        turn.get_matchs_information(matchs)
-        turn.finish_turn()
-        return turn
+
+        matchs = []
+        for pair in turn.pairs:
+            match = Match(pair)
+            match = self.get_players_color(match, pair)
+            matchs.append(match)
+        turn.pairs = matchs
+
+        self.p_in_t_view.display_turn(turn)
+        tournament.add_turn_in_tournament(turn)
+
+        return tournament
+
+
+    def control_to_start_turn(self, tournament):
+        if not tournament.turns :
+            return True
+        turn = tournament.turns[-1]
+        if tournament.current_turn == turn.current_turn:
+            return True
+        self.message.display_message(f"Veuillez finir le {turn.name} avant d'en commencer un nouveau.\n"
+                                     "Retour au menu des tours.")
+        return False
+
+
+
+
 
     @staticmethod
     def get_players_color(match: Match, players_in_pair: list[Player]) -> list[Player]:
@@ -69,7 +103,7 @@ class TournamentController:
             players_in_pair[1].color = "Blanc"
         return players_in_pair
 
-    def run_match_menu(self, pairs: list[list[Player]], current_turn: int) -> list[Match]:
+    def run_matchs_menu(self, tournament) -> list[Match]:
         """Exécute les matchs d'un tour.
 
         Pour chaque paire de joueurs, affiche le menu du match,
@@ -82,12 +116,16 @@ class TournamentController:
         Returns:
             list[Match]: Liste des matchs joués durant le tour
         """
+        if not self.control_to_run_matchs(tournament):
+            return tournament
+
+        turn = tournament.turns[-1]
+
         matchs = []
-        for current_match, pair in enumerate(pairs):
+        for current_match, pair in enumerate(turn.pairs):
             match = Match(pair)
-            self.get_players_color(match, pair)
             p1, p2 = pair[0], pair[1]
-            choice = self.p_in_t_view.display_match_menu(current_turn + 1, current_match + 1, p1, p2)
+            choice = self.p_in_t_view.display_match_menu(turn, current_match + 1, p1, p2)
             if choice == "2":
                 winner = p1
             elif choice == "3":
@@ -96,7 +134,26 @@ class TournamentController:
                 winner = None
             match.launch_match(winner)
             matchs.append(match)
-        return matchs
+
+        turn.get_matchs_information(matchs)
+        turn.finish_turn()
+        tournament.update_last_turn_in_tournament(turn)
+        self.message.display_message(f"Fin du tour {tournament.current_turn} {turn.end_datetime}.")
+        self.p_in_t_view.display_players_in_tournament(score_sorter(turn.players))
+
+        return tournament
+
+    def control_to_run_matchs(self, tournament):
+        if not tournament.turns:
+            self.message.display_message(f"Veuillez lancer le 1er Round.\n"
+                                         "Retour au menu des tours.")
+            return False
+        turn = tournament.turns[-1]
+        if tournament.current_turn == turn.current_turn:
+            self.message.display_message(f"Le {turn.name} est déja terminé, veuillez en commencer un nouveau.\n"
+                                         "Retour au menu des tours.")
+            return False
+        return True
 
     def get_tournament_winner(self, players: list[Player], tournament: Tournament) -> None:
         """Détermine et affiche le(s) vainqueur(s) du tournoi.
@@ -115,27 +172,36 @@ class TournamentController:
             players_remaining.pop(-1)
         self.p_in_t_view.display_winner(winners, tournament)
 
-    def run_tournament(self, tournament : Tournament) -> None:
-        """Lance le déroulement complet d'un tournoi.
+    def run_turn_menu(self, tournament: Tournament) -> None:
+        """Lance le menu des tours d'un tournoi.
 
-        Génère les paires de joueurs, exécute les tours successifs,
-        enregistre les tours et affiche les scores après chaque tour.
-        À la fin, affiche le ou les vainqueurs du tournoi.
+        Affiche le menu des tours d'un tournoi via la vue 'tournament_view'.
+        Exécute les actions selon le choix de l'uitilisateur :
+        - Commencer le prochain tour
+        - Terminer le tour actuel
+        - Revenir au menu du tournoi
 
         Args:
             tournament (Tournament): Instance de tournament
         """
-        players_alone = []
-        pairs_in_tournament = []
-        turn = Turn(players=tournament.players)
-        while turn.current_turn < tournament.turn_number:
-            pairs, player_alone = turn.get_players_pairs(pairs_in_tournament, players_alone)
-            pairs_in_tournament.extend(pairs)
-            if player_alone is not None:
-                players_alone.append(player_alone)
-            self.run_turn(turn, pairs, player_alone)
 
-            tournament.add_turn_in_tournament(turn)
-            turn = Turn(players=turn.players, current_turn=turn.current_turn)
-            self.p_in_t_view.display_players_in_tournament(score_sorter(turn.players))
-        self.get_tournament_winner(score_sorter(turn.players), tournament)
+        while tournament.current_turn < tournament.turn_number:
+            choice_tournament = self.tournament_view.display_turn_menu(tournament)
+            if choice_tournament == "1":
+                # commencer le prochain tour
+                tournament = self.start_and_display_turn(tournament)
+
+
+
+            elif choice_tournament == "2":
+                # finir le tour actuel
+
+
+                tournament = self.run_matchs_menu(tournament)
+
+
+
+            elif choice_tournament == "3":
+                break
+
+        self.get_tournament_winner(score_sorter(tournament.players), tournament)

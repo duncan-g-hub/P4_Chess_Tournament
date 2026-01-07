@@ -8,7 +8,7 @@ class Match:
 
     Gère une paire de joueur, attribue des couleurs et met les scores à jour.
     """
-    def __init__(self, pair: tuple[Player,Player]) -> None:
+    def __init__(self, pair: tuple[Player, Player]) -> None:
         self.pair = pair
 
     def launch_match(self, winner: Player) -> None:

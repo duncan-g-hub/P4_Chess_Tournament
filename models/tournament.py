@@ -80,22 +80,44 @@ class Tournament:
         Args:
             turn (Turn): instance de la classe Turn.
         """
-        self.current_turn += 1
         self.turns.append(turn)
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
+                pairs = []
+                for pair in turn.pairs:
+                    pairs.append([pair[0].serialize(), pair[1].serialize()])
                 tournament["current_turn"] = self.current_turn
                 tournament["turns"].append({"name": turn.name,
-                                            "matchs": turn.serialize_matchs(),
+                                            "pairs": pairs,
                                             "player_alone": turn.player_alone.serialize(),
                                             "start_datetime": turn.start_datetime,
-                                            "end_datetime": turn.end_datetime, })
+                                            "current_turn": turn.current_turn})
+        self.update_tournaments(tournaments)
+
+    def update_last_turn_in_tournament(self, turn) -> None:
+        self.current_turn += 1
+        self.turns[-1] = turn
+        self.players = turn.players
+        tournaments = load_tournaments()
+        for tournament in tournaments:
+            if tournament["name"] == self.name:
+                pairs = []
+                for pair in turn.pairs:
+                    pairs.append([pair[0].serialize(), pair[1].serialize()])
+                tournament["turns"][-1] = {"name": turn.name,
+                                           "pairs": pairs,
+                                           "matchs": turn.serialize_matchs(),
+                                           "player_alone": turn.player_alone.serialize(),
+                                           "start_datetime": turn.start_datetime,
+                                           "end_datetime": turn.end_datetime,
+                                           "current_turn": turn.current_turn}
                 players = []
                 for player in turn.players:
                     players.append(player.serialize())
                 tournament["players"] = players
         self.update_tournaments(tournaments)
+
 
     @staticmethod
     def update_tournaments(tournaments: list[dict]) -> None:

@@ -1,4 +1,5 @@
 from models.tournament import Tournament
+from models.turn import Turn
 from views import input_checker
 from views.input_format import cleaning_input
 
@@ -35,7 +36,7 @@ class TournamentView:
             print("----------------------------------")
             print(input_checker.control_end_date(end_date, start_date)[1])
             end_date = cleaning_input(input("Entrer le date de fin du tournoi (jj/mm/aaaa) : "))
-        turn_number = cleaning_input(input("Entrer le nombre de tour du tournoi (par défaut 4) : "))
+        turn_number = cleaning_input(input("Entrer le nombre de round du tournoi (par défaut 4) : "))
         if turn_number.isdigit():
             turn_number = int(turn_number)
         else:
@@ -101,7 +102,7 @@ class TournamentView:
         Returns:
             str: Numéro correspondant au choix de l'utilisateur
         """
-        possible_choices = ["1", "2", "3", "4", "5", "6", "7"]
+        possible_choices = ["1", "2", "3", "4", "5", "6"]
         print("---------- Menu Tournoi ----------")
         print()
         print(f"Tournoi '{tournament.name.title()}' séléctionné.")
@@ -109,16 +110,15 @@ class TournamentView:
         print("1.Afficher les informations du tournoi ")
         print("2.Ajouter un joueur au tournoi ")
         print("3.Afficher les joueurs participants au tournoi ")
-        print("4.Afficher la liste des tours et matchs du tournoi ")
-        print("5.Commencer le prochain tour ")
-        print("6.Finir le tour actuel ")
-        print("7.Revenir au menu principal ")
+        print("4.Afficher la liste des rounds et matchs du tournoi ")
+        print("5.Lancer le menu des rounds du tournoi ")
+        print("6.Revenir au menu principal ")
         print()
         print("----------------------------------")
         choice = input("Entrer le numéro correspondant : ")
         print("----------------------------------")
         while choice not in possible_choices:
-            print("Vous devez entrer un numéro compris entre 1 et 7.")
+            print("Vous devez entrer un numéro compris entre 1 et 6.")
             choice = input("Entrer le numéro correspondant : ")
             print("----------------------------------")
         return choice
@@ -135,8 +135,40 @@ class TournamentView:
         print(f"Lieu : {tournament.location.title()}")
         print(f"Date de départ : {tournament.start_date}")
         print(f"Date de fin : {tournament.end_date}")
-        print(f"Nombre de tour : {tournament.turn_number}")
+        print(f"Nombre de round : {tournament.turn_number}")
         print(f"Description : {tournament.description.capitalize()}")
         print()
         print("----------------------------------")
 
+    @staticmethod
+    def display_turn_menu(tournament: Tournament) -> str:
+        """Affiche le menu des tours d'un tournoi et récupère le choix de l'utilisateur.
+
+        Args:
+            tournament (Tournament): Instance de Tournament
+
+        Returns:
+            str: Numéro correspondant au choix de l'utilisateur
+        """
+        if tournament.turns:
+            current_turn = tournament.turns[-1].current_turn
+        else:
+            current_turn = 0
+
+        possible_choices = ["1", "2", "3"]
+        print("----------- Menu Rounds ----------")
+        print()
+        print(f"Tournoi '{tournament.name.title()}', Round n°{current_turn} sur {tournament.turn_number} : ")
+        print()
+        print(f"1.Commencer le Round n°{current_turn+1} ")
+        print(f"2.Terminer le Round n°{current_turn} ")
+        print("3.Revenir au menu du tournoi ")
+        print()
+        print("----------------------------------")
+        choice = input("Entrer le numéro correspondant : ")
+        print("----------------------------------")
+        while choice not in possible_choices:
+            print("Vous devez entrer un numéro compris entre 1 et 3.")
+            choice = input("Entrer le numéro correspondant : ")
+            print("----------------------------------")
+        return choice

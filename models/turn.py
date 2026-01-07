@@ -16,20 +16,24 @@ class Turn:
     def __init__(
             self,
             players: list[Player] | None = None,
+            pairs: list[tuple[Player, Player]] | None = None,
             matchs: list[tuple[list]] | None = None,
-            current_turn: int = 0,
             start_datetime: str | None = None,
             end_datetime: str | None = None,
             player_alone: Player | None = None,
+            current_turn: int = 0,
             name: str | None = None
     ) -> None:
         self.players = players
+        self.pairs = pairs
         self.matchs = matchs
-        self.current_turn = current_turn
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
         self.player_alone = player_alone
+        self.current_turn = current_turn
         self.name = name
+
+
 
     def mix_players_randomly(self) -> None:
         """Mélange l'ordre de la liste des joueurs aléatoirement. """
@@ -63,7 +67,7 @@ class Turn:
         pairs = self.get_unique_pairs(available_players, pairs_in_tournament)
         if pairs is None:
             pairs = self.get_pairs_with_penalty(available_players, pairs_in_tournament)[0]
-        return pairs, self.player_alone
+        self.pairs = pairs
 
     def get_unique_pairs(self, available_players: list[Player], pairs_in_tournament: list[list[Player]]) -> list[list[
             Player]] | None:
@@ -180,9 +184,11 @@ class Turn:
             self.players.pop(index)
 
     def start_turn(self) -> None:
-        """Met à jour la date et l'heure de départ du tour courant."""
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.start_datetime = now
+        self.current_turn +=1
+        self.name = f"Round n°{self.current_turn}"
+        self.end_datetime = None
 
     def get_matchs_information(self, matchs: list[Match]) -> None:
         """Met à jour les matchs du tour courant.
@@ -193,8 +199,10 @@ class Turn:
         Args:
             matchs (list[Match]): Liste d'instances de Match.
         """
+        self.pairs = []
         tuple_matchs = []
         for match in matchs:
+            self.pairs.append([match.pair[0],match.pair[1]])
             tuple_matchs.append(([match.pair[0], match.pair[0].score],
                                  [match.pair[1], match.pair[1].score]))
         self.matchs = tuple_matchs
@@ -202,10 +210,9 @@ class Turn:
     def finish_turn(self) -> None:
         """Finalise le tour courant.
 
-        Met à jour le numéro de tour, le nom, les joueurs et la date et heure de fin.
+        Met à jour les joueurs et la date et heure de fin.
         """
-        self.current_turn += 1
-        self.name = f"Round {self.current_turn}"
+
         self.update_players()
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.end_datetime = now
@@ -233,11 +240,16 @@ class Turn:
         """
         turns = []
         for t in turns_dict:
-            turn = Turn(matchs=self.deserialize_matchs(t["matchs"]),
+            pairs = []
+            for pair in t["pairs"]:
+                pairs.append(Player().deserialize_players(pair))
+            turn = Turn(matchs=self.deserialize_matchs(t.get("matchs")),
                         start_datetime=t["start_datetime"],
-                        end_datetime=t["end_datetime"],
+                        end_datetime=t.get("end_datetime"),
                         player_alone=Player().deserialize_players([t["player_alone"]])[0],
-                        name=t["name"])
+                        current_turn=t["current_turn"],
+                        name=t["name"],
+                        pairs=pairs)
             turns.append(turn)
         return turns
 
@@ -274,10 +286,10 @@ class Turn:
             list[tuple]: Liste des matchs désérialisés
         """
         deserialized_matchs = []
-        for match in serialized_matchs:
-            deserialized_match = []
-            for player in match:
-                deserialized_match.append([Player().deserialize_players([player[0]])[0],player[1]])
-            deserialized_matchs.append(tuple(deserialized_match))
+        if serialized_matchs:
+            for match in serialized_matchs:
+                deserialized_match = []
+                for player in match:
+                    deserialized_match.append([Player().deserialize_players([player[0]])[0], player[1]])
+                deserialized_matchs.append(tuple(deserialized_match))
         return deserialized_matchs
-

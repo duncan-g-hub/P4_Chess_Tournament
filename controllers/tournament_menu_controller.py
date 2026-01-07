@@ -1,7 +1,6 @@
 from models.tournament import Tournament
 from models.player import Player
 from controllers.list_sorter import name_sorter
-from models.turn import Turn
 
 
 class TournamentMenuController:
@@ -113,7 +112,8 @@ class TournamentMenuController:
             self.message.display_message(f"Le tournoi {tournament.name.title()} n'a toujours pas eu lieu.\n"
                                          f"Retour au menu du tournoi {tournament.name.title()}.")
             return False
-        self.p_in_t_view.display_turns(tournament.turns)
+        for turn in tournament.turns:
+            self.p_in_t_view.display_turn(turn)
         return True
 
     def get_players_in_tournament(self, tournament: Tournament) -> bool:
@@ -136,8 +136,8 @@ class TournamentMenuController:
         self.p_in_t_view.display_players_in_tournament(name_sorter(tournament.players))
         return True
 
-    def control_to_run_tournament(self, tournament: Tournament) -> bool:
-        """Vérifie les conditions pour lancer un tournoi et le lance si possible.
+    def control_to_run_turn_menu(self, tournament: Tournament) -> bool:
+        """Vérifie les conditions pour lancer le menu des tours et le lance si possible.
 
         Affiche un message via la vue 'message' si le tournoi à déja commencé, sinon
         Affiche un message via la vue 'message' si moins de deux joueurs sont inscrits, sinon
@@ -149,8 +149,8 @@ class TournamentMenuController:
         Returns:
             bool: True si le tournoi a été lancé, False sinon
         """
-        if tournament.turns:
-            self.message.display_message(f"Le tournoi {tournament.name.title()} a déjà eu lieu.\n"
+        if tournament.turns == tournament.turn_number:
+            self.message.display_message(f"Le tournoi {tournament.name.title()} est déjà terminé.\n"
                                          f"Retour au menu du tournoi {tournament.name.title()}.")
             return False
         if len(tournament.players) < 2:
@@ -159,7 +159,7 @@ class TournamentMenuController:
                 f"Retour au menu du tournoi {tournament.name.title()}.")
             return False
         self.p_in_t_view.display_players_in_tournament(tournament.players)
-        self.tournament_controller.run_tournament(tournament)
+        self.tournament_controller.run_turn_menu(tournament)
         return True
 
     def run_tournament_menu(self) -> None:
@@ -187,17 +187,8 @@ class TournamentMenuController:
                 self.get_players_in_tournament(tournament)
             elif choice_tournament == "4":
                 self.get_tournament_turns(tournament)
-
             elif choice_tournament == "5":
-                #commencer le prochain tour
-                #control premier tour ou dernier tour fini et pas supérieur au tour du tournoi
-                # affiche les paires et joueurs seuls
-                self.control_to_run_tournament(tournament)
+                self.control_to_run_turn_menu(tournament)
             elif choice_tournament == "6":
-                #finir le tour actuel
-                # control de l'avencement du tour (déja fini ? déja commencé ?)
-                # menu match  saisie des matchs affiche le resultat du tour
-                pass
-            elif choice_tournament == "7":
                 self.message.display_message("Retour au menu principal. ")
                 break
