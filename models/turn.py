@@ -33,8 +33,6 @@ class Turn:
         self.current_turn = current_turn
         self.name = name
 
-
-
     def mix_players_randomly(self) -> None:
         """Mélange l'ordre de la liste des joueurs aléatoirement. """
         random.shuffle(self.players)
@@ -186,7 +184,7 @@ class Turn:
     def start_turn(self) -> None:
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.start_datetime = now
-        self.current_turn +=1
+        self.current_turn += 1
         self.name = f"Tour n°{self.current_turn}"
         self.end_datetime = None
 
@@ -202,7 +200,7 @@ class Turn:
         self.pairs = []
         tuple_matchs = []
         for match in matchs:
-            self.pairs.append([match.pair[0],match.pair[1]])
+            self.pairs.append([match.pair[0], match.pair[1]])
             tuple_matchs.append(([match.pair[0], match.pair[0].score],
                                  [match.pair[1], match.pair[1].score]))
         self.matchs = tuple_matchs

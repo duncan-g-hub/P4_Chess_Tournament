@@ -37,12 +37,12 @@ class PlayersInTournamentView:
         for i, pair in enumerate(turn.pairs):
             print(f"Match n°{i + 1} :")
             print(f"Joueur {pair[0].color} : "
-                f"{pair[0].player_id.upper()} - {pair[0].last_name.upper()} "
-                f"{pair[0].first_name.capitalize()} - {pair[0].score}pt")
+                  f"{pair[0].player_id.upper()} - {pair[0].last_name.upper()} "
+                  f"{pair[0].first_name.capitalize()} - {pair[0].score}pt")
             print("          --- VS ---")
             print(f"Joueur {pair[1].color} : "
-                f"{pair[1].player_id.upper()} - {pair[1].last_name.upper()} "
-                f"{pair[1].first_name.capitalize()} - {pair[1].score}pt")
+                  f"{pair[1].player_id.upper()} - {pair[1].last_name.upper()} "
+                  f"{pair[1].first_name.capitalize()} - {pair[1].score}pt")
             print()
         if turn.player_alone:
             p = turn.player_alone

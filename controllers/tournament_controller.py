@@ -66,9 +66,8 @@ class TournamentController:
 
         return tournament
 
-
     def control_to_start_turn(self, tournament):
-        if not tournament.turns :
+        if not tournament.turns:
             return True
         turn = tournament.turns[-1]
         if tournament.current_turn == turn.current_turn:
@@ -77,15 +76,11 @@ class TournamentController:
                                      "Retour au menu des tours.")
         return False
 
-
-
-
-
     @staticmethod
     def get_players_color(match: Match, players_in_pair: list[Player]) -> list[Player]:
         """Attribue aléatoirement les couleurs aux joueurs d'un match.
 
-        Modifie les attributs color des joueurs
+        Modifie les attributs color des joueurs.
 
         Args:
             match (Match): Instance de Match
@@ -145,7 +140,7 @@ class TournamentController:
 
     def control_to_run_matchs(self, tournament):
         if not tournament.turns:
-            self.message.display_message(f"Veuillez lancer le 1er Tour.\n"
+            self.message.display_message("Veuillez lancer le 1er Tour.\n"
                                          "Retour au menu des tours.")
             return False
         turn = tournament.turns[-1]
@@ -184,24 +179,12 @@ class TournamentController:
         Args:
             tournament (Tournament): Instance de tournament
         """
-
         while tournament.current_turn < tournament.turn_number:
             choice_tournament = self.tournament_view.display_turn_menu(tournament)
             if choice_tournament == "1":
-                # commencer le prochain tour
                 tournament = self.start_and_display_turn(tournament)
-
-
-
             elif choice_tournament == "2":
-                # finir le tour actuel
-
-
                 tournament = self.run_matchs_menu(tournament)
-
-
-
             elif choice_tournament == "3":
                 break
-
         self.get_tournament_winner(score_sorter(tournament.players), tournament)

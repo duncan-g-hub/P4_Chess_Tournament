@@ -118,7 +118,6 @@ class Tournament:
                 tournament["players"] = players
         self.update_tournaments(tournaments)
 
-
     @staticmethod
     def update_tournaments(tournaments: list[dict]) -> None:
         """Met à jour le fichier tournaments.json.
