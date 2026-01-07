@@ -187,7 +187,7 @@ class Turn:
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.start_datetime = now
         self.current_turn +=1
-        self.name = f"Round n°{self.current_turn}"
+        self.name = f"Tour n°{self.current_turn}"
         self.end_datetime = None
 
     def get_matchs_information(self, matchs: list[Match]) -> None:

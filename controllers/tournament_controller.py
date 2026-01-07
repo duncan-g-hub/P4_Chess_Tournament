@@ -145,7 +145,7 @@ class TournamentController:
 
     def control_to_run_matchs(self, tournament):
         if not tournament.turns:
-            self.message.display_message(f"Veuillez lancer le 1er Round.\n"
+            self.message.display_message(f"Veuillez lancer le 1er Tour.\n"
                                          "Retour au menu des tours.")
             return False
         turn = tournament.turns[-1]
