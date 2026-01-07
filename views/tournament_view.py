@@ -1,5 +1,4 @@
 from models.tournament import Tournament
-from models.turn import Turn
 from views import input_checker
 from views.input_format import cleaning_input
 
@@ -154,7 +153,6 @@ class TournamentView:
             current_turn = tournament.turns[-1].current_turn
         else:
             current_turn = 0
-
         possible_choices = ["1", "2", "3"]
         print("----------- Menu Tours -----------")
         print()

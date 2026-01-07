@@ -210,7 +210,6 @@ class Turn:
 
         Met à jour les joueurs et la date et heure de fin.
         """
-
         self.update_players()
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.end_datetime = now

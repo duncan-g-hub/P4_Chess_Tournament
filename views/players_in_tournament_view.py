@@ -30,7 +30,6 @@ class PlayersInTournamentView:
         Args:
             turn (Turn): Instances de Turn
         """
-
         print()
         print(f"Le {turn.name} commence {turn.start_datetime}.")
         print()
@@ -64,14 +63,13 @@ class PlayersInTournamentView:
         Retourne le résultat du match demandé à l'utilisateur.
 
         Args:
-            current_turn (int): Numéro du tour courant
+            turn (Turn): Instance de Turn
             current_match (int): Numéro du match courant
             p1 (Player): Joueur 1
             p2 (Player): Joueur 2
 
         Returns:
             str: Choix de l'utilisateur (1 = égalité, 2 = victoire p1, 3 = victoire p2)
-
         """
         possible_choices = ["1", "2", "3"]
         print("----------- Menu Match -----------")

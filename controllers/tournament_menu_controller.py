@@ -87,7 +87,6 @@ class TournamentMenuController:
         Returns:
             bool: True si le joueur est déjà inscrit, False sinon
         """
-
         tournaments = Tournament().deserialize_all()
         for tournament in tournaments:
             if tournament.name == tournament_name:
@@ -176,7 +175,6 @@ class TournamentMenuController:
         - Revenir au menu principal
         """
         tournament = self.tournament_view.display_tournaments_list(Tournament().deserialize_all())
-
         while True:
             choice_tournament = self.tournament_view.display_tournament_menu(tournament)
             if choice_tournament == "1":
