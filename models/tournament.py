@@ -62,6 +62,7 @@ class Tournament:
         Args:
             player (Player): instance de la classe Player.
         """
+        self.players.append(player)
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
@@ -71,15 +72,20 @@ class Tournament:
         self.update_tournaments(tournaments)
 
     def add_turn_in_tournament(self, turn: Turn) -> None:
-        """Ajoute un tour au tournoi courant et met à jour le tournoi dans le fichier tournaments.json
+        """Ajoute un tour au tournoi courant.
+
+        Met à jour le tournoi dans le fichier tournaments.json
+        Incrémente le n°tour courant.
 
         Args:
             turn (Turn): instance de la classe Turn.
         """
         self.current_turn += 1
+        self.turns.append(turn)
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
+                tournament["current_turn"] = self.current_turn
                 tournament["turns"].append({"name": turn.name,
                                             "matchs": turn.serialize_matchs(),
                                             "player_alone": turn.player_alone.serialize(),
@@ -93,7 +99,7 @@ class Tournament:
 
     @staticmethod
     def update_tournaments(tournaments: list[dict]) -> None:
-        """Met à jour du fichier tournaments.json.
+        """Met à jour le fichier tournaments.json.
 
         Args:
             tournaments (list[dict]): liste des informations tournois
@@ -106,8 +112,7 @@ class Tournament:
         """Crée une liste d'instance Tournament à partir de tournaments.json.
 
         Returns:
-            list[Tournament]: liste d'isntances Tournament
-
+            list[Tournament]: liste d'instances Tournament
         """
         tournaments = []
         for t in load_tournaments():
@@ -118,8 +123,8 @@ class Tournament:
                                     turn_number=t["turn_number"],
                                     description=t["description"],
                                     current_turn=t["current_turn"],
-                                    players=Player().get_players_from_list_dict(t["players"]),
-                                    turns=t["turns"])
+                                    players=Player().deserialize_players(t["players"]),
+                                    turns=Turn().deserialize_turns(t["turns"]))
             tournaments.append(tournament)
         return tournaments
 

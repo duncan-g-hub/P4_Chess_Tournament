@@ -64,7 +64,7 @@ class TournamentView:
         print("----------------------------------")
 
     @staticmethod
-    def display_tournaments_list(tournaments: list[Tournament]) -> str:
+    def display_tournaments_list(tournaments: list[Tournament]) -> Tournament:
         """Affiche la liste des tournois et récupère la sélection de l'utilisateur.
 
         Affiche chaque tournoi avec un numéro, puis demande à l'utilisateur de
@@ -75,7 +75,7 @@ class TournamentView:
             tournaments (list[Tournament]): Liste d'instances de Tournament
 
         Returns:
-            str: Nom du tournoi sélectionné par l'utilisateur
+            Tournament: Tournoi sélectionné par l'utilisateur
         """
         possible_choices = []
         for nb, tournament in enumerate(tournaments):
@@ -118,7 +118,7 @@ class TournamentView:
         choice = input("Entrer le numéro correspondant : ")
         print("----------------------------------")
         while choice not in possible_choices:
-            print("Vous devez entrer un numéro compris entre 1 et 6.")
+            print("Vous devez entrer un numéro compris entre 1 et 7.")
             choice = input("Entrer le numéro correspondant : ")
             print("----------------------------------")
         return choice
@@ -131,7 +131,7 @@ class TournamentView:
             tournament (Tournament): Instance de Tournament
         """
         print()
-        print(f"Nom du tournoi : '{tournament.name.title()}")
+        print(f"Nom du tournoi : '{tournament.name.title()}'")
         print(f"Lieu : {tournament.location.title()}")
         print(f"Date de départ : {tournament.start_date}")
         print(f"Date de fin : {tournament.end_date}")

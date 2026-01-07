@@ -35,10 +35,6 @@ class Turn:
         """Mélange l'ordre de la liste des joueurs aléatoirement. """
         random.shuffle(self.players)
 
-    def sort_players(self) -> None:
-        """Trie la liste des joueurs selon leurs scores (tri croissant)."""
-        self.players = sorted(self.players, key=get_key_score)
-
     def get_players_pairs(self, pairs_in_tournament: list[list[Player]], players_alone: list[Player]) -> tuple[
             list[list[Player]], Player]:
         """Génère les paires de joueurs pour le tour courant.
@@ -191,7 +187,7 @@ class Turn:
     def get_matchs_information(self, matchs: list[Match]) -> None:
         """Met à jour les matchs du tour courant.
 
-        Les matchs sont stockés sous forme de tuple (player_id, score)
+        Les matchs sont stockés sous forme de tuple (Player, Player.score)
         à partir d'une liste d'instances Match.
 
         Args:
@@ -226,7 +222,7 @@ class Turn:
             updated_players.append(self.player_alone)
         self.players = updated_players
 
-    def deserialize_all(self, turns_dict: list[dict]) -> list["Turn"]:
+    def deserialize_turns(self, turns_dict: list[dict]) -> list["Turn"]:
         """Crée une liste d'instance Turn à partir de dictionnaires.
 
             Args :
@@ -240,39 +236,39 @@ class Turn:
             turn = Turn(matchs=self.deserialize_matchs(t["matchs"]),
                         start_datetime=t["start_datetime"],
                         end_datetime=t["end_datetime"],
-                        player_alone=Player().get_players_from_list_dict([t["player_alone"]])[0],
+                        player_alone=Player().deserialize_players([t["player_alone"]])[0],
                         name=t["name"])
             turns.append(turn)
         return turns
 
-    def serialize_matchs(self) -> list[tuple[dict, float]]:
-        """Sérialise les matchs du tour.
+    def serialize_matchs(self) -> list[tuple]:
+        """Sérialise les matchs du tour courant.
 
-        Transforme la liste des matchs en une structure sérialisable
-        (liste de listes) afin de permettre l'enregistrement des données.
-        Chaque joueur est converti en dictionnaire via sa méthode `serialize`
-        et conserve son score associé au match.
+        Transforme les matchs en une structure sérialisable afin de permettre
+        l'enregistrement des données. Chaque match est représenté par un tuple
+        contenant les joueurs, où chaque joueur est stocké sous la forme :
+        [données_du_joueur, score].
 
         Returns:
-            list: Liste des matchs sérialisés
+            list[tuple]: Liste des matchs sérialisés
         """
         serialized_matchs = []
         for match in self.matchs:
             serialized_match = []
             for player in match:
                 serialized_match.append([player[0].serialize(), player[1]])
-            serialized_matchs.append(serialized_match)
+            serialized_matchs.append(tuple(serialized_match))
         return serialized_matchs
 
     @staticmethod
-    def deserialize_matchs(serialized_matchs: list[list[list]]) -> list[tuple]:
+    def deserialize_matchs(serialized_matchs: list[list]) -> list[tuple]:
         """Désérialise une liste de matchs.
 
         Reconstruit les objets joueurs à partir des données sérialisées
         et recompose la structure des matchs avec les scores associés.
 
         Args:
-            serialized_matchs (list): Liste de matchs sérialisés
+            serialized_matchs (list[list]): Liste de matchs sérialisés
 
         Returns:
             list[tuple]: Liste des matchs désérialisés
@@ -281,13 +277,7 @@ class Turn:
         for match in serialized_matchs:
             deserialized_match = []
             for player in match:
-                deserialized_match.append([Player().get_players_from_list_dict([player[0]])[0],player[1]])
+                deserialized_match.append([Player().deserialize_players([player[0]])[0],player[1]])
             deserialized_matchs.append(tuple(deserialized_match))
         return deserialized_matchs
 
-
-def get_key_score(player: Player) -> float:
-    """Récupère le score d'un joueur à partir d'une instance de Player.
-
-    Utilisé pour le tri des joueurs."""
-    return player.score

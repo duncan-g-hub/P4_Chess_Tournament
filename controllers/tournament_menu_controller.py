@@ -32,7 +32,8 @@ class TournamentMenuController:
         """Ajoute un joueur à un tournoi si possible.
 
         Affiche un message via la vue 'message' si le tournoi à déja eu lieu, sinon
-        Affiche un message via la vue 'message' si le joueur n'existe pas ou qu'il a déja été inscrit, sinon
+        Affiche un message via la vue 'message' si le joueur n'existe pas dans la liste des joueurs stockés
+        ou qu'il a déja été inscrit au tournoi, sinon
         Inscrit le joueur au tournoi si toutes les conditions sont remplies.
 
         Args:
@@ -112,22 +113,20 @@ class TournamentMenuController:
             self.message.display_message(f"Le tournoi {tournament.name.title()} n'a toujours pas eu lieu.\n"
                                          f"Retour au menu du tournoi {tournament.name.title()}.")
             return False
-
-        turns = Turn().deserialize_all(tournament.turns)
-        self.p_in_t_view.display_turns(turns)
+        self.p_in_t_view.display_turns(tournament.turns)
         return True
 
     def get_players_in_tournament(self, tournament: Tournament) -> bool:
         """Affiche la liste des joueurs inscrits dans un tournoi.
 
-        Affiche un message via la vue 'message' s'il y a moins dans deux joueurs inscrits au tournoi.
+        Affiche un message via la vue 'message' s'il y a moins de deux joueurs inscrits au tournoi.
         Sinon affiche la liste des joueurs inscrits au tournoi via la vue 'p_in_t_view'.
 
         Args:
             tournament (Tournament): instance de Tournament
 
         Returns:
-            bool: True si au moins un joueur est inscrit, False sinon
+            bool: True si au moins deux joueurs inscrits, False sinon
         """
         if len(tournament.players) < 1:
             self.message.display_message(f"Il n'y a aucun participant pour le tournoi {tournament.name.title()}, "
@@ -172,8 +171,8 @@ class TournamentMenuController:
         - Ajouter un joueur au tournoi
         - Afficher les joueurs participants au tournoi
         - Afficher les tours et les matchs du tournoi
-        - Commencer un tour
-        - Finir un tour
+        - Commencer le prochain tour
+        - Finir le tour actuel
         - Revenir au menu principal
         """
         tournament = self.tournament_view.display_tournaments_list(Tournament().deserialize_all())
@@ -192,8 +191,7 @@ class TournamentMenuController:
             elif choice_tournament == "5":
                 #commencer le prochain tour
                 #control premier tour ou dernier tour fini et pas supérieur au tour du tournoi
-                # affiche les paires et joueurs seul
-
+                # affiche les paires et joueurs seuls
                 self.control_to_run_tournament(tournament)
             elif choice_tournament == "6":
                 #finir le tour actuel

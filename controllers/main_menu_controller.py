@@ -34,10 +34,10 @@ class MainMenuController:
         Affiche un message d'erreur via la vue 'message' si un tournoi portant le meme nom existe, sinon
         Ajoute le tournoi et confirme sa création via la vue 'message'.
         """
-        tournament_name, location, start_date, end_date, turn_number, descritpion = (
+        tournament_name, location, start_date, end_date, turn_number, description = (
             self.tournament_view.tournament_form())
-        tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, descritpion)
-        if self.control_tournament(tournament.name):
+        tournament = Tournament(tournament_name, location, start_date, end_date, turn_number, description)
+        if self.control_tournament_exist(tournament.name):
             self.message.display_message(f"Le tournoi {tournament.name.title()} existe déja. "
                                          f"Veuillez saisir les informations de nouveau en changeant de nom.")
         else:
@@ -45,7 +45,7 @@ class MainMenuController:
             self.message.display_message(f"Le tournoi {tournament.name.title()} a bien été créé.")
 
     @staticmethod
-    def control_tournament(tournament_name: str) -> bool:
+    def control_tournament_exist(tournament_name: str) -> bool:
         """Vérifie si un tournoi portant ce nom existe déjà.
 
         Args:
@@ -122,13 +122,13 @@ class MainMenuController:
             choice = self.main_menu_view.display_main_menu()
             if choice == "1":
                 self.add_tournament()
-            if choice == "2":
+            elif choice == "2":
                 self.control_to_run_tournament_menu()
-            if choice == "3":
+            elif choice == "3":
                 self.tournament_view.display_tournaments(Tournament().deserialize_all())
-            if choice == "4":
+            elif choice == "4":
                 self.add_player()
-            if choice == "5":
+            elif choice == "5":
                 self.player_view.display_players(name_sorter(Player().deserialize_all()))
-            if choice == "6":
+            elif choice == "6":
                 break

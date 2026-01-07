@@ -21,7 +21,7 @@ class TournamentController:
         self.p_in_t_view = p_in_t_view
         self.message = message
 
-    def run_turn(self, turn: Turn, pairs: list[list[Player]], player_alone: Player) -> Turn:
+    def run_turn(self, turn: Turn, pairs: list[list[Player]], player_alone: Player | None) -> Turn:
         """Lance un tour du tournoi.
 
         Démarre le tour, affiche les informations du joueur seul s'il existe,
@@ -50,6 +50,8 @@ class TournamentController:
     @staticmethod
     def get_players_color(match: Match, players_in_pair: list[Player]) -> list[Player]:
         """Attribue aléatoirement les couleurs aux joueurs d'un match.
+
+        Modifie les attributs color des joueurs
 
         Args:
             match (Match): Instance de Match
@@ -102,7 +104,7 @@ class TournamentController:
         Gère les égalités en sélectionnant tous les joueurs ayant le score maximal.
 
         Args:
-            players (list[Player]): Liste des joueurs triés par score
+            players (list[Player]): Liste non vide des joueurs triés par score
             tournament (Tournament): Instance de tournament
         """
         players_remaining = players[:]
@@ -129,7 +131,8 @@ class TournamentController:
         while turn.current_turn < tournament.turn_number:
             pairs, player_alone = turn.get_players_pairs(pairs_in_tournament, players_alone)
             pairs_in_tournament.extend(pairs)
-            players_alone.append(player_alone)
+            if player_alone is not None:
+                players_alone.append(player_alone)
             self.run_turn(turn, pairs, player_alone)
 
             tournament.add_turn_in_tournament(turn)

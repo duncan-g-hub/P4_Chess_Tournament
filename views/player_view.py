@@ -58,9 +58,9 @@ class PlayerView:
         Demande à l'utilisateur de saisir l'identifiant et retourne
         la saisie nettoyée.
 
-                Returns:
-                    str: Identifiant propre
-                """
-        player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur' : "))
+        Returns:
+            str: Identifiant propre
+        """
+        player_id = cleaning_input(input("Entrer l'identifiant national d'échecs du joueur : "))
         print("----------------------------------")
         return player_id

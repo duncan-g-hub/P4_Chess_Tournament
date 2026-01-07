@@ -72,7 +72,7 @@ class Player:
         return players
 
     @staticmethod
-    def get_players_from_list_dict(dict_players: list[dict]) -> list["Player"]:
+    def deserialize_players(dict_players: list[dict]) -> list["Player"]:
         """Crée une liste d'instances Player à partir d'une liste de dictionnaires.
 
         Args:

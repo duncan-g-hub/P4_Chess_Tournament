@@ -3,7 +3,7 @@ from models.tournament import Tournament
 from models.turn import Turn
 
 
-class PLayersInTournamentView:
+class PlayersInTournamentView:
     """Gère l'affichage et la saisie des informations liées aux joueurs dans un tournoi."""
 
     @staticmethod
@@ -25,7 +25,8 @@ class PLayersInTournamentView:
         """Affiche les tours et matchs qui les composent.
 
         Pour chaque tour, affiche le nom, la date et l'heure de départ et de fin.
-        Pour chaque match, affiche le numéro et la paire de joueurs qui le compose.
+        Pour chaque match, affiche les joueurs et leurs scores à partir de la structure sérialisée des matchs.
+        Si un joueur est seul, il est affiché.
         Args:
             turns (list[Turn]): Liste d'instances de Turn
         """
