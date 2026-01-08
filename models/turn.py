@@ -21,8 +21,8 @@ class Turn:
             start_datetime: str | None = None,
             end_datetime: str | None = None,
             player_alone: Player | None = None,
-            current_turn: int = 0,
-            name: str | None = None
+            name: str | None = None,
+            is_finished: bool | None = None
     ) -> None:
         self.players = players
         self.pairs = pairs
@@ -30,28 +30,30 @@ class Turn:
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
         self.player_alone = player_alone
-        self.current_turn = current_turn
         self.name = name
+        self.is_finished = is_finished
 
     def mix_players_randomly(self) -> None:
         """Mélange l'ordre de la liste des joueurs aléatoirement. """
         random.shuffle(self.players)
 
-    def get_players_pairs(self, pairs_in_tournament: list[list[Player]], players_alone: list[Player]) -> None:
+    def get_players_pairs(self, pairs_in_tournament: list[tuple[str, str]], players_alone: list[str],
+                          started_turns: int) -> None:
         """Génère les paires de joueurs pour le tour courant.
 
         Mélange ou trie les joueurs selon le numéro du tour, gère un éventuel
         joueur seul, puis génère des paires en évitant autant que possible
         les paires déjà jouées dans le tournoi.
-        Si une combinaison de paire unique n'est possible, une solution
+        Si une combinaison de paire unique n'est pas possible, une solution
         avec pénalité minimale est calculée.
 
         Args:
-            pairs_in_tournament (list[list[Player]]): Liste des paires déjà jouées,
-            players_alone (list[Player]): Liste des joueurs ayant déjà été seuls.
+            pairs_in_tournament (list[tuple[str, str]]): Liste des paires déjà jouées,
+            players_alone (list[str]): Liste des joueurs ayant déjà été seuls.
+            started_turns (int): Numéro du tour.
 
         """
-        if self.current_turn == 0:
+        if started_turns == 0:
             self.mix_players_randomly()
         else:
             self.players = score_sorter(self.players)
@@ -62,7 +64,7 @@ class Turn:
             pairs = self.get_pairs_with_penalty(available_players, pairs_in_tournament)[0]
         self.pairs = pairs
 
-    def get_unique_pairs(self, available_players: list[Player], pairs_in_tournament: list[list[Player]]) -> list[list[
+    def get_unique_pairs(self, available_players: list[Player], pairs_in_tournament: list[tuple[str, str]]) -> list[list[
             Player]] | None:
         """Génère récursivement des paires de joueurs uniques.
 
@@ -76,7 +78,7 @@ class Turn:
 
         Args:
             available_players (list[Player]): Liste des joueurs disponibles pour former des paires
-            pairs_in_tournament (list[list[Player]]): Paires déjà jouées dans le tournoi
+            pairs_in_tournament (list[tuple[str, str]]): Paires déjà jouées dans le tournoi
 
         Returns:
             list[list[Player]] | None: Liste de paires uniques si possible, sinon None.
@@ -92,9 +94,11 @@ class Turn:
             p2 = available_players[i]
             # on crée la paire
             pair = [p1, p2]
-            pair_reverse = [p2, p1]
+            # gestion des paires avec player_id pour le contrôle
+            id_pair = [p1.player_id, p2.player_id]
+            id_pair_reverse = [p2.player_id, p1.player_id]
             # si la paire n'est pas déja présente dans pairs_in_tournament
-            if pair not in pairs_in_tournament and pair_reverse not in pairs_in_tournament:
+            if id_pair not in pairs_in_tournament and id_pair_reverse not in pairs_in_tournament:
                 # on crée une liste des joueurs restant en enlevant p1 et p2
                 remaining_players = available_players[1:i] + available_players[i + 1:]
                 # on applique la recursivité pour générer des paires avec le reste
@@ -106,7 +110,7 @@ class Turn:
         # si une paire ne peut pas etre afiliée à une autre, on retourne none
         return None
 
-    def get_pairs_with_penalty(self, available_players: list[Player], pairs_in_tournament: list[list[Player]]) -> \
+    def get_pairs_with_penalty(self, available_players: list[Player], pairs_in_tournament: list[tuple[str, str]]) -> \
             tuple[list[list[Player]], int]:
         """Génère récursivement des paires en minimisant les répétitions.
 
@@ -119,7 +123,7 @@ class Turn:
         Args:
             available_players (list[Player]): Liste des joueurs disponibles
                 pour former des paires,
-            pairs_in_tournament (list[list[Player]]): Paires déjà jouées
+            pairs_in_tournament (list[tuple[str, str]]): Paires déjà jouées
                 dans le tournoi.
 
         Returns:
@@ -135,8 +139,9 @@ class Turn:
         for i in range(1, len(available_players)):
             p2 = available_players[i]
             pair = [p1, p2]
-            pair_reverse = [p2, p1]
-            if pair in pairs_in_tournament or pair_reverse in pairs_in_tournament:
+            id_pair = [p1.player_id, p2.player_id]
+            id_pair_reverse = [p2.player_id, p1.player_id]
+            if id_pair in pairs_in_tournament or id_pair_reverse in pairs_in_tournament:
                 penalty = 1
             else:
                 penalty = 0
@@ -154,7 +159,7 @@ class Turn:
         # on retourne la liste des paires avec la pénalité correpondante
         return best_solution, best_penalty
 
-    def get_player_alone(self, players_alone: list[Player]) -> None:
+    def get_player_alone(self, players_alone: list[str]) -> None:
         """Récupère un joueur seul pour le tour courant si nécessaire.
 
         Si le nombre de joueurs est impair, un joueur est tiré au sort.
@@ -164,29 +169,33 @@ class Turn:
         la génération des paires.
 
         Args:
-            players_alone (list[Player]): Liste des joueurs ayant déjà
+            players_alone (list[str]): Liste de player_id des joueurs ayant déjà
                 été seuls lors des tours précédents.
         """
         self.player_alone = None
         if len(self.players) % 2 == 1:  # permet de dire si la liste est impaire
             index = random.randrange(len(self.players))
             self.player_alone = self.players[index]
-            while self.player_alone in players_alone:
+            while self.player_alone.player_id in players_alone:
                 index = random.randrange(len(self.players))
                 self.player_alone = self.players[index]
             self.players.pop(index)
 
-    def start_turn(self) -> None:
+    def start_turn(self, started_turns: int) -> None:
         """Commence le tour courant
 
-        Met la date de départ à jour. Incrémente le n° de tour. Défini le nom du tour.
+        Met la date de départ à jour. Défini le nom du tour à partir du n° de tour.
+        Passe le tour au statut non-fini.
         Supprime la date de fin correspondant au tour précédent.
+
+        Args:
+            started_turns (int): Numéro du tour.
         """
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.start_datetime = now
-        self.current_turn += 1
-        self.name = f"Tour n°{self.current_turn}"
+        self.name = f"Tour n°{started_turns+1}"
         self.end_datetime = None
+        self.is_finished = False
 
     def get_matchs_information(self, matchs: list[Match]) -> None:
         """Ajoute les matchs et paires au tour courant.
@@ -210,10 +219,12 @@ class Turn:
         """Finalise le tour courant.
 
         Met à jour les joueurs et la date et heure de fin.
+        Passe le tour au statut fini.
         """
         self.update_players()
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.end_datetime = now
+        self.is_finished = True
 
     def update_players(self) -> None:
         """Met à jour la liste des joueurs du tour courant à partir de la liste
@@ -239,15 +250,18 @@ class Turn:
         turns = []
         for t in turns_dict:
             pairs = []
+            players = []
             for pair in t["pairs"]:
                 pairs.append(Player().deserialize_players(pair))
+                players.extend(Player().deserialize_players(pair))
             turn = Turn(matchs=self.deserialize_matchs(t.get("matchs")),
                         start_datetime=t["start_datetime"],
                         end_datetime=t.get("end_datetime"),
                         player_alone=Player().deserialize_players([t["player_alone"]])[0],
-                        current_turn=t["current_turn"],
+                        is_finished=t["is_finished"],
                         name=t["name"],
-                        pairs=pairs)
+                        pairs=pairs,
+                        players=players)
             turns.append(turn)
         return turns
 

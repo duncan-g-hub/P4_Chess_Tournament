@@ -148,7 +148,7 @@ class TournamentMenuController:
         Returns:
             bool: True si le menu des tours a été lancé, False sinon
         """
-        if tournament.turns == tournament.turn_number:
+        if tournament.finished_turns == tournament.turn_number:
             self.message.display_message(f"Le tournoi {tournament.name.title()} est déjà terminé.\n"
                                          f"Retour au menu du tournoi {tournament.name.title()}.")
             return False

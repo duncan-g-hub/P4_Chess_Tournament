@@ -19,7 +19,8 @@ class Tournament:
             end_date: str | None = None,
             turn_number: int = 4,
             description: str = "",
-            current_turn: int = 0,
+            started_turns: int = 0,
+            finished_turns: int = 0,
             players: list[Player] | None = None,
             turns: list[Turn] | None = None
     ) -> None:
@@ -29,7 +30,8 @@ class Tournament:
         self.end_date = end_date
         self.turn_number = turn_number
         self.description = description
-        self.current_turn = current_turn
+        self.started_turns = started_turns
+        self.finished_turns = finished_turns
         self.players = players or []
         self.turns = turns or []
 
@@ -51,7 +53,8 @@ class Tournament:
                 "end_date": self.end_date,
                 "turn_number": self.turn_number,
                 "description": self.description,
-                "current_turn": self.current_turn,
+                "started_turns": self.started_turns,
+                "finished_turns": self.finished_turns,
                 "players": self.players,
                 "turns": self.turns}
 
@@ -63,17 +66,18 @@ class Tournament:
             player (Player): instance de la classe Player.
         """
         self.players.append(player)
+        player.score = 0.0
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
                 player = player.serialize()
-                player["score"] = 0.0
                 tournament["players"].append(player)
         self.update_tournaments(tournaments)
 
     def add_turn_in_tournament(self, turn: Turn) -> None:
         """Ajoute un tour au tournoi courant.
 
+        Incrémente le nombre tours commencés dans le tournoi.
         Ajoute les données du tour au tournoi courant.
         Met à jour tournoi dans le fichier tournaments.json
 
@@ -81,6 +85,7 @@ class Tournament:
             turn (Turn): instance de la classe Turn.
         """
         self.turns.append(turn)
+        self.started_turns += 1
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
@@ -91,13 +96,15 @@ class Tournament:
                                             "pairs": pairs,
                                             "player_alone": turn.player_alone.serialize(),
                                             "start_datetime": turn.start_datetime,
-                                            "current_turn": turn.current_turn})
+                                            "is_finished": turn.is_finished})
+                tournament["started_turns"] = self.started_turns
         self.update_tournaments(tournaments)
 
     def update_last_turn_in_tournament(self, turn) -> None:
         """Met à jour le dernier tour du tournoi courant.
 
-        Incrémente le n° de tour dans le tournoi. Met à jour les joueurs du tournoi.
+        Incrémente le nombre de tours finis.
+        Met à jour les joueurs du tournoi.
         Met à jour les données du dernier tour dans le tournoi courant.
         Met à jour le tournoi dans le fichier tournaments.json (tours, n°tour, joueurs).
 
@@ -105,7 +112,7 @@ class Tournament:
             turn (Turn): instance de la classe Turn.
         """
 
-        self.current_turn += 1
+        self.finished_turns += 1
         self.turns[-1] = turn
         self.players = turn.players
         tournaments = load_tournaments()
@@ -117,11 +124,12 @@ class Tournament:
                 tournament["turns"][-1] = {"name": turn.name,
                                            "pairs": pairs,
                                            "matchs": turn.serialize_matchs(),
-                                           "player_alone": turn.player_alone.serialize(),
+                                           "player_alone":
+                                               turn.player_alone.serialize() if turn.player_alone else None,
                                            "start_datetime": turn.start_datetime,
                                            "end_datetime": turn.end_datetime,
-                                           "current_turn": turn.current_turn}
-                tournament["current_turn"] = self.current_turn
+                                           "is_finished": turn.is_finished}
+                tournament["finished_turns"] = self.finished_turns
                 players = []
                 for player in turn.players:
                     players.append(player.serialize())
@@ -153,7 +161,8 @@ class Tournament:
                                     end_date=t["end_date"],
                                     turn_number=t["turn_number"],
                                     description=t["description"],
-                                    current_turn=t["current_turn"],
+                                    started_turns=t["started_turns"],
+                                    finished_turns=t["finished_turns"],
                                     players=Player().deserialize_players(t["players"]),
                                     turns=Turn().deserialize_turns(t["turns"]))
             tournaments.append(tournament)

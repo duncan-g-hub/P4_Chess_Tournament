@@ -148,17 +148,13 @@ class TournamentView:
         Returns:
             str: Numéro correspondant au choix de l'utilisateur
         """
-        if tournament.turns:
-            current_turn = tournament.turns[-1].current_turn
-        else:
-            current_turn = 0
         possible_choices = ["1", "2", "3"]
         print("----------- Menu Tours -----------")
         print()
-        print(f"Tournoi '{tournament.name.title()}', Tour n°{current_turn} sur {tournament.turn_number} : ")
+        print(f"Tournoi '{tournament.name.title()}', Tour n°{tournament.started_turns} sur {tournament.turn_number} : ")
         print()
-        print(f"1.Commencer le Tour n°{current_turn+1} ")
-        print(f"2.Terminer le Tour n°{current_turn} ")
+        print(f"1.Commencer le Tour n°{tournament.started_turns+1} ")
+        print(f"2.Terminer le Tour n°{tournament.started_turns} ")
         print("3.Revenir au menu du tournoi ")
         print()
         print("----------------------------------")

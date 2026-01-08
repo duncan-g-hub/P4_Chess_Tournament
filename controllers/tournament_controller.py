@@ -49,16 +49,17 @@ class TournamentController:
         pairs_in_tournament = []
         if tournament.turns:
             for turn in tournament.turns:
-                pairs_in_tournament.append(turn.pairs)
-                players_alone.append(turn.player_alone)
-            turn = tournament.turns[-1]
-        else:
-            turn = Turn(players=tournament.players)
-        turn.get_players_pairs(pairs_in_tournament, players_alone)
-        pairs_in_tournament.extend(turn.pairs)
-        if turn.player_alone is not None:
-            players_alone.append(turn.player_alone)
-        turn.start_turn()
+                for pair in turn.pairs:
+                    pairs_in_tournament.append([pair[0].player_id, pair[1].player_id])
+                if turn.player_alone:
+                    players_alone.append(turn.player_alone.player_id)
+        turn = Turn(players=tournament.players)
+        turn.get_players_pairs(pairs_in_tournament, players_alone, tournament.started_turns)
+        for pair in turn.pairs:
+            pairs_in_tournament.append([pair[0].player_id, pair[1].player_id])
+        if turn.player_alone :
+            players_alone.append(turn.player_alone.player_id)
+        turn.start_turn(tournament.started_turns)
         matchs = []
         for pair in turn.pairs:
             match = Match(pair)
@@ -84,12 +85,13 @@ class TournamentController:
         """
         if not tournament.turns:
             return True
-        turn = tournament.turns[-1]
-        if tournament.current_turn == turn.current_turn:
+        last_turn = tournament.turns[-1]
+        if last_turn.is_finished :
             return True
-        self.message.display_message(f"Veuillez finir le {turn.name} avant d'en commencer un nouveau.\n"
+        self.message.display_message(f"Veuillez finir le {last_turn.name} avant d'en commencer un nouveau.\n"
                                      "Retour au menu des tours.")
         return False
+
 
     @staticmethod
     def get_players_color(match: Match, players_in_pair: list[Player]) -> list[Player]:
@@ -154,7 +156,7 @@ class TournamentController:
         turn.get_matchs_information(matchs)
         turn.finish_turn()
         tournament.update_last_turn_in_tournament(turn)
-        self.message.display_message(f"Fin du tour {tournament.current_turn} {turn.end_datetime}.")
+        self.message.display_message(f"Fin du tour {tournament.started_turns} {turn.end_datetime}.")
         self.p_in_t_view.display_players_in_tournament(score_sorter(turn.players))
         return tournament
 
@@ -175,9 +177,11 @@ class TournamentController:
             self.message.display_message("Veuillez lancer le 1er Tour.\n"
                                          "Retour au menu des tours.")
             return False
-        turn = tournament.turns[-1]
-        if tournament.current_turn == turn.current_turn:
-            self.message.display_message(f"Le {turn.name} est déja terminé, veuillez en commencer un nouveau.\n"
+
+        last_turn = tournament.turns[-1]
+
+        if last_turn.is_finished :
+            self.message.display_message(f"Le {last_turn.name} est déja terminé, veuillez en commencer un nouveau.\n"
                                          "Retour au menu des tours.")
             return False
         return True
@@ -211,7 +215,7 @@ class TournamentController:
         Args:
             tournament (Tournament): Instance de tournament
         """
-        while tournament.current_turn < tournament.turn_number:
+        while tournament.finished_turns < tournament.turn_number:
             choice_tournament = self.tournament_view.display_turn_menu(tournament)
             if choice_tournament == "1":
                 tournament = self.start_and_display_turn(tournament)
@@ -219,4 +223,5 @@ class TournamentController:
                 tournament = self.run_matchs_menu(tournament)
             elif choice_tournament == "3":
                 break
-        self.get_tournament_winner(score_sorter(tournament.players), tournament)
+        if tournament.finished_turns == tournament.turn_number:
+            self.get_tournament_winner(score_sorter(tournament.players), tournament)
