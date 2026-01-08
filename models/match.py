@@ -19,7 +19,7 @@ class Match:
         """
         self.update_scores(winner)
 
-    def get_random_sides(self) -> tuple[Player, Player]:
+    def get_random_colors(self) -> tuple[Player, Player]:
         """Attribue aléatoirement les couleurs aux joueurs.
 
         Returns:

@@ -24,15 +24,24 @@ class TournamentController:
         self.message = message
 
     def start_and_display_turn(self, tournament: Tournament) -> Tournament:
-        """Lance un tour du tournoi.
+        """Lance un tour du tournoi si possible.
 
-        Démarre le tour, affiche les informations du tour via la vue 'p_in_t_view'.
+        Vérifie s'il est possible de lancer le tour, si un tour est déjà en cours,
+        le tournoi est retourné sans modification.
+
+        Si des tours existent déjà, récupère l'historique des paires et des joueurs seuls.
+        Sinon, initialise un nouveau tour avec les joueurs du tournoi.
+
+        Génère les paires et le joueur seul pour le tour, attribue aléatoirement les couleurs aux joueurs,
+        Démarre le tour et affiche ses informations via la vue 'p_in_t_view'
+
+        Ajoute le tour au tournoi et retourne le tournoi mis à jour.
 
         Args:
             tournament (Tournament): Instance du tournoi en cours
 
         Returns:
-            Tournament: Tournoi mis à jour
+            Tournament: Tournoi mis à jour ou inchangée
         """
         if not self.control_to_start_turn(tournament):
             return tournament
@@ -61,6 +70,18 @@ class TournamentController:
         return tournament
 
     def control_to_start_turn(self, tournament: Tournament) -> bool:
+        """Vérifie si un nouveau tour peut être démarré.
+
+        Autorise le démarrage d'un tour si aucun tour n'existe encore dans le tournoi,
+        ou le dernier tour enregistré est terminé.
+        Sinon Affiche un message via la vue 'message'.
+
+        Args:
+            tournament (Tournament): Instance du tournoi en cours
+
+        Returns:
+            bool : True si un nouveau tour peut être démarré, False sinon
+        """
         if not tournament.turns:
             return True
         turn = tournament.turns[-1]
@@ -83,7 +104,7 @@ class TournamentController:
         Returns:
             list[Player]: Joueurs avec couleurs assignées
         """
-        white, black = match.get_random_sides()
+        white, black = match.get_random_colors()
         if players_in_pair[0] == white:
             players_in_pair[0].color = "Blanc"
             players_in_pair[1].color = "Noir"
@@ -93,16 +114,26 @@ class TournamentController:
         return players_in_pair
 
     def run_matchs_menu(self, tournament: Tournament) -> Tournament:
-        """Exécute les matchs d'un tour.
+        """Lance les menus des matchs d'un tour.
 
-        Pour chaque paire de joueurs, affiche le menu du match,
-        récupère le résultat et met à jour les scores.
+        Vérifie s'il est possible de lancer les matchs du tour, sinon renvoie le tournoi
+        sans modification.
+
+        Récupère le dernier tour du tournoi et parcourt chaque paire de joueurs.
+        Pour chaque pair, affiche le menu de saisie du résultat via la vue 'p_in_t_view',
+        détermine le vainqueur ou l'égalité, puis met à jour les scores du match.
+
+        Regroupe les matchs joués, met à jour les informations du tour,
+        termine le tour et met à jour le tournoi.
+
+        Affiche un message de fin de tour ainsi que le classement des joueurs.
+        Retourne le tournoi mis à jour
 
         Args:
-            tournament (Tournament): Instance de Tournament
+            tournament (Tournament): Instance du tournoi en cours
 
         Returns:
-            Tournament: Tournoi mis à jour
+            Tournament: Tournoi mis à jour ou inchangé
         """
         if not self.control_to_run_matchs(tournament):
             return tournament
@@ -128,6 +159,18 @@ class TournamentController:
         return tournament
 
     def control_to_run_matchs(self, tournament: Tournament):
+        """Vérifie si un tour peut être finalisé.
+
+        Autorise l'accès au menu des matchs uniquement si un tour existe
+        et que ce tour est en cours (commencé, mais non terminé).
+        Sinon affiche un message via la vue 'message'.
+
+        Args:
+            tournament (Tournament): Instance du tournoi en cours
+
+        Returns:
+            bool: True si les matchs du tour courant peuvent être finalisés, False sinon
+        """
         if not tournament.turns:
             self.message.display_message("Veuillez lancer le 1er Tour.\n"
                                          "Retour au menu des tours.")

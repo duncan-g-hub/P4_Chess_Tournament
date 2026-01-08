@@ -24,11 +24,14 @@ class PlayersInTournamentView:
     def display_turn(turn: Turn) -> None:
         """Affiche le tour et matchs qui les composent.
 
-        Affiche le nom, la date et l'heure de départ et de fin d'un tour
-        Pour chaque match, affiche les joueurs et leurs scores à partir de la structure sérialisée des matchs.
+        Affiche le nom, la date et l'heure de départ du tour.
+        Pour chaque paire de joueurs, affiche le match correspondant avec
+        les couleurs, identifiants, noms, prénoms et scores des joueurs.
         Si un joueur est seul, il est affiché.
+        Si le tour est terminé, la date et l'heure de fin sont affichées.
+
         Args:
-            turn (Turn): Instances de Turn
+            turn (Turn): Instances du tour à afficher
         """
         print()
         print(f"Le {turn.name} commence {turn.start_datetime}.")

@@ -118,14 +118,14 @@ class TournamentMenuController:
     def get_players_in_tournament(self, tournament: Tournament) -> bool:
         """Affiche la liste des joueurs inscrits dans un tournoi.
 
-        Affiche un message via la vue 'message' s'il y a moins de deux joueurs inscrits au tournoi.
+        Affiche un message via la vue 'message' s'ii n'y a pas de joueurs inscrits au tournoi.
         Sinon affiche la liste des joueurs inscrits au tournoi via la vue 'p_in_t_view'.
 
         Args:
             tournament (Tournament): instance de Tournament
 
         Returns:
-            bool: True si au moins deux joueurs inscrits, False sinon
+            bool: True si au moins un joueur inscrit, False sinon
         """
         if len(tournament.players) < 1:
             self.message.display_message(f"Il n'y a aucun participant pour le tournoi {tournament.name.title()}, "
@@ -138,7 +138,7 @@ class TournamentMenuController:
     def control_to_run_turn_menu(self, tournament: Tournament) -> bool:
         """Vérifie les conditions pour lancer le menu des tours et le lance si possible.
 
-        Affiche un message via la vue 'message' si le tournoi à déja commencé, sinon
+        Affiche un message via la vue 'message' si le tournoi est terminé, sinon
         Affiche un message via la vue 'message' si moins de deux joueurs sont inscrits, sinon
         Affiche les participants via la vue 'p_in_t_view' avant de lancer le tournoi via le 'tournament_controller'.
 
@@ -146,7 +146,7 @@ class TournamentMenuController:
             tournament (Tournament): instance de Tournament
 
         Returns:
-            bool: True si le tournoi a été lancé, False sinon
+            bool: True si le menu des tours a été lancé, False sinon
         """
         if tournament.turns == tournament.turn_number:
             self.message.display_message(f"Le tournoi {tournament.name.title()} est déjà terminé.\n"
@@ -154,7 +154,7 @@ class TournamentMenuController:
             return False
         if len(tournament.players) < 2:
             self.message.display_message(
-                f"Il n'y a pas assez de joueurs inscrits pour lancer le tournoi {tournament.name.title()}.\n"
+                f"Il n'y a pas assez de joueurs inscrits pour commencer le tournoi {tournament.name.title()}.\n"
                 f"Retour au menu du tournoi {tournament.name.title()}.")
             return False
         self.p_in_t_view.display_players_in_tournament(tournament.players)
@@ -170,8 +170,7 @@ class TournamentMenuController:
         - Ajouter un joueur au tournoi
         - Afficher les joueurs participants au tournoi
         - Afficher les tours et les matchs du tournoi
-        - Commencer le prochain tour
-        - Finir le tour actuel
+        - Accéder au menu des tours
         - Revenir au menu principal
         """
         tournament = self.tournament_view.display_tournaments_list(Tournament().deserialize_all())

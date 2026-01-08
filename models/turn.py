@@ -37,8 +37,7 @@ class Turn:
         """Mélange l'ordre de la liste des joueurs aléatoirement. """
         random.shuffle(self.players)
 
-    def get_players_pairs(self, pairs_in_tournament: list[list[Player]], players_alone: list[Player]) -> tuple[
-            list[list[Player]], Player]:
+    def get_players_pairs(self, pairs_in_tournament: list[list[Player]], players_alone: list[Player]) -> None:
         """Génère les paires de joueurs pour le tour courant.
 
         Mélange ou trie les joueurs selon le numéro du tour, gère un éventuel
@@ -51,10 +50,6 @@ class Turn:
             pairs_in_tournament (list[list[Player]]): Liste des paires déjà jouées,
             players_alone (list[Player]): Liste des joueurs ayant déjà été seuls.
 
-        Returns:
-            tuple[list[list[Player]], Player]:
-                - Liste des paires de joueurs pour le tour.
-                - Joueur laissé seul pour ce tour (le cas échéant).
         """
         if self.current_turn == 0:
             self.mix_players_randomly()
@@ -182,6 +177,11 @@ class Turn:
             self.players.pop(index)
 
     def start_turn(self) -> None:
+        """Commence le tour courant
+
+        Met la date de départ à jour. Incrémente le n° de tour. Défini le nom du tour.
+        Supprime la date de fin correspondant au tour précédent.
+        """
         now = datetime.now().strftime("le %d/%m/%Y à %H:%M:%S")
         self.start_datetime = now
         self.current_turn += 1
@@ -189,10 +189,11 @@ class Turn:
         self.end_datetime = None
 
     def get_matchs_information(self, matchs: list[Match]) -> None:
-        """Met à jour les matchs du tour courant.
+        """Ajoute les matchs et paires au tour courant.
 
-        Les matchs sont stockés sous forme de tuple (Player, Player.score)
-        à partir d'une liste d'instances Match.
+        Les matchs sont stockés sous forme de tuple ([Player, Player.score], [Player, Player.score])
+        Les paires sont stockés sous forme de liste [Player, Player]
+        Écrase les matchs et paires du tour précédent.
 
         Args:
             matchs (list[Match]): Liste d'instances de Match.

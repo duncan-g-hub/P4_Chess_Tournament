@@ -40,7 +40,7 @@ class Tournament:
         self.update_tournaments(tournaments)
 
     def serialize(self) -> dict:
-        """Création d'un dictionnaire à partir des attributs d'instance.
+        """Crée un dictionnaire à partir des attributs d'instance.
 
         Returns:
             dict: informations du tournoi
@@ -74,8 +74,8 @@ class Tournament:
     def add_turn_in_tournament(self, turn: Turn) -> None:
         """Ajoute un tour au tournoi courant.
 
-        Met à jour le tournoi dans le fichier tournaments.json
-        Incrémente le n°tour courant.
+        Ajoute les données du tour au tournoi courant.
+        Met à jour tournoi dans le fichier tournaments.json
 
         Args:
             turn (Turn): instance de la classe Turn.
@@ -87,7 +87,6 @@ class Tournament:
                 pairs = []
                 for pair in turn.pairs:
                     pairs.append([pair[0].serialize(), pair[1].serialize()])
-                tournament["current_turn"] = self.current_turn
                 tournament["turns"].append({"name": turn.name,
                                             "pairs": pairs,
                                             "player_alone": turn.player_alone.serialize(),
@@ -96,6 +95,16 @@ class Tournament:
         self.update_tournaments(tournaments)
 
     def update_last_turn_in_tournament(self, turn) -> None:
+        """Met à jour le dernier tour du tournoi courant.
+
+        Incrémente le n° de tour dans le tournoi. Met à jour les joueurs du tournoi.
+        Met à jour les données du dernier tour dans le tournoi courant.
+        Met à jour le tournoi dans le fichier tournaments.json (tours, n°tour, joueurs).
+
+        Args:
+            turn (Turn): instance de la classe Turn.
+        """
+
         self.current_turn += 1
         self.turns[-1] = turn
         self.players = turn.players
@@ -112,6 +121,7 @@ class Tournament:
                                            "start_datetime": turn.start_datetime,
                                            "end_datetime": turn.end_datetime,
                                            "current_turn": turn.current_turn}
+                tournament["current_turn"] = self.current_turn
                 players = []
                 for player in turn.players:
                     players.append(player.serialize())

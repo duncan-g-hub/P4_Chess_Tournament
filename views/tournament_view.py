@@ -68,8 +68,7 @@ class TournamentView:
         """Affiche la liste des tournois et récupère la sélection de l'utilisateur.
 
         Affiche chaque tournoi avec un numéro, puis demande à l'utilisateur de
-        sélectionner un tournoi en entrant le numéro correspondant. La saisie est
-        validée pour s'assurer qu'elle correspond à un tournoi existant.
+        sélectionner un tournoi en entrant le numéro correspondant.
 
         Args:
             tournaments (list[Tournament]): Liste d'instances de Tournament
@@ -110,7 +109,7 @@ class TournamentView:
         print("2.Ajouter un joueur au tournoi ")
         print("3.Afficher les joueurs participants au tournoi ")
         print("4.Afficher la liste des tours et matchs du tournoi ")
-        print("5.Lancer le menu des tours du tournoi ")
+        print("5.Accéder au menu des tours du tournoi ")
         print("6.Revenir au menu principal ")
         print()
         print("----------------------------------")
