@@ -107,7 +107,7 @@ class Tournament:
         Incrémente le nombre de tours finis.
         Met à jour les joueurs du tournoi.
         Met à jour les données du dernier tour dans le tournoi courant.
-        Met à jour le tournoi dans le fichier tournaments.json (tours, n°tour, joueurs).
+        Met à jour le tournoi dans le fichier tournaments.json (tours, nombre de tours finis, joueurs).
 
         Args:
             turn (Turn): instance de la classe Turn.

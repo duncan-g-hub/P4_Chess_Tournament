@@ -50,7 +50,7 @@ class Turn:
         Args:
             pairs_in_tournament (list[tuple[str, str]]): Liste des paires déjà jouées,
             players_alone (list[str]): Liste des joueurs ayant déjà été seuls.
-            started_turns (int): Numéro du tour.
+            started_turns (int): Nombre de tours commencés.
 
         """
         if started_turns == 0:
@@ -64,8 +64,8 @@ class Turn:
             pairs = self.get_pairs_with_penalty(available_players, pairs_in_tournament)[0]
         self.pairs = pairs
 
-    def get_unique_pairs(self, available_players: list[Player], pairs_in_tournament: list[tuple[str, str]]) -> list[list[
-            Player]] | None:
+    def get_unique_pairs(self, available_players: list[Player], pairs_in_tournament: list[tuple[str, str]]) -> (
+            list[list[Player]] | None):
         """Génère récursivement des paires de joueurs uniques.
 
         Tente de créer des paires sans répétition par rapport aux paires déjà
@@ -184,7 +184,7 @@ class Turn:
     def start_turn(self, started_turns: int) -> None:
         """Commence le tour courant
 
-        Met la date de départ à jour. Défini le nom du tour à partir du n° de tour.
+        Met la date de départ à jour. Défini le nom du tour à partir du nombre de tours commencés.
         Passe le tour au statut non-fini.
         Supprime la date de fin correspondant au tour précédent.
 

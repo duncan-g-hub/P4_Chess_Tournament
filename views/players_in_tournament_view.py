@@ -61,7 +61,7 @@ class PlayersInTournamentView:
     def display_match_menu(turn, current_match: int, p1: Player, p2: Player) -> str:
         """Affiche le menu du match et récupère le choix de l'utilisateur.
 
-        Affiche le numéro du tour en cours et du match en cours.
+        Affiche le nombre de tours commencés et le numéro du match en cours.
         Pour chaque joueur, affiche sa couleur, son identifiant, son nom et son score.
         Retourne le résultat du match demandé à l'utilisateur.
 

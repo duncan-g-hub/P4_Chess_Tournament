@@ -57,7 +57,7 @@ class TournamentController:
         turn.get_players_pairs(pairs_in_tournament, players_alone, tournament.started_turns)
         for pair in turn.pairs:
             pairs_in_tournament.append([pair[0].player_id, pair[1].player_id])
-        if turn.player_alone :
+        if turn.player_alone:
             players_alone.append(turn.player_alone.player_id)
         turn.start_turn(tournament.started_turns)
         matchs = []
@@ -86,12 +86,11 @@ class TournamentController:
         if not tournament.turns:
             return True
         last_turn = tournament.turns[-1]
-        if last_turn.is_finished :
+        if last_turn.is_finished:
             return True
         self.message.display_message(f"Veuillez finir le {last_turn.name} avant d'en commencer un nouveau.\n"
                                      "Retour au menu des tours.")
         return False
-
 
     @staticmethod
     def get_players_color(match: Match, players_in_pair: list[Player]) -> list[Player]:
@@ -180,7 +179,7 @@ class TournamentController:
 
         last_turn = tournament.turns[-1]
 
-        if last_turn.is_finished :
+        if last_turn.is_finished:
             self.message.display_message(f"Le {last_turn.name} est déja terminé, veuillez en commencer un nouveau.\n"
                                          "Retour au menu des tours.")
             return False

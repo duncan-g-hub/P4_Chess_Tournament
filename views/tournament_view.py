@@ -151,7 +151,7 @@ class TournamentView:
         possible_choices = ["1", "2", "3"]
         print("----------- Menu Tours -----------")
         print()
-        print(f"Tournoi '{tournament.name.title()}', Tour n°{tournament.started_turns} sur {tournament.turn_number} : ")
+        print(f"Tournoi '{tournament.name.title()}', Tour n°{tournament.started_turns} sur {tournament.turn_number} :")
         print()
         print(f"1.Commencer le Tour n°{tournament.started_turns+1} ")
         print(f"2.Terminer le Tour n°{tournament.started_turns} ")
