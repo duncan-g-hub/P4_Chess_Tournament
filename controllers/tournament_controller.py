@@ -198,7 +198,7 @@ class TournamentController:
         players_remaining = players[:]
         winners = [players_remaining[-1]]
         players_remaining.pop(-1)
-        while players_remaining[-1].score == winners[-1].score:
+        while players_remaining and players_remaining[-1].score == winners[-1].score:
             winners.append(players_remaining[-1])
             players_remaining.pop(-1)
         self.p_in_t_view.display_winner(winners, tournament)

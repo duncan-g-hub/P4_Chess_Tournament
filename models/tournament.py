@@ -94,7 +94,8 @@ class Tournament:
                     pairs.append([pair[0].serialize(), pair[1].serialize()])
                 tournament["turns"].append({"name": turn.name,
                                             "pairs": pairs,
-                                            "player_alone": turn.player_alone.serialize(),
+                                            "player_alone":
+                                                turn.player_alone.serialize() if turn.player_alone else None,
                                             "start_datetime": turn.start_datetime,
                                             "is_finished": turn.is_finished})
                 tournament["started_turns"] = self.started_turns
