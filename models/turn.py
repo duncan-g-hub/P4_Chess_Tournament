@@ -257,7 +257,8 @@ class Turn:
             turn = Turn(matchs=self.deserialize_matchs(t.get("matchs")),
                         start_datetime=t["start_datetime"],
                         end_datetime=t.get("end_datetime"),
-                        player_alone=Player().deserialize_players([t["player_alone"]])[0],
+                        player_alone=
+                        Player().deserialize_players([t["player_alone"]])[0] if t["player_alone"] else None,
                         is_finished=t["is_finished"],
                         name=t["name"],
                         pairs=pairs,

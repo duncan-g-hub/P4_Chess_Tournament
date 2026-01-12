@@ -111,8 +111,10 @@ class TournamentMenuController:
             self.message.display_message(f"Le tournoi {tournament.name.title()} n'a toujours pas eu lieu.\n"
                                          f"Retour au menu du tournoi {tournament.name.title()}.")
             return False
-        for turn in tournament.turns:
-            self.p_in_t_view.display_turn(turn)
+        for t in Tournament().deserialize_all():
+            if t.name == tournament.name:
+                for turn in t.turns:
+                    self.p_in_t_view.display_turn(turn)
         return True
 
     def get_players_in_tournament(self, tournament: Tournament) -> bool:
