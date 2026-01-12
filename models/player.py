@@ -42,7 +42,8 @@ class Player:
                 "first_name": self.first_name,
                 "birth_date": self.birth_date,
                 "player_id": self.player_id,
-                "score": self.score}
+                "score": self.score,
+                "color": self.color}
 
     @staticmethod
     def update_players(players: list[dict]) -> None:
@@ -63,11 +64,7 @@ class Player:
         """
         players = []
         for p in load_players():
-            player = Player(player_id=p["player_id"],
-                            last_name=p["last_name"],
-                            first_name=p["first_name"],
-                            birth_date=p["birth_date"],
-                            score=p["score"])
+            player = Player(**p)
             players.append(player)
         return players
 
