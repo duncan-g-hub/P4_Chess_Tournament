@@ -129,7 +129,7 @@ class TournamentView:
             tournament (Tournament): Instance de Tournament
         """
         print()
-        print(f"Nom du tournoi : '{tournament.name.title()}'")
+        print(f"Nom du tournoi : {tournament.name.title()}")
         print(f"Lieu : {tournament.location.title()}")
         print(f"Date de départ : {tournament.start_date}")
         print(f"Date de fin : {tournament.end_date}")

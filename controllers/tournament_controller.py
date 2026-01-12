@@ -118,9 +118,9 @@ class TournamentController:
             return tournament
         turn = tournament.turns[-1]
         matchs = []
-        for current_match, pair in enumerate(turn.pairs):
-            match = Match(pair)
-            p1, p2 = pair[0], pair[1]
+        for current_match, match in enumerate(turn.matchs):
+            m = Match((match[0][0], match[1][0]))
+            p1, p2 = m.pair[0], m.pair[1]
             choice = self.p_in_t_view.display_match_menu(turn, current_match + 1, p1, p2)
             if choice == "2":
                 winner = p1
@@ -128,8 +128,8 @@ class TournamentController:
                 winner = p2
             else:
                 winner = None
-            match.launch_match(winner)
-            matchs.append(match)
+            m.launch_match(winner)
+            matchs.append(m)
         turn.get_matchs_information(matchs)
         turn.finish_turn()
         tournament.update_last_turn_in_tournament(turn)
