@@ -250,11 +250,13 @@ class Turn:
         turns = []
         for t in turns_dict:
             players = []
+            player_alone = None
+            if t["player_alone"]:
+                player_alone = Player().deserialize_players([t["player_alone"]])[0]
             turn = Turn(matchs=self.deserialize_matchs(t.get("matchs")),
                         start_datetime=t["start_datetime"],
                         end_datetime=t.get("end_datetime"),
-                        player_alone=
-                        Player().deserialize_players([t["player_alone"]])[0] if t["player_alone"] else None,
+                        player_alone=player_alone,
                         is_finished=t["is_finished"],
                         name=t["name"],
                         players=players)

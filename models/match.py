@@ -33,7 +33,6 @@ class Match:
             self.pair[1].color = "Blanc"
             self.pair[0].color = "Noir"
 
-
     def update_scores(self, winner: Player) -> None:
         """Met à jour les scores de la paire après le match.
 
