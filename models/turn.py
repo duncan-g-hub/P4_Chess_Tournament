@@ -249,11 +249,7 @@ class Turn:
         """
         turns = []
         for t in turns_dict:
-            pairs = []
             players = []
-            for pair in t["pairs"]:
-                pairs.append(Player().deserialize_players(pair))
-                players.extend(Player().deserialize_players(pair))
             turn = Turn(matchs=self.deserialize_matchs(t.get("matchs")),
                         start_datetime=t["start_datetime"],
                         end_datetime=t.get("end_datetime"),
@@ -261,7 +257,6 @@ class Turn:
                         Player().deserialize_players([t["player_alone"]])[0] if t["player_alone"] else None,
                         is_finished=t["is_finished"],
                         name=t["name"],
-                        pairs=pairs,
                         players=players)
             turns.append(turn)
         return turns

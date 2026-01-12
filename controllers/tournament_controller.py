@@ -49,8 +49,8 @@ class TournamentController:
         pairs_in_tournament = []
         if tournament.turns:
             for turn in tournament.turns:
-                for pair in turn.pairs:
-                    pairs_in_tournament.append([pair[0].player_id, pair[1].player_id])
+                for pair in turn.matchs:
+                    pairs_in_tournament.append([pair[0][0].player_id, pair[1][0].player_id])
                 if turn.player_alone:
                     players_alone.append(turn.player_alone.player_id)
         turn = Turn(players=tournament.players)
@@ -63,9 +63,9 @@ class TournamentController:
         matchs = []
         for pair in turn.pairs:
             match = Match(pair)
-            match = self.get_players_color(match, pair)
+            match.get_random_colors()
             matchs.append(match)
-        turn.pairs = matchs
+        turn.get_matchs_information(matchs)
         self.p_in_t_view.display_turn(turn)
         tournament.add_turn_in_tournament(turn)
         return tournament
@@ -91,28 +91,6 @@ class TournamentController:
         self.message.display_message(f"Veuillez finir le {last_turn.name} avant d'en commencer un nouveau.\n"
                                      "Retour au menu des tours.")
         return False
-
-    @staticmethod
-    def get_players_color(match: Match, players_in_pair: list[Player]) -> list[Player]:
-        """Attribue aléatoirement les couleurs aux joueurs d'un match.
-
-        Modifie les attributs color des joueurs.
-
-        Args:
-            match (Match): Instance de Match
-            players_in_pair (list[Player]): Paire de joueurs
-
-        Returns:
-            list[Player]: Joueurs avec couleurs assignées
-        """
-        white, black = match.get_random_colors()
-        if players_in_pair[0] == white:
-            players_in_pair[0].color = "Blanc"
-            players_in_pair[1].color = "Noir"
-        else:
-            players_in_pair[0].color = "Noir"
-            players_in_pair[1].color = "Blanc"
-        return players_in_pair
 
     def run_matchs_menu(self, tournament: Tournament) -> Tournament:
         """Lance les menus des matchs d'un tour.

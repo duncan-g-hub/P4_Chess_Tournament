@@ -89,11 +89,8 @@ class Tournament:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
-                pairs = []
-                for pair in turn.pairs:
-                    pairs.append([pair[0].serialize(), pair[1].serialize()])
                 tournament["turns"].append({"name": turn.name,
-                                            "pairs": pairs,
+                                            "matchs": turn.serialize_matchs(),
                                             "player_alone":
                                                 turn.player_alone.serialize() if turn.player_alone else None,
                                             "start_datetime": turn.start_datetime,
@@ -119,11 +116,7 @@ class Tournament:
         tournaments = load_tournaments()
         for tournament in tournaments:
             if tournament["name"] == self.name:
-                pairs = []
-                for pair in turn.pairs:
-                    pairs.append([pair[0].serialize(), pair[1].serialize()])
                 tournament["turns"][-1] = {"name": turn.name,
-                                           "pairs": pairs,
                                            "matchs": turn.serialize_matchs(),
                                            "player_alone":
                                                turn.player_alone.serialize() if turn.player_alone else None,

@@ -27,10 +27,12 @@ class Match:
         """
         white = random.choice(self.pair)
         if white == self.pair[0]:
-            black = self.pair[1]
+            self.pair[0].color = "Blanc"
+            self.pair[1].color = "Noir"
         else:
-            black = self.pair[1]
-        return white, black
+            self.pair[1].color = "Blanc"
+            self.pair[0].color = "Noir"
+
 
     def update_scores(self, winner: Player) -> None:
         """Met à jour les scores de la paire après le match.
