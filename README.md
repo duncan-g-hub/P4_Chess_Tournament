@@ -18,6 +18,7 @@ L'objectif est de constituer un outil qui ne nécessite aucune connexion interne
     - Ajouter des joueurs au tournoi
     - Commencer un tournoi
 - Gestion des matchs et tours : 
+  - Génération de paires de joueurs uniques pour chaque tour
   - Déroulement d'un tournoi sous forme de tours
   - Déroulement d'un tour sous forme de match
 - Sauvegarde des données dans des fichiers .json : 
