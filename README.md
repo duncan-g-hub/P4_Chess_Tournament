@@ -13,13 +13,13 @@ L'objectif est de constituer un outil qui ne nécessite aucune connexion interne
 - Gestion des joueurs : 
   - Ajouter des joueurs
 - Gestion des tournois : 
-  - Ajoutet des tournois
+  - Ajouter des tournois
   - Sélection d'un tournoi :
     - Ajouter des joueurs au tournoi
     - Commencer un tournoi
-- Gestion des matchs et rounds : 
-  - Déroulement d'un tournoi sous forme de rounds
-  - Déroulement d'un round sous forme de match
+- Gestion des matchs et tours : 
+  - Déroulement d'un tournoi sous forme de tours
+  - Déroulement d'un tour sous forme de match
 - Sauvegarde des données dans des fichiers .json : 
   - Données joueurs : `/data/players.json`
   - Données tournois : `/data/tournaments.json`
@@ -28,14 +28,14 @@ L'objectif est de constituer un outil qui ne nécessite aucune connexion interne
   - Afficher les tournois
   - Afficher les informations d'un tournoi
   - Afficher les joueurs inscrits à un tournoi 
-  - Afficher les rounds et matchs liés à un tournoi
+  - Afficher les tours et matchs liés à un tournoi
 
 ---
 
 ## Architecture
 
 Le projet suit une architecture de type MVC :
-- Models : gestion des données et logique métier
+- Models : logique métier, gestion des données et entités
 - Views : interface en ligne de commande
 - Controllers : coordination entre modèles et vues
 
