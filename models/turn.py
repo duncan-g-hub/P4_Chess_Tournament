@@ -176,7 +176,7 @@ class Turn:
         if len(self.players) % 2 == 1:  # permet de dire si la liste est impaire
             index = random.randrange(len(self.players))
             self.player_alone = self.players[index]
-            while self.player_alone.player_id in players_alone:
+            while len(players_alone) < len(self.players) and self.player_alone.player_id in players_alone:
                 index = random.randrange(len(self.players))
                 self.player_alone = self.players[index]
             self.players.pop(index)
